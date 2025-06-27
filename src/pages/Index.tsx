@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PDFMerger from '../components/PDFMerger';
+import PDFSplitter from '../components/PDFSplitter';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -19,8 +20,9 @@ const Index = () => {
           </p>
         </div>
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-16">
           <PDFMerger />
+          <PDFSplitter />
         </div>
       </main>
       <Footer />

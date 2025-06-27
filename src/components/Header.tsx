@@ -20,8 +20,8 @@ const Header = () => {
             <a href="#merge" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
               Merge
             </a>
-            <a href="#split" className="text-gray-400 cursor-not-allowed font-medium">
-              Split (Coming Soon)
+            <a href="#split" className="text-gray-600 hover:text-orange-600 font-medium transition-colors">
+              Split
             </a>
             <a href="#compress" className="text-gray-400 cursor-not-allowed font-medium">
               Compress (Coming Soon)
