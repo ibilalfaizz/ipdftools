@@ -17,6 +17,8 @@ export interface PDFFile {
 const PDFMerger = () => {
   const [files, setFiles] = useState<PDFFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mergedPdfBlob, setMergedPdfBlob] = useState<Blob | null>(null);
+  const [mergedFileName, setMergedFileName] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback((selectedFiles: FileList | null) => {
@@ -99,19 +101,12 @@ const PDFMerger = () => {
 
       // Save the merged PDF
       const pdfBytes = await mergedPdf.save();
-      
-      // Create download link
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'merged-document.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
       
-      toast.success('PDFs merged and downloaded successfully!');
+      setMergedPdfBlob(blob);
+      setMergedFileName('merged-document.pdf');
+      
+      toast.success('PDFs merged successfully! Click download to get your file.');
       
     } catch (error) {
       toast.error('Failed to merge PDFs. Please try again.');
@@ -121,8 +116,25 @@ const PDFMerger = () => {
     }
   };
 
+  const downloadMergedPDF = () => {
+    if (!mergedPdfBlob) return;
+    
+    const url = URL.createObjectURL(mergedPdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = mergedFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast.success('PDF downloaded successfully!');
+  };
+
   const clearAll = () => {
     setFiles([]);
+    setMergedPdfBlob(null);
+    setMergedFileName('');
     toast.success('All files cleared');
   };
 
@@ -152,6 +164,30 @@ const PDFMerger = () => {
               onRemove={removeFile}
               onReorder={reorderFiles}
             />
+          )}
+
+          {/* Success Message & Download */}
+          {mergedPdfBlob && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Download className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-green-900">PDF merged successfully!</p>
+                    <p className="text-sm text-green-700">Your merged PDF is ready for download</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={downloadMergedPDF}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+              </div>
+            </div>
           )}
 
           {files.length > 0 && (

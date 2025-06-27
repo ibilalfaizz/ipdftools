@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { Upload, Download, Loader2, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,11 +12,17 @@ interface SplitOption {
   ranges?: string;
 }
 
+interface SplitResult {
+  blobs: Blob[];
+  filenames: string[];
+}
+
 const PDFSplitter = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [splitOption, setSplitOption] = useState<SplitOption>({ type: 'individual' });
   const [pageCount, setPageCount] = useState<number>(0);
+  const [splitResult, setSplitResult] = useState<SplitResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback(async (selectedFiles: FileList | null) => {
@@ -36,6 +41,7 @@ const PDFSplitter = () => {
     }
 
     setFile(selectedFile);
+    setSplitResult(null);
     
     // Get page count
     try {
@@ -115,7 +121,10 @@ const PDFSplitter = () => {
         }
       }
 
-      // Create and download split PDFs
+      const blobs: Blob[] = [];
+      const filenames: string[] = [];
+
+      // Create split PDFs
       for (let i = 0; i < pagesToSplit.length; i++) {
         const newPdf = await PDFDocument.create();
         const pageIndices = pagesToSplit[i];
@@ -125,26 +134,19 @@ const PDFSplitter = () => {
         
         const pdfBytes = await newPdf.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.href = url;
+        blobs.push(blob);
         
         if (splitOption.type === 'individual') {
-          link.download = `${file.name.replace('.pdf', '')}_page_${pageIndices[0] + 1}.pdf`;
+          filenames.push(`${file.name.replace('.pdf', '')}_page_${pageIndices[0] + 1}.pdf`);
         } else {
           const rangeStr = pageIndices.length === 1 
             ? `page_${pageIndices[0] + 1}` 
             : `pages_${pageIndices[0] + 1}-${pageIndices[pageIndices.length - 1] + 1}`;
-          link.download = `${file.name.replace('.pdf', '')}_${rangeStr}.pdf`;
+          filenames.push(`${file.name.replace('.pdf', '')}_${rangeStr}.pdf`);
         }
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
       }
       
+      setSplitResult({ blobs, filenames });
       toast.success(`PDF split into ${pagesToSplit.length} file${pagesToSplit.length > 1 ? 's' : ''} successfully!`);
       
     } catch (error) {
@@ -155,10 +157,45 @@ const PDFSplitter = () => {
     }
   };
 
+  const downloadFile = (index: number) => {
+    if (!splitResult) return;
+    
+    const url = URL.createObjectURL(splitResult.blobs[index]);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = splitResult.filenames[index];
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast.success('File downloaded!');
+  };
+
+  const downloadAll = () => {
+    if (!splitResult) return;
+    
+    splitResult.blobs.forEach((blob, index) => {
+      setTimeout(() => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = splitResult.filenames[index];
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, index * 100); // Small delay between downloads
+    });
+    
+    toast.success('All files downloaded!');
+  };
+
   const clearFile = () => {
     setFile(null);
     setPageCount(0);
     setSplitOption({ type: 'individual' });
+    setSplitResult(null);
     toast.success('File cleared');
   };
 
@@ -294,8 +331,47 @@ const PDFSplitter = () => {
             </div>
           )}
 
+          {/* Split Results */}
+          {splitResult && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Scissors className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-green-900">PDF split successfully!</p>
+                    <p className="text-sm text-green-700">{splitResult.blobs.length} files ready for download</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={downloadAll}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  Download All
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+                {splitResult.filenames.map((filename, index) => (
+                  <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
+                    <span className="text-sm text-gray-700 truncate flex-1 mr-2">{filename}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => downloadFile(index)}
+                      className="flex-shrink-0"
+                    >
+                      <Download className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
-          {file && (
+          {file && !splitResult && (
             <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
               <Button
                 onClick={splitPDF}
