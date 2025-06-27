@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { Upload, X, GripVertical, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import FileUploadZone from './FileUploadZone';
 import FileList from './FileList';
 import { toast } from 'sonner';
+import { PDFDocument } from 'pdf-lib';
 
 export interface PDFFile {
   id: string;
@@ -83,29 +83,35 @@ const PDFMerger = () => {
     setIsProcessing(true);
 
     try {
-      const formData = new FormData();
-      files.forEach((pdfFile, index) => {
-        formData.append(`pdf-${index}`, pdfFile.file);
-      });
+      // Create a new PDF document
+      const mergedPdf = await PDFDocument.create();
 
-      // For now, we'll simulate the merge process
-      // In a real app, you'd send this to your backend
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Process each file in order
+      for (const pdfFile of files) {
+        const arrayBuffer = await pdfFile.file.arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        
+        copiedPages.forEach((page) => {
+          mergedPdf.addPage(page);
+        });
+      }
+
+      // Save the merged PDF
+      const pdfBytes = await mergedPdf.save();
       
-      // Simulate download
-      toast.success('PDFs merged successfully!');
+      // Create download link
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'merged-document.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
       
-      // In a real implementation, you would:
-      // const response = await fetch('/api/merge-pdfs', {
-      //   method: 'POST',
-      //   body: formData
-      // });
-      // const blob = await response.blob();
-      // const url = URL.createObjectURL(blob);
-      // const a = document.createElement('a');
-      // a.href = url;
-      // a.download = 'merged.pdf';
-      // a.click();
+      toast.success('PDFs merged and downloaded successfully!');
       
     } catch (error) {
       toast.error('Failed to merge PDFs. Please try again.');
