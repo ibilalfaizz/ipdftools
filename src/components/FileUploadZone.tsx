@@ -8,13 +8,19 @@ interface FileUploadZoneProps {
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onFileSelect: (files: FileList | null) => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
+  acceptedFormats?: string;
+  title?: string;
+  description?: string;
 }
 
 const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   onDrop,
   onDragOver,
   onFileSelect,
-  fileInputRef
+  fileInputRef,
+  acceptedFormats = ".pdf,application/pdf",
+  title = "Drop PDF files here or click to browse",
+  description = "Support for multiple files • Maximum 50MB per file"
 }) => {
   return (
     <div
@@ -30,10 +36,10 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         
         <div>
           <p className="text-xl font-semibold text-gray-700 mb-2">
-            Drop PDF files here or click to browse
+            {title}
           </p>
           <p className="text-gray-500">
-            Support for multiple files • Maximum 50MB per file
+            {description}
           </p>
         </div>
         
@@ -50,7 +56,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         ref={fileInputRef}
         type="file"
         multiple
-        accept=".pdf,application/pdf"
+        accept={acceptedFormats}
         onChange={(e) => onFileSelect(e.target.files)}
         className="hidden"
       />

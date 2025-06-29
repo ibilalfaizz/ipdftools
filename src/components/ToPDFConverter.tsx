@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Upload, Download, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +19,14 @@ const ToPDFConverter = () => {
     'HEIC', 'JPG', 'MD', 'MOBI', 'ODT', 'OXPS', 'PNG', 'PPT', 'PPTX', 
     'PS', 'PUB', 'RTF', 'SVG', 'TIFF', 'TXT', 'WebP', 'XLS', 'XLSX', 'XPS'
   ];
+
+  // Create accept string for all supported formats
+  const acceptedFormats = [
+    '.azw3', '.bmp', '.chm', '.csv', '.djvu', '.doc', '.docx', '.eps', '.epub',
+    '.heic', '.jpg', '.jpeg', '.md', '.mobi', '.odt', '.oxps', '.png', '.ppt', 
+    '.pptx', '.ps', '.pub', '.rtf', '.svg', '.tiff', '.tif', '.txt', '.webp', 
+    '.xls', '.xlsx', '.xps'
+  ].join(',');
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -147,6 +154,9 @@ const ToPDFConverter = () => {
               onDragOver={handleDragOver}
               onFileSelect={handleFileSelect}
               fileInputRef={fileInputRef}
+              acceptedFormats={acceptedFormats}
+              title="Drop files here or click to browse"
+              description="Support for DOC, DOCX, JPG, PNG, TXT, XLS, XLSX and many more formats • Maximum 50MB per file"
             />
           </CardContent>
         </Card>
