@@ -6,7 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
 import { useToast } from '@/hooks/use-toast';
-import { PDFDocument } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Set up the worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 const FromPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -23,23 +26,32 @@ const FromPDFConverter = () => {
   const extractTextFromPDF = async (file: File): Promise<string> => {
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const pages = pdfDoc.getPages();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let extractedText = '';
       
-      // This is a simplified text extraction
-      // In a real application, you'd use a proper PDF text extraction library
-      let extractedText = `Extracted content from: ${file.name}\n\n`;
-      extractedText += `This PDF contains ${pages.length} page(s).\n\n`;
-      extractedText += `Note: This is a placeholder text extraction. In a production environment, `;
-      extractedText += `you would use a proper PDF parsing library like PDF.js or pdf2pic to extract `;
-      extractedText += `actual text content, images, and other elements from the PDF.\n\n`;
-      extractedText += `File size: ${(file.size / 1024).toFixed(2)} KB\n`;
-      extractedText += `Created: ${new Date().toISOString()}`;
+      console.log(`Extracting text from ${file.name} with ${pdf.numPages} pages...`);
       
-      return extractedText;
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const textContent = await page.getTextContent();
+        
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        
+        if (pageText.trim()) {
+          extractedText += `\n--- Page ${pageNum} ---\n${pageText}\n`;
+        }
+      }
+      
+      if (extractedText.trim() === '') {
+        return `No text content found in ${file.name}. This PDF might contain only images or scanned content.`;
+      }
+      
+      return extractedText.trim();
     } catch (error) {
       console.error('Error extracting text from PDF:', error);
-      return `Error extracting content from ${file.name}. The PDF might be corrupted or password-protected.`;
+      return `Error extracting content from ${file.name}. The PDF might be corrupted, password-protected, or contain only images.`;
     }
   };
 
@@ -51,35 +63,64 @@ const FromPDFConverter = () => {
       const blob = new Blob([text], { type: 'text/plain' });
       return { blob, extension: 'txt' };
     } else if (formatLower === 'jpg' || formatLower === 'png') {
-      // For image conversion, create a placeholder
-      const canvas = document.createElement('canvas');
-      canvas.width = 800;
-      canvas.height = 600;
-      const ctx = canvas.getContext('2d');
-      
-      if (ctx) {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#333333';
-        ctx.font = '20px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Converted from: ${file.name}`, canvas.width / 2, 100);
-        ctx.fillText(`To: ${format.toUpperCase()}`, canvas.width / 2, 150);
-        ctx.fillText('This is a placeholder conversion', canvas.width / 2, 250);
-        ctx.fillText('In production, use proper PDF-to-image', canvas.width / 2, 300);
-        ctx.fillText('conversion libraries like pdf2pic', canvas.width / 2, 350);
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        // Convert first page to image as an example
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 2.0 });
+        
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        
+        if (context) {
+          await page.render({
+            canvasContext: context,
+            viewport: viewport
+          }).promise;
+        }
+        
+        return new Promise<{ blob: Blob; extension: string }>((resolve) => {
+          canvas.toBlob((blob) => {
+            resolve({ 
+              blob: blob || new Blob(), 
+              extension: formatLower 
+            });
+          }, `image/${formatLower}`, 0.9);
+        });
+      } catch (error) {
+        console.error('Error converting PDF to image:', error);
+        // Fallback to placeholder image
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+        
+        if (ctx) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#333333';
+          ctx.font = '20px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(`Error converting: ${file.name}`, canvas.width / 2, 100);
+          ctx.fillText(`To: ${format.toUpperCase()}`, canvas.width / 2, 150);
+          ctx.fillText('PDF might be corrupted or password-protected', canvas.width / 2, 250);
+        }
+        
+        return new Promise<{ blob: Blob; extension: string }>((resolve) => {
+          canvas.toBlob((blob) => {
+            resolve({ 
+              blob: blob || new Blob(), 
+              extension: formatLower 
+            });
+          }, `image/${formatLower}`);
+        });
       }
-      
-      return new Promise<{ blob: Blob; extension: string }>((resolve) => {
-        canvas.toBlob((blob) => {
-          resolve({ 
-            blob: blob || new Blob(), 
-            extension: formatLower 
-          });
-        }, `image/${formatLower}`);
-      });
     } else {
-      // For other formats, create a text-based placeholder
+      // For other formats, create a text-based conversion
       const text = await extractTextFromPDF(file);
       const content = `Converted from PDF: ${file.name}\n\nTarget format: ${format.toUpperCase()}\n\n${text}`;
       const blob = new Blob([content], { type: 'application/octet-stream' });
