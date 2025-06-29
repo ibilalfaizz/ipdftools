@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
 import { useToast } from '@/hooks/use-toast';
+import { PDFDocument } from 'pdf-lib';
 
 const FromPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -18,6 +19,73 @@ const FromPDFConverter = () => {
   const supportedFormats = [
     'AZW3', 'BMP', 'DjVu', 'ePub', 'JPG', 'MOBI', 'PNG', 'SVG', 'TIFF', 'TXT'
   ];
+
+  const extractTextFromPDF = async (file: File): Promise<string> => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pages = pdfDoc.getPages();
+      
+      // This is a simplified text extraction
+      // In a real application, you'd use a proper PDF text extraction library
+      let extractedText = `Extracted content from: ${file.name}\n\n`;
+      extractedText += `This PDF contains ${pages.length} page(s).\n\n`;
+      extractedText += `Note: This is a placeholder text extraction. In a production environment, `;
+      extractedText += `you would use a proper PDF parsing library like PDF.js or pdf2pic to extract `;
+      extractedText += `actual text content, images, and other elements from the PDF.\n\n`;
+      extractedText += `File size: ${(file.size / 1024).toFixed(2)} KB\n`;
+      extractedText += `Created: ${new Date().toISOString()}`;
+      
+      return extractedText;
+    } catch (error) {
+      console.error('Error extracting text from PDF:', error);
+      return `Error extracting content from ${file.name}. The PDF might be corrupted or password-protected.`;
+    }
+  };
+
+  const convertPDFToFormat = async (file: File, format: string) => {
+    const formatLower = format.toLowerCase();
+    
+    if (formatLower === 'txt') {
+      const text = await extractTextFromPDF(file);
+      const blob = new Blob([text], { type: 'text/plain' });
+      return { blob, extension: 'txt' };
+    } else if (formatLower === 'jpg' || formatLower === 'png') {
+      // For image conversion, create a placeholder
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 600;
+      const ctx = canvas.getContext('2d');
+      
+      if (ctx) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#333333';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Converted from: ${file.name}`, canvas.width / 2, 100);
+        ctx.fillText(`To: ${format.toUpperCase()}`, canvas.width / 2, 150);
+        ctx.fillText('This is a placeholder conversion', canvas.width / 2, 250);
+        ctx.fillText('In production, use proper PDF-to-image', canvas.width / 2, 300);
+        ctx.fillText('conversion libraries like pdf2pic', canvas.width / 2, 350);
+      }
+      
+      return new Promise<{ blob: Blob; extension: string }>((resolve) => {
+        canvas.toBlob((blob) => {
+          resolve({ 
+            blob: blob || new Blob(), 
+            extension: formatLower 
+          });
+        }, `image/${formatLower}`);
+      });
+    } else {
+      // For other formats, create a text-based placeholder
+      const text = await extractTextFromPDF(file);
+      const content = `Converted from PDF: ${file.name}\n\nTarget format: ${format.toUpperCase()}\n\n${text}`;
+      const blob = new Blob([content], { type: 'application/octet-stream' });
+      return { blob, extension: formatLower };
+    }
+  };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -86,14 +154,18 @@ const FromPDFConverter = () => {
     setIsConverting(true);
     
     try {
-      // Simulate conversion process (in real implementation, you'd use a conversion API)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const converted = [];
       
-      const fileExtension = targetFormat.toLowerCase();
-      const converted = files.map((file, index) => ({
-        name: `${file.name.split('.')[0]}_converted.${fileExtension}`,
-        url: URL.createObjectURL(new Blob([`Converted ${targetFormat} content`], { type: 'application/octet-stream' }))
-      }));
+      for (const file of files) {
+        console.log(`Converting ${file.name} to ${targetFormat}...`);
+        const { blob, extension } = await convertPDFToFormat(file, targetFormat);
+        const url = URL.createObjectURL(blob);
+        
+        converted.push({
+          name: `${file.name.split('.')[0]}_converted.${extension}`,
+          url: url
+        });
+      }
 
       setConvertedFiles(converted);
       
@@ -102,6 +174,7 @@ const FromPDFConverter = () => {
         description: `${files.length} PDF file(s) converted to ${targetFormat} successfully.`,
       });
     } catch (error) {
+      console.error('Conversion error:', error);
       toast({
         title: "Conversion Failed",
         description: "An error occurred during conversion.",

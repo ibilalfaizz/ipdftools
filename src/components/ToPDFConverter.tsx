@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Upload, Download, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
 import { useToast } from '@/hooks/use-toast';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 const ToPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -27,6 +29,90 @@ const ToPDFConverter = () => {
     '.pptx', '.ps', '.pub', '.rtf', '.svg', '.tiff', '.tif', '.txt', '.webp', 
     '.xls', '.xlsx', '.xps'
   ].join(',');
+
+  const createPDFFromText = async (content: string, fileName: string) => {
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([612, 792]); // Standard US Letter size
+    
+    const fontSize = 12;
+    const margin = 50;
+    const lineHeight = fontSize * 1.2;
+    const maxWidth = page.getWidth() - (margin * 2);
+    
+    // Split content into lines that fit the page width
+    const words = content.split(' ');
+    const lines = [];
+    let currentLine = '';
+    
+    for (const word of words) {
+      const testLine = currentLine + (currentLine ? ' ' : '') + word;
+      if (testLine.length * (fontSize * 0.6) < maxWidth) {
+        currentLine = testLine;
+      } else {
+        if (currentLine) lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    
+    // Add text to PDF
+    let yPosition = page.getHeight() - margin;
+    for (const line of lines) {
+      if (yPosition < margin) break; // Stop if we run out of space
+      page.drawText(line, {
+        x: margin,
+        y: yPosition,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= lineHeight;
+    }
+    
+    // Add header with original filename
+    page.drawText(`Converted from: ${fileName}`, {
+      x: margin,
+      y: page.getHeight() - 30,
+      size: 10,
+      color: rgb(0.5, 0.5, 0.5),
+    });
+    
+    return await pdfDoc.save();
+  };
+
+  const createPDFFromImage = async (imageFile: File, fileName: string) => {
+    const pdfDoc = await PDFDocument.create();
+    const imageBytes = await imageFile.arrayBuffer();
+    
+    let image;
+    if (imageFile.type.includes('png')) {
+      image = await pdfDoc.embedPng(imageBytes);
+    } else if (imageFile.type.includes('jpg') || imageFile.type.includes('jpeg')) {
+      image = await pdfDoc.embedJpg(imageBytes);
+    } else {
+      // For other image formats, we'll create a text PDF indicating the format
+      return await createPDFFromText(`This is a placeholder for ${fileName}. Image format conversion requires additional processing.`, fileName);
+    }
+    
+    const page = pdfDoc.addPage();
+    const { width, height } = image.scale(1);
+    
+    // Scale image to fit page while maintaining aspect ratio
+    const pageWidth = page.getWidth();
+    const pageHeight = page.getHeight();
+    const scale = Math.min(pageWidth / width, pageHeight / height) * 0.9;
+    
+    const scaledWidth = width * scale;
+    const scaledHeight = height * scale;
+    
+    page.drawImage(image, {
+      x: (pageWidth - scaledWidth) / 2,
+      y: (pageHeight - scaledHeight) / 2,
+      width: scaledWidth,
+      height: scaledHeight,
+    });
+    
+    return await pdfDoc.save();
+  };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -70,13 +156,33 @@ const ToPDFConverter = () => {
     setIsConverting(true);
     
     try {
-      // Simulate conversion process (in real implementation, you'd use a conversion API)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const converted = [];
       
-      const converted = files.map((file, index) => ({
-        name: `${file.name.split('.')[0]}_converted.pdf`,
-        url: URL.createObjectURL(new Blob(['Converted PDF content'], { type: 'application/pdf' }))
-      }));
+      for (const file of files) {
+        console.log(`Converting ${file.name}...`);
+        let pdfBytes;
+        
+        if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+          // Handle text files
+          const text = await file.text();
+          pdfBytes = await createPDFFromText(text, file.name);
+        } else if (file.type.startsWith('image/')) {
+          // Handle image files
+          pdfBytes = await createPDFFromImage(file, file.name);
+        } else {
+          // For other file types, create a placeholder PDF
+          const placeholderText = `This is a converted PDF from ${file.name}.\n\nOriginal file type: ${file.type || 'unknown'}\nFile size: ${(file.size / 1024).toFixed(2)} KB\n\nNote: This is a placeholder conversion. In a production environment, you would integrate with a proper file conversion service to handle various file formats like DOC, DOCX, XLS, XLSX, PPT, PPTX, etc.`;
+          pdfBytes = await createPDFFromText(placeholderText, file.name);
+        }
+        
+        const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(pdfBlob);
+        
+        converted.push({
+          name: `${file.name.split('.')[0]}_converted.pdf`,
+          url: url
+        });
+      }
 
       setConvertedFiles(converted);
       
@@ -85,6 +191,7 @@ const ToPDFConverter = () => {
         description: `${files.length} file(s) converted to PDF successfully.`,
       });
     } catch (error) {
+      console.error('Conversion error:', error);
       toast({
         title: "Conversion Failed",
         description: "An error occurred during conversion.",
