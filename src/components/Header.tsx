@@ -2,17 +2,23 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import LanguageSelector from './LanguageSelector';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Header = () => {
   const location = useLocation();
+  const { t } = useLanguage();
   
   const navItems = [
-    { href: "/merge", label: "Merge", color: "hover:text-blue-600" },
-    { href: "/split", label: "Split", color: "hover:text-orange-600" },
-    { href: "/compress", label: "Compress", color: "hover:text-green-600" },
-    { href: "/to-pdf", label: "To PDF", color: "hover:text-green-600" },
-    { href: "/from-pdf", label: "From PDF", color: "hover:text-purple-600" },
-    { href: "/rotate", label: "Rotate (Coming Soon)", color: "text-gray-400 cursor-not-allowed" }
+    { href: "/merge", label: t('nav.merge'), color: "hover:text-blue-600" },
+    { href: "/split", label: t('nav.split'), color: "hover:text-orange-600" },
+    { href: "/compress", label: t('nav.compress'), color: "hover:text-green-600" },
+    { href: "/rotate", label: t('nav.rotate'), color: "hover:text-indigo-600" },
+    { href: "/pdf-to-word", label: t('nav.pdf_to_word'), color: "hover:text-blue-600" },
+    { href: "/pdf-to-jpg", label: t('nav.pdf_to_jpg'), color: "hover:text-purple-600" },
+    { href: "/pdf-to-text", label: t('nav.pdf_to_text'), color: "hover:text-green-600" },
+    { href: "/word-to-pdf", label: t('nav.word_to_pdf'), color: "hover:text-blue-600" },
+    { href: "/jpg-to-pdf", label: t('nav.jpg_to_pdf'), color: "hover:text-orange-600" }
   ];
 
   return (
@@ -28,21 +34,24 @@ const Header = () => {
             </span>
           </Link>
           
-          <nav className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`font-medium transition-colors ${
-                  location.pathname === item.href 
-                    ? 'text-blue-600' 
-                    : `text-gray-600 ${item.color}`
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="flex items-center space-x-4">
+            <nav className="hidden md:flex space-x-6">
+              {navItems.slice(0, 4).map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`font-medium transition-colors text-sm ${
+                    location.pathname === item.href 
+                      ? 'text-blue-600' 
+                      : `text-gray-600 ${item.color}`
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <LanguageSelector />
+          </div>
         </div>
       </div>
     </header>
