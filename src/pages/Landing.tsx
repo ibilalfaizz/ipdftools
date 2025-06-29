@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FileText, Merge, Split, Minimize, RotateCw, ArrowRight } from 'lucide-react';
+import { FileText, Merge, Split, Minimize, RotateCw, ArrowRight, Upload, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
@@ -34,6 +34,22 @@ const Landing = () => {
       available: true
     },
     {
+      icon: <Upload className="w-8 h-8" />,
+      title: "Convert to PDF",
+      description: "Convert various file formats (DOC, JPG, PNG, etc.) to PDF.",
+      path: "/to-pdf",
+      color: "from-green-500 to-blue-500",
+      available: true
+    },
+    {
+      icon: <Download className="w-8 h-8" />,
+      title: "Convert from PDF",
+      description: "Convert PDF files to various formats (JPG, PNG, TXT, etc.).",
+      path: "/from-pdf",
+      color: "from-purple-500 to-pink-500",
+      available: true
+    },
+    {
       icon: <RotateCw className="w-8 h-8" />,
       title: "Rotate PDFs",
       description: "Rotate PDF pages to the correct orientation.",
@@ -58,7 +74,7 @@ const Landing = () => {
             PDF Tools Hub
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            The ultimate collection of PDF tools. Merge, split, compress, and rotate your documents 
+            The ultimate collection of PDF tools. Merge, split, compress, convert, and rotate your documents 
             with professional-grade quality. Fast, secure, and completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -71,7 +87,7 @@ const Landing = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {features.map((feature, index) => (
             <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/60 backdrop-blur-sm">
               <CardHeader className="text-center pb-4">

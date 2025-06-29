@@ -10,6 +10,8 @@ const Header = () => {
     { href: "/merge", label: "Merge", color: "hover:text-blue-600" },
     { href: "/split", label: "Split", color: "hover:text-orange-600" },
     { href: "/compress", label: "Compress", color: "hover:text-green-600" },
+    { href: "/to-pdf", label: "To PDF", color: "hover:text-green-600" },
+    { href: "/from-pdf", label: "From PDF", color: "hover:text-purple-600" },
     { href: "/rotate", label: "Rotate (Coming Soon)", color: "text-gray-400 cursor-not-allowed" }
   ];
 
