@@ -1,9 +1,10 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { RotateCw } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileUploadZone } from './FileUploadZone';
+import FileUploadZone from './FileUploadZone';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from "@/components/ui/use-toast"
 import { useMutation } from '@tanstack/react-query';
@@ -37,8 +38,8 @@ const PDFRotator = () => {
     }
   })
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+  const handleDrop = useCallback((droppedFiles: File[]) => {
+    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
   }, []);
 
   const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {

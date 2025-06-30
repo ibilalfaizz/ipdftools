@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Image, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,9 +21,9 @@ const PDFToJPGConverter = () => {
     event.preventDefault();
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFiles((prev) => [...prev, ...Array.from(event.target.files)]);
+  const handleFileSelect = () => {
+    if (fileInputRef.current && fileInputRef.current.files) {
+      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
     }
   };
 

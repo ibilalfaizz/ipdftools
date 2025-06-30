@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,11 +17,12 @@ const PDFToWordConverter = () => {
   const { toast } = useToast();
   const [isConverting, setIsConverting] = useState(false);
 
-  const { mutate } = useMutation(convertPdfToWord, {
-    onSuccess: (data, variables, context) => {
+  const { mutate } = useMutation({
+    mutationFn: convertPdfToWord,
+    onSuccess: (data: any) => {
       setIsConverting(false);
       if (data && data.length > 0) {
-        data.forEach((fileData, index) => {
+        data.forEach((fileData: any, index: number) => {
           saveAs(fileData.url, fileData.filename);
         });
         toast({
@@ -36,7 +38,7 @@ const PDFToWordConverter = () => {
       }
       setFiles([]);
     },
-    onError: (error, variables, context) => {
+    onError: () => {
       setIsConverting(false);
       toast({
         variant: "destructive",
@@ -83,8 +85,6 @@ const PDFToWordConverter = () => {
     setIsConverting(true);
     mutate(formData);
   };
-
-  const fileTypes = ['pdf'];
 
   return (
     <div className="max-w-4xl mx-auto p-6">

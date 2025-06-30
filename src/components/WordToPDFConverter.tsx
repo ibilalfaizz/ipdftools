@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { FileUploadZone } from '@/components/FileUploadZone';
+import FileUploadZone from './FileUploadZone';
 import { useToast } from "@/components/ui/use-toast"
 import { useLanguage } from '../contexts/LanguageContext';
 

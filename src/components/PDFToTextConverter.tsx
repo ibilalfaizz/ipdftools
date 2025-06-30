@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -68,7 +69,10 @@ const PDFToTextConverter = () => {
               for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
-                const pageText = textContent.items.map(item => item.str).join(" ");
+                const pageText = textContent.items
+                  .filter((item): item is any => 'str' in item)
+                  .map(item => item.str)
+                  .join(" ");
                 fullText += pageText + "\n";
               }
               resolve(fullText);
