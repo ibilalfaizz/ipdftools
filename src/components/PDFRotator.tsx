@@ -1,281 +1,136 @@
-
-import React, { useState, useRef } from 'react';
-import { Upload, Download, FileText, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useCallback } from 'react';
+import { RotateCw } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import FileUploadZone from './FileUploadZone';
-import { useToast } from '@/hooks/use-toast';
-import { PDFDocument, degrees } from 'pdf-lib';
+import { FileUploadZone } from './FileUploadZone';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useToast } from "@/components/ui/use-toast"
+import { useMutation } from '@tanstack/react-query';
+import { rotatePdf } from '../lib/api';
+import { saveAs } from 'file-saver';
 
 const PDFRotator = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [rotatedFiles, setRotatedFiles] = useState<{ name: string; url: string }[]>([]);
-  const [isRotating, setIsRotating] = useState(false);
-  const [rotationAngle, setRotationAngle] = useState<string>('90');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useLanguage();
   const { toast } = useToast();
+  const [files, setFiles] = useState<File[]>([]);
+  const [rotationAngle, setRotationAngle] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const rotatePDF = async (file: File, angle: number): Promise<Uint8Array> => {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      
-      const pages = pdfDoc.getPages();
-      pages.forEach(page => {
-        page.setRotation(degrees(angle));
-      });
-
-      return await pdfDoc.save();
-    } catch (error) {
-      console.error('Error rotating PDF:', error);
-      throw error;
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
-    if (droppedFiles.length === 0) {
-      toast({
-        title: "Invalid Files",
-        description: "Please select PDF files only.",
-        variant: "destructive",
-      });
-      return;
-    }
-    handleFiles(droppedFiles);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleFileSelect = (fileList: FileList | null) => {
-    if (fileList) {
-      const selectedFiles = Array.from(fileList).filter(file => file.type === 'application/pdf');
-      if (selectedFiles.length === 0) {
+  const { mutate: rotate, isPending: isRotating } = useMutation({
+    mutationFn: rotatePdf,
+    onSuccess: (data, variables) => {
+      if (data) {
+        saveAs(data, `rotated_${variables[0].name}`);
         toast({
-          title: "Invalid Files",
-          description: "Please select PDF files only.",
-          variant: "destructive",
-        });
-        return;
+          title: t('rotate.success', { angle: rotationAngle }),
+          description: "Your file has been successfully rotated.",
+        })
       }
-      handleFiles(selectedFiles);
-    }
-  };
-
-  const handleFiles = (newFiles: File[]) => {
-    setFiles(prev => [...prev, ...newFiles]);
-    toast({
-      title: "Files Added",
-      description: `${newFiles.length} PDF file(s) added for rotation.`,
-    });
-  };
-
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const rotatePDFs = async () => {
-    if (files.length === 0) {
+    },
+    onError: () => {
       toast({
-        title: "No Files Selected",
-        description: "Please select PDF files to rotate.",
         variant: "destructive",
-      });
-      return;
+        title: t('rotate.failed'),
+        description: "Something went wrong. Please try again.",
+      })
     }
+  })
 
+  const handleDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+  }, []);
+
+  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  }, []);
+
+  const handleFileSelect = () => {
+    if (fileInputRef.current && fileInputRef.current.files) {
+      const selectedFiles = Array.from(fileInputRef.current.files);
+      setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    }
+  };
+
+  const handleRemoveFile = (name: string) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== name));
+  };
+
+  const handleRotate = () => {
     if (!rotationAngle) {
       toast({
-        title: "No Rotation Selected",
-        description: "Please select a rotation angle.",
         variant: "destructive",
-      });
+        title: t('rotate.no_angle'),
+        description: "Please select a rotation angle.",
+      })
       return;
     }
 
-    setIsRotating(true);
-    
-    try {
-      const rotated = [];
-      const angle = parseInt(rotationAngle);
-      
-      for (const file of files) {
-        const rotatedBytes = await rotatePDF(file, angle);
-        const blob = new Blob([rotatedBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        
-        rotated.push({
-          name: `${file.name.split('.')[0]}_rotated_${angle}deg.pdf`,
-          url: url
-        });
-      }
-
-      setRotatedFiles(rotated);
-      
-      toast({
-        title: "Rotation Complete",
-        description: `${files.length} PDF file(s) rotated by ${angle}° successfully.`,
-      });
-    } catch (error) {
-      console.error('Rotation error:', error);
-      toast({
-        title: "Rotation Failed",
-        description: "An error occurred during rotation.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsRotating(false);
-    }
-  };
-
-  const downloadFile = (url: string, name: string) => {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const downloadAll = () => {
-    rotatedFiles.forEach(file => {
-      downloadFile(file.url, file.name);
-    });
+    files.forEach(file => {
+      rotate([file, rotationAngle]);
+    })
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-3 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mb-4">
-          <FileText className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mb-4">
+          <RotateCw className="h-8 w-8 text-white" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">PDF Rotator</h1>
-        <p className="text-xl text-gray-600">
-          Rotate your PDF pages to the correct orientation
-        </p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('rotate.title')}</h1>
+        <p className="text-xl text-gray-600">{t('rotate.description')}</p>
       </div>
 
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Upload className="h-5 w-5" />
-              <span>Select PDF Files to Rotate</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select rotation angle *
-              </label>
-              <Select value={rotationAngle} onValueChange={setRotationAngle}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose rotation angle" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="90">90° Clockwise</SelectItem>
-                  <SelectItem value="180">180° (Upside Down)</SelectItem>
-                  <SelectItem value="270">270° Clockwise (90° Counter-clockwise)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <FileUploadZone
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onFileSelect={handleFileSelect}
-              fileInputRef={fileInputRef}
-              acceptedTypes="application/pdf"
-            />
-          </CardContent>
-        </Card>
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <FileUploadZone
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onFileSelect={handleFileSelect}
+            fileInputRef={fileInputRef}
+          />
+        </CardContent>
+      </Card>
 
-        {files.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Selected PDF Files ({files.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 mb-4">
-                {files.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="h-5 w-5 text-red-500" />
-                      <div>
-                        <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeFile(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              
-              <Button
-                onClick={rotatePDFs}
-                disabled={isRotating || !rotationAngle}
-                className="w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600"
-              >
-                {isRotating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Rotating...
-                  </>
-                ) : (
-                  <>
-                    <FileText className="mr-2 h-4 w-4" />
-                    Rotate PDFs by {rotationAngle}°
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {rotatedFiles.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Rotated Files</span>
-                <Button onClick={downloadAll} className="bg-indigo-600 hover:bg-indigo-700">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download All
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-gray-700 mb-3">{t('common.files_added')}:</h3>
+        {files.length === 0 ? (
+          <p className="text-gray-500">{t('common.no_files_selected')}</p>
+        ) : (
+          <ul>
+            {files.map((file) => (
+              <li key={file.name} className="flex items-center justify-between py-2 border-b border-gray-200">
+                <span className="text-gray-600">{file.name}</span>
+                <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-100" onClick={() => handleRemoveFile(file.name)}>
+                  {t('common.remove')}
                 </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {rotatedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="h-5 w-5 text-indigo-600" />
-                      <span className="font-medium text-gray-900">{file.name}</span>
-                    </div>
-                    <Button
-                      onClick={() => downloadFile(file.url, file.name)}
-                      size="sm"
-                      className="bg-indigo-600 hover:bg-indigo-700"
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
+
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-gray-700 mb-3">{t('rotate.select_angle')}:</h3>
+        <Select onValueChange={setRotationAngle}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t('rotate.angle_placeholder')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="90">{t('rotate.90_clockwise')}</SelectItem>
+            <SelectItem value="180">{t('rotate.180')}</SelectItem>
+            <SelectItem value="270">{t('rotate.270_clockwise')}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Button
+        className="w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-semibold py-3 rounded-md shadow-md transition-colors duration-300"
+        onClick={handleRotate}
+        disabled={files.length === 0 || isRotating}
+      >
+        {isRotating ? t('rotate.rotating') : t('rotate.convert_button', { angle: rotationAngle })}
+      </Button>
     </div>
   );
 };

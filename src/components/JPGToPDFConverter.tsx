@@ -1,281 +1,209 @@
-
-import React, { useState, useRef } from 'react';
-import { Upload, Download, Image, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import FileUploadZone from './FileUploadZone';
-import { useToast } from '@/hooks/use-toast';
-import { PDFDocument } from 'pdf-lib';
+import { Download } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useToast } from "@/components/ui/use-toast"
+
+interface FileUploadZoneProps {
+  onDrop: (acceptedFiles: File[]) => void;
+  onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+  onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+}
+
+const FileUploadZone: React.FC<FileUploadZoneProps> = ({ onDrop, onDragOver, onFileSelect, fileInputRef }) => {
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop });
+
+  return (
+    <div
+      {...getRootProps()}
+      className={`border-2 border-dashed rounded-md p-6 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700 transition-colors duration-300 ${
+        isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+      }`}
+      onDragOver={onDragOver}
+    >
+      <input {...getInputProps()} type="file" multiple onChange={onFileSelect} ref={fileInputRef} className="hidden" accept="image/jpeg, image/png"/>
+      <Download className="h-6 w-6 text-gray-400 mb-2" />
+      <p className="text-gray-500 dark:text-gray-400 text-sm">
+        {isDragActive ? 'Drop the images here...' : 'Drag and drop images here, or click to select files'}
+      </p>
+    </div>
+  );
+};
 
 const JPGToPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const [convertedFiles, setConvertedFiles] = useState<{ name: string; url: string }[]>([]);
-  const [isConverting, setIsConverting] = useState(false);
+  const [conversionLoading, setConversionLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
+  const { t } = useLanguage();
+  const { toast } = useToast()
 
-  const convertImageToPDF = async (file: File): Promise<Uint8Array> => {
-    try {
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage();
-
-      const imageBytes = await file.arrayBuffer();
-      let image;
-
-      if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
-        image = await pdfDoc.embedJpg(imageBytes);
-      } else if (file.type === 'image/png') {
-        image = await pdfDoc.embedPng(imageBytes);
-      } else {
-        throw new Error('Unsupported image format');
-      }
-
-      const { width, height } = image.scale(1);
-      const pageWidth = page.getWidth();
-      const pageHeight = page.getHeight();
-
-      const scale = Math.min(pageWidth / width, pageHeight / height);
-      const scaledWidth = width * scale;
-      const scaledHeight = height * scale;
-
-      const x = (pageWidth - scaledWidth) / 2;
-      const y = (pageHeight - scaledHeight) / 2;
-
-      page.drawImage(image, {
-        x,
-        y,
-        width: scaledWidth,
-        height: scaledHeight,
-      });
-
-      return await pdfDoc.save();
-    } catch (error) {
-      console.error('Error converting image to PDF:', error);
-      throw error;
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files).filter(file => 
-      file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
-    );
-    if (droppedFiles.length === 0) {
-      toast({
-        title: "Invalid Files",
-        description: "Please select JPG or PNG image files only.",
-        variant: "destructive",
-      });
-      return;
-    }
-    handleFiles(droppedFiles);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleFileSelect = (fileList: FileList | null) => {
-    if (fileList) {
-      const selectedFiles = Array.from(fileList).filter(file => 
-        file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
-      );
-      if (selectedFiles.length === 0) {
-        toast({
-          title: "Invalid Files",
-          description: "Please select JPG or PNG image files only.",
-          variant: "destructive",
-        });
-        return;
-      }
-      handleFiles(selectedFiles);
-    }
-  };
-
-  const handleFiles = (newFiles: File[]) => {
-    setFiles(prev => [...prev, ...newFiles]);
+  const handleDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
     toast({
-      title: "Files Added",
-      description: `${newFiles.length} image file(s) added for conversion.`,
-    });
+      title: t('common.files_added'),
+      description: `${acceptedFiles.length} ${t('common.files_added').toLowerCase()}`,
+    })
+  }, [t, toast]);
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
   };
 
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      handleDrop(selectedFiles);
+    }
   };
 
-  const convertToPDF = async () => {
+  const handleRemoveFile = (index: number) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  const convertToPdf = async () => {
     if (files.length === 0) {
       toast({
-        title: "No Files Selected",
-        description: "Please select image files to convert.",
         variant: "destructive",
-      });
+        title: t('common.no_files_selected'),
+        description: t('common.no_files_selected').toLowerCase(),
+      })
       return;
     }
 
-    setIsConverting(true);
-    
+    setConversionLoading(true);
     try {
-      const converted = [];
-      
-      for (const file of files) {
-        const pdfBytes = await convertImageToPDF(file);
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        
-        converted.push({
-          name: `${file.name.split('.')[0]}.pdf`,
-          url: url
+      const { jsPDF } = await import('jspdf');
+      const pdf = new jsPDF();
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const imageUrl = await readFileAsDataURL(file);
+
+        const img = new Image();
+        img.src = imageUrl;
+
+        await new Promise((resolve, reject) => {
+          img.onload = () => {
+            const width = img.width;
+            const height = img.height;
+
+            if (width > height) {
+              pdf.addPage([width, height]);
+            } else {
+              pdf.addPage([height, width]);
+            }
+
+            pdf.addImage(imageUrl, 'JPEG', 0, 0, width, height);
+            resolve(null);
+          };
+
+          img.onerror = (error) => {
+            console.error('Error loading image:', error);
+            reject(error);
+          };
         });
+
+        if (i < files.length - 1) {
+          pdf.addPage();
+        }
       }
 
-      setConvertedFiles(converted);
-      
+      setConversionLoading(false);
+      downloadPdf(pdf);
       toast({
-        title: "Conversion Complete",
-        description: `${files.length} image file(s) converted to PDF successfully.`,
-      });
+        title: t('common.conversion_complete'),
+        description: t('common.conversion_complete').toLowerCase(),
+      })
     } catch (error) {
-      console.error('Conversion error:', error);
+      console.error('Error converting to PDF:', error);
+      setConversionLoading(false);
       toast({
-        title: "Conversion Failed",
-        description: "An error occurred during conversion.",
         variant: "destructive",
-      });
-    } finally {
-      setIsConverting(false);
+        title: t('common.conversion_failed'),
+        description: t('common.conversion_failed').toLowerCase(),
+      })
     }
   };
 
-  const downloadFile = (url: string, name: string) => {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('Failed to read file as Data URL'));
+        }
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
-  const downloadAll = () => {
-    convertedFiles.forEach(file => {
-      downloadFile(file.url, file.name);
-    });
+  const downloadPdf = (pdf: any) => {
+    setDownloading(true);
+    pdf.save('converted.pdf');
+    setDownloading(false);
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full mb-4">
-          <Image className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full mb-4">
+          <Download className="h-8 w-8 text-white" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">JPG to PDF Converter</h1>
-        <p className="text-xl text-gray-600">
-          Convert your JPG and PNG images to PDF documents
-        </p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('jpg_to_pdf.title')}</h1>
+        <p className="text-xl text-gray-600">{t('jpg_to_pdf.description')}</p>
       </div>
 
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Upload className="h-5 w-5" />
-              <span>Select Image Files</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <FileUploadZone
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onFileSelect={handleFileSelect}
-              fileInputRef={fileInputRef}
-              acceptedTypes="image/jpeg,image/jpg,image/png"
-            />
-          </CardContent>
-        </Card>
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <FileUploadZone
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onFileSelect={handleFileSelect}
+            fileInputRef={fileInputRef}
+          />
+        </CardContent>
+      </Card>
 
-        {files.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Selected Image Files ({files.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 mb-4">
-                {files.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Image className="h-5 w-5 text-orange-500" />
-                      <div>
-                        <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeFile(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              
-              <Button
-                onClick={convertToPDF}
-                disabled={isConverting}
-                className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600"
-              >
-                {isConverting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Converting...
-                  </>
-                ) : (
-                  <>
-                    <Image className="mr-2 h-4 w-4" />
-                    Convert to PDF
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {convertedFiles.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Converted Files</span>
-                <Button onClick={downloadAll} className="bg-orange-600 hover:bg-orange-700">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download All
+      {files.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">{t('common.files_added')}</h2>
+          <ul>
+            {files.map((file, index) => (
+              <li key={index} className="flex items-center justify-between py-2 border-b border-gray-200">
+                <span className="text-gray-600">{file.name}</span>
+                <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
+                  {t('common.remove')}
                 </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {convertedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Image className="h-5 w-5 text-orange-600" />
-                      <span className="font-medium text-gray-900">{file.name}</span>
-                    </div>
-                    <Button
-                      onClick={() => downloadFile(file.url, file.name)}
-                      size="sm"
-                      className="bg-orange-600 hover:bg-orange-700"
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="text-center">
+        <Button
+          className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:from-orange-600 hover:to-yellow-600 font-semibold py-3 px-6 rounded-md transition-colors duration-300"
+          onClick={convertToPdf}
+          disabled={conversionLoading}
+        >
+          {conversionLoading ? t('common.converting') : t('common.convert')}
+        </Button>
       </div>
+
+      {downloading && (
+        <div className="text-center mt-4">
+          <p className="text-gray-600">{t('common.downloading')}</p>
+        </div>
+      )}
     </div>
   );
 };
