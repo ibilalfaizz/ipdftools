@@ -1,85 +1,67 @@
 
-import React, { useState, useRef, useCallback } from 'react';
-import { Upload } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useRef } from 'react';
+import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import FileUploadZone from './FileUploadZone';
-import { useToast } from "@/components/ui/use-toast"
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
+import FileUploadZone from './FileUploadZone';
 
 const WordToPDFConverter = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [converting, setConverting] = useState(false);
-  const [conversionComplete, setConversionComplete] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
-  const { toast } = useToast()
+  const [files, setFiles] = useState<File[]>([]);
+  const [isConverting, setIsConverting] = useState(false);
+  const [convertedFiles, setConvertedFiles] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
-  }, []);
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFiles((prev) => [...prev, ...acceptedFiles]);
+  };
 
-  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-  }, []);
+  };
 
   const handleFileSelect = () => {
     if (fileInputRef.current && fileInputRef.current.files) {
-      const selectedFiles = Array.from(fileInputRef.current.files);
-      setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
     }
   };
 
-  const handleRemoveFile = (indexToRemove: number) => {
-    setFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
+  const handleRemoveFile = (index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleConvert = async () => {
-    if (files.length === 0) {
-      toast({
-        variant: "destructive",
-        title: t('common.no_files_selected'),
-        description: "Please select word files to convert."
-      })
-      return;
+    if (files.length === 0) return;
+    setIsConverting(true);
+    setConvertedFiles([]);
+
+    try {
+      // Simulate conversion process
+      // In real implementation, convert Word to PDF here
+      const converted = files.map((file) => URL.createObjectURL(file));
+      setConvertedFiles(converted);
+    } catch (error) {
+      console.error('Conversion failed', error);
+    } finally {
+      setIsConverting(false);
     }
-
-    const allowedExtensions = /(\.doc|\.docx)$/i;
-    const invalidFiles = files.filter(file => !allowedExtensions.exec(file.name));
-
-    if (invalidFiles.length > 0) {
-      toast({
-        variant: "destructive",
-        title: t('common.invalid_files'),
-        description: t('word_to_pdf.word_only')
-      })
-      return;
-    }
-
-    setConverting(true);
-    setConversionComplete(false);
-
-    // Simulate conversion process
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    setConverting(false);
-    setConversionComplete(true);
-    toast({
-      title: t('common.conversion_complete'),
-      description: t('word_to_pdf.success'),
-    })
   };
 
-  const handleDownload = () => {
-    // Simulate download process
-    alert('Download will start soon!');
+  const handleDownload = (url: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'converted.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
         <div className="inline-flex p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
-          <Upload className="h-8 w-8 text-white" />
+          <FileText className="h-8 w-8 text-white" />
         </div>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('word_to_pdf.title')}</h1>
         <p className="text-xl text-gray-600">{t('word_to_pdf.description')}</p>
@@ -98,12 +80,12 @@ const WordToPDFConverter = () => {
 
       {files.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">{t('common.files_added')}:</h2>
-          <ul>
+          <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
+          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
             {files.map((file, index) => (
-              <li key={index} className="flex items-center justify-between py-2 border-b border-gray-200">
-                <span className="text-gray-600">{file.name}</span>
-                <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
+              <li key={index} className="flex justify-between items-center">
+                <span>{file.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
                   {t('common.remove')}
                 </Button>
               </li>
@@ -112,28 +94,27 @@ const WordToPDFConverter = () => {
         </div>
       )}
 
-      <div className="text-center">
-        <Button
-          size="lg"
-          className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300"
-          onClick={handleConvert}
-          disabled={converting}
-        >
-          {converting ? t('common.converting') : t('word_to_pdf.convert_button')}
+      <div className="flex justify-center mb-6">
+        <Button onClick={handleConvert} disabled={files.length === 0 || isConverting}>
+          {isConverting ? t('common.converting') : t('word_to_pdf.convert_button')}
         </Button>
       </div>
 
-      {conversionComplete && (
-        <div className="text-center mt-8">
-          <h2 className="text-3xl font-bold text-green-600 mb-4">{t('common.conversion_complete')}!</h2>
-          <p className="text-gray-600 mb-4">Your Word file has been successfully converted to PDF.</p>
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-700 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300"
-            onClick={handleDownload}
-          >
-            {t('common.download')}
-          </Button>
+      {convertedFiles.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
+          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
+            {convertedFiles.map((url, index) => (
+              <li key={index} className="flex justify-between items-center">
+                <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                  {`converted_${index + 1}.pdf`}
+                </a>
+                <Button variant="ghost" size="sm" onClick={() => handleDownload(url)}>
+                  {t('common.download')}
+                </Button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

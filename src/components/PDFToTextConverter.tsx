@@ -1,133 +1,90 @@
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useToast } from "@/components/ui/use-toast";
-import FileUploadZone from './FileUploadZone';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
+import FileUploadZone from './FileUploadZone';
+import * as pdfjs from 'pdfjs-dist';
+
+// Set up the worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const PDFToTextConverter = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [converting, setConverting] = useState(false);
-  const [convertedText, setConvertedText] = useState<string>('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
-  const { toast } = useToast();
+  const [files, setFiles] = useState<File[]>([]);
+  const [isConverting, setIsConverting] = useState(false);
+  const [convertedTexts, setConvertedTexts] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
-    toast({
-      title: t('common.files_added'),
-      description: `Added ${acceptedFiles.length} files to the queue.`,
-    });
-  }, [setFiles, toast, t]);
+  const extractTextFromPDF = async (file: File): Promise<string> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+    let fullText = '';
 
-  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item) => {
+          if ('str' in item) {
+            return item.str;
+          }
+          return '';
+        })
+        .join(' ');
+      fullText += pageText + '\n';
+    }
+
+    return fullText;
+  };
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFiles((prev) => [...prev, ...acceptedFiles]);
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-  }, []);
+  };
 
   const handleFileSelect = () => {
     if (fileInputRef.current && fileInputRef.current.files) {
-      const selectedFiles = Array.from(fileInputRef.current.files);
-      handleDrop(selectedFiles);
+      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
     }
   };
 
-  const handleRemoveFile = (name: string) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== name));
+  const handleRemoveFile = (index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const convertPDFToText = async () => {
-    if (files.length === 0) {
-      toast({
-        variant: "destructive",
-        title: t('common.no_files_selected'),
-        description: "Please select PDF files to convert.",
-      });
-      return;
-    }
-
-    setConverting(true);
-    setConvertedText('');
+  const handleConvert = async () => {
+    if (files.length === 0) return;
+    setIsConverting(true);
+    setConvertedTexts([]);
 
     try {
-      const textPromises = files.map(async (file) => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-
-          reader.onload = async function () {
-            try {
-              const pdfData = new Uint8Array(reader.result as ArrayBuffer);
-              // Dynamically import pdfjsLib
-              const pdfjsLib = await import('pdfjs-dist');
-              pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-
-              const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
-              let fullText = "";
-
-              for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const pageText = textContent.items
-                  .filter((item): item is any => 'str' in item)
-                  .map(item => item.str)
-                  .join(" ");
-                fullText += pageText + "\n";
-              }
-              resolve(fullText);
-            } catch (error) {
-              console.error("Error extracting text from PDF:", error);
-              reject(error);
-            }
-          };
-
-          reader.onerror = (error) => {
-            console.error("Error reading file:", error);
-            reject(error);
-          };
-
-          reader.readAsArrayBuffer(file);
-        });
-      });
-
-      const texts = await Promise.all(textPromises);
-      setConvertedText(texts.join('\n\n'));
-
-      toast({
-        title: t('common.conversion_complete'),
-        description: t('pdf_to_text.success'),
-      });
+      const texts: string[] = [];
+      for (const file of files) {
+        const text = await extractTextFromPDF(file);
+        texts.push(text);
+      }
+      setConvertedTexts(texts);
     } catch (error) {
-      console.error("Conversion error:", error);
-      toast({
-        variant: "destructive",
-        title: t('common.conversion_failed'),
-        description: "An error occurred during conversion.",
-      });
+      console.error('Text extraction failed', error);
     } finally {
-      setConverting(false);
+      setIsConverting(false);
     }
   };
 
-  const handleDownload = () => {
-    if (!convertedText) {
-      toast({
-        variant: "destructive",
-        title: "No Text to Download",
-        description: "Please convert PDF files to text first.",
-      });
-      return;
-    }
-
-    const blob = new Blob([convertedText], { type: 'text/plain' });
+  const handleDownload = (text: string, index: number) => {
+    const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted_text.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `extracted_text_${index + 1}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
@@ -154,12 +111,12 @@ const PDFToTextConverter = () => {
 
       {files.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-3">{t('common.files_added')}:</h2>
-          <ul>
-            {files.map((file) => (
-              <li key={file.name} className="flex items-center justify-between py-2 border-b border-gray-200">
-                <span className="text-gray-600">{file.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(file.name)}>
+          <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
+          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
+            {files.map((file, index) => (
+              <li key={index} className="flex justify-between items-center">
+                <span>{file.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
                   {t('common.remove')}
                 </Button>
               </li>
@@ -169,32 +126,31 @@ const PDFToTextConverter = () => {
       )}
 
       <div className="flex justify-center mb-6">
-        <Button
-          size="lg"
-          className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
-          onClick={convertPDFToText}
-          disabled={converting}
-        >
-          {converting ? t('common.converting') : t('common.convert_button')}
+        <Button onClick={handleConvert} disabled={files.length === 0 || isConverting}>
+          {isConverting ? t('common.converting') : t('pdf_to_text.convert_button')}
         </Button>
       </div>
 
-      {convertedText && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-3">Converted Text:</h2>
-          <div className="whitespace-pre-line break-words bg-gray-100 p-4 rounded-md text-gray-800">
-            {convertedText}
-          </div>
-          <div className="flex justify-end mt-4">
-            <Button
-              variant="secondary"
-              size="lg"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-md shadow-md transition-colors duration-300"
-              onClick={handleDownload}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              {t('common.download')}
-            </Button>
+      {convertedTexts.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
+          <div className="space-y-4">
+            {convertedTexts.map((text, index) => (
+              <Card key={index}>
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-medium">{`extracted_text_${index + 1}.txt`}</h3>
+                    <Button variant="ghost" size="sm" onClick={() => handleDownload(text, index)}>
+                      <Download className="h-4 w-4 mr-2" />
+                      {t('common.download')}
+                    </Button>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded max-h-32 overflow-y-auto">
+                    <pre className="text-sm whitespace-pre-wrap">{text.substring(0, 500)}...</pre>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       )}

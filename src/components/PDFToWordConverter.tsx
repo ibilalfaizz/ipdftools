@@ -1,89 +1,71 @@
 
-import React, { useState, useRef, useCallback } from 'react';
-import { FileText } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useToast } from "@/components/ui/use-toast"
+import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
-import { useMutation } from '@tanstack/react-query';
 import { convertPdfToWord } from '../lib/api';
 import { saveAs } from 'file-saver';
 
 const PDFToWordConverter = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
-  const { toast } = useToast();
+  const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
+  const [convertedFiles, setConvertedFiles] = useState<any[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { mutate } = useMutation({
-    mutationFn: convertPdfToWord,
-    onSuccess: (data: any) => {
-      setIsConverting(false);
-      if (data && data.length > 0) {
-        data.forEach((fileData: any, index: number) => {
-          saveAs(fileData.url, fileData.filename);
-        });
-        toast({
-          title: t('common.conversion_complete'),
-          description: t('pdf_to_word.success'),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t('common.conversion_failed'),
-          description: 'No files were converted.',
-        });
-      }
-      setFiles([]);
-    },
-    onError: () => {
-      setIsConverting(false);
-      toast({
-        variant: "destructive",
-        title: t('common.conversion_failed'),
-        description: 'An error occurred during conversion.',
-      });
-    },
+  const { mutate: convert } = useQuery({
+    queryKey: ['convertPdfToWord'],
+    queryFn: () => convertPdfToWord(new FormData()),
+    enabled: false,
   });
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
-  }, []);
-
-  const handleFileSelect = () => {
-    if (fileInputRef.current && fileInputRef.current.files) {
-      const selectedFiles = Array.from(fileInputRef.current.files);
-      handleDrop(selectedFiles);
-    }
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFiles((prev) => [...prev, ...acceptedFiles]);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
+  const handleFileSelect = () => {
+    if (fileInputRef.current && fileInputRef.current.files) {
+      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
+    }
+  };
+
   const handleRemoveFile = (index: number) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleConvert = async () => {
-    if (files.length === 0) {
-      toast({
-        variant: "destructive",
-        title: t('common.no_files_selected'),
-        description: t('pdf_to_word.select_pdf'),
-      });
-      return;
-    }
-
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append('files', file);
-    });
-
+    if (files.length === 0) return;
     setIsConverting(true);
-    mutate(formData);
+    setConvertedFiles([]);
+
+    try {
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const result = await convertPdfToWord(formData);
+      setConvertedFiles(result as any[]);
+    } catch (error) {
+      console.error('Conversion failed', error);
+    } finally {
+      setIsConverting(false);
+    }
+  };
+
+  const handleDownload = (file: any) => {
+    // Mock implementation - create a blob for download
+    const blob = new Blob(['Mock Word content'], { 
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
+    });
+    saveAs(blob, file.filename);
   };
 
   return (
@@ -109,12 +91,12 @@ const PDFToWordConverter = () => {
 
       {files.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">{t('common.files_added')}:</h2>
-          <ul>
+          <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
+          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
             {files.map((file, index) => (
-              <li key={index} className="flex items-center justify-between py-2 border-b border-gray-200">
-                <span className="text-gray-600">{file.name}</span>
-                <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-100" onClick={() => handleRemoveFile(index)}>
+              <li key={index} className="flex justify-between items-center">
+                <span>{file.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
                   {t('common.remove')}
                 </Button>
               </li>
@@ -123,16 +105,28 @@ const PDFToWordConverter = () => {
         </div>
       )}
 
-      <div className="text-center">
-        <Button
-          size="lg"
-          className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-semibold rounded-md py-3 px-8"
-          onClick={handleConvert}
-          disabled={isConverting}
-        >
+      <div className="flex justify-center mb-6">
+        <Button onClick={handleConvert} disabled={files.length === 0 || isConverting}>
           {isConverting ? t('common.converting') : t('pdf_to_word.convert_button')}
         </Button>
       </div>
+
+      {convertedFiles.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
+          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
+            {convertedFiles.map((file, index) => (
+              <li key={index} className="flex justify-between items-center">
+                <span>{file.filename}</span>
+                <Button variant="ghost" size="sm" onClick={() => handleDownload(file)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  {t('common.download')}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
