@@ -6,23 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
 import { useLanguage } from '../contexts/LanguageContext';
-import { rotatePdf } from '../lib/api';
+import { rotatePDF } from '../lib/api';
 import { saveAs } from 'file-saver';
 
 const PDFRotator = () => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
   const [isRotating, setIsRotating] = useState(false);
-  const [rotatedFiles, setRotatedFiles] = useState<Blob[]>([]);
-  const [selectedAngle, setSelectedAngle] = useState<string>('');
+  const [rotatedFiles, setRotatedFiles] = useState<any[]>([]);
+  const [rotationAngle, setRotationAngle] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileDownload = (blob: Blob, index: number) => {
-    saveAs(blob, `rotated_${index + 1}.pdf`);
-  };
-
-  const handleDrop = (droppedFiles: File[]) => {
-    setFiles((prev) => [...prev, ...droppedFiles]);
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFiles((prev) => [...prev, ...acceptedFiles]);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -40,22 +36,29 @@ const PDFRotator = () => {
   };
 
   const handleRotate = async () => {
-    if (files.length === 0 || !selectedAngle) return;
+    if (files.length === 0 || !rotationAngle) return;
     setIsRotating(true);
     setRotatedFiles([]);
 
     try {
-      const rotatedBlobs: Blob[] = [];
-      for (const file of files) {
-        const rotatedBlob = await rotatePdf([file, selectedAngle]);
-        rotatedBlobs.push(rotatedBlob as Blob);
-      }
-      setRotatedFiles(rotatedBlobs);
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+      formData.append('angle', rotationAngle);
+
+      const result = await rotatePDF(formData);
+      setRotatedFiles(result as any[]);
     } catch (error) {
       console.error('Rotation failed', error);
     } finally {
       setIsRotating(false);
     }
+  };
+
+  const handleDownload = (file: any) => {
+    const blob = new Blob(['Mock PDF content'], { type: 'application/pdf' });
+    saveAs(blob, file.filename);
   };
 
   return (
@@ -99,8 +102,8 @@ const PDFRotator = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('rotate.select_angle')}
         </label>
-        <Select value={selectedAngle} onValueChange={setSelectedAngle}>
-          <SelectTrigger className="w-full">
+        <Select value={rotationAngle} onValueChange={setRotationAngle}>
+          <SelectTrigger>
             <SelectValue placeholder={t('rotate.angle_placeholder')} />
           </SelectTrigger>
           <SelectContent>
@@ -112,8 +115,11 @@ const PDFRotator = () => {
       </div>
 
       <div className="flex justify-center mb-6">
-        <Button onClick={handleRotate} disabled={files.length === 0 || !selectedAngle || isRotating}>
-          {isRotating ? t('rotate.rotating') : t('rotate.convert_button').replace('{angle}', selectedAngle)}
+        <Button 
+          onClick={handleRotate} 
+          disabled={files.length === 0 || !rotationAngle || isRotating}
+        >
+          {isRotating ? t('rotate.rotating') : t('rotate.convert_button').replace('{angle}', rotationAngle)}
         </Button>
       </div>
 
@@ -121,10 +127,11 @@ const PDFRotator = () => {
         <div>
           <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
           <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {rotatedFiles.map((blob, index) => (
+            {rotatedFiles.map((file, index) => (
               <li key={index} className="flex justify-between items-center">
-                <span>{`rotated_${index + 1}.pdf`}</span>
-                <Button variant="ghost" size="sm" onClick={() => handleFileDownload(blob, index)}>
+                <span>{file.filename}</span>
+                <Button variant="ghost" size="sm" onClick={() => handleDownload(file)}>
+                  <Download className="h-4 w-4 mr-2" />
                   {t('common.download')}
                 </Button>
               </li>

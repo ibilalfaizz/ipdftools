@@ -5,16 +5,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
+import { convertPdfToJpg } from '../lib/api';
 
 const PDFToJPGConverter = () => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
-  const [convertedFiles, setConvertedFiles] = useState<string[]>([]);
+  const [convertedFiles, setConvertedFiles] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDrop = (droppedFiles: File[]) => {
-    setFiles((prev) => [...prev, ...droppedFiles]);
+  const handleDrop = (acceptedFiles: File[]) => {
+    setFiles((prev) => [...prev, ...acceptedFiles]);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -37,10 +38,13 @@ const PDFToJPGConverter = () => {
     setConvertedFiles([]);
 
     try {
-      // Simulate conversion process
-      // In real implementation, convert PDF to JPG here
-      const converted = files.map((file) => URL.createObjectURL(file));
-      setConvertedFiles(converted);
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('files', file);
+      });
+
+      const result = await convertPdfToJpg(formData);
+      setConvertedFiles(result as any[]);
     } catch (error) {
       console.error('Conversion failed', error);
     } finally {
@@ -104,12 +108,13 @@ const PDFToJPGConverter = () => {
         <div>
           <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
           <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {convertedFiles.map((url, index) => (
+            {convertedFiles.map((file, index) => (
               <li key={index} className="flex justify-between items-center">
-                <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                  {`converted_${index + 1}.jpg`}
+                <a href={file.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                  {file.filename}
                 </a>
-                <Button variant="ghost" size="sm" onClick={() => handleDownload(url)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDownload(file.url)}>
+                  <Download className="h-4 w-4 mr-2" />
                   {t('common.download')}
                 </Button>
               </li>

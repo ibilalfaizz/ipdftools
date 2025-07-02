@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
 import { convertPdfToWord } from '../lib/api';
@@ -12,14 +12,17 @@ import { saveAs } from 'file-saver';
 const PDFToWordConverter = () => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
-  const [isConverting, setIsConverting] = useState(false);
   const [convertedFiles, setConvertedFiles] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: convert } = useQuery({
-    queryKey: ['convertPdfToWord'],
-    queryFn: () => convertPdfToWord(new FormData()),
-    enabled: false,
+  const { mutate: convert, isPending: isConverting } = useMutation({
+    mutationFn: convertPdfToWord,
+    onSuccess: (data) => {
+      setConvertedFiles(data as any[]);
+    },
+    onError: (error) => {
+      console.error('Conversion failed', error);
+    }
   });
 
   const handleDrop = (acceptedFiles: File[]) => {
@@ -42,22 +45,14 @@ const PDFToWordConverter = () => {
 
   const handleConvert = async () => {
     if (files.length === 0) return;
-    setIsConverting(true);
     setConvertedFiles([]);
 
-    try {
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append('files', file);
-      });
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
 
-      const result = await convertPdfToWord(formData);
-      setConvertedFiles(result as any[]);
-    } catch (error) {
-      console.error('Conversion failed', error);
-    } finally {
-      setIsConverting(false);
-    }
+    convert(formData);
   };
 
   const handleDownload = (file: any) => {
