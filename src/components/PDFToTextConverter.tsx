@@ -26,8 +26,12 @@ const PDFToTextConverter = () => {
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
       const pageText = textContent.items
-        .filter((item): item is pdfjsLib.TextItem => 'str' in item)
-        .map((item) => item.str)
+        .map((item: any) => {
+          if (item && typeof item === 'object' && 'str' in item) {
+            return item.str;
+          }
+          return '';
+        })
         .join(' ');
       fullText += pageText + '\n';
     }
