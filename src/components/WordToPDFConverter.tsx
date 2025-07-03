@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,9 +21,7 @@ const WordToPDFConverter = () => {
   };
 
   const handleFileSelect = () => {
-    if (fileInputRef.current && fileInputRef.current.files) {
-      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
-    }
+    // File selection is now handled by FileUploadZone
   };
 
   const handleRemoveFile = (index: number) => {
@@ -74,6 +71,9 @@ const WordToPDFConverter = () => {
             onDragOver={handleDragOver}
             onFileSelect={handleFileSelect}
             fileInputRef={fileInputRef}
+            acceptedFormats=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            title="Drop Word files here or click to browse"
+            description="Support for .doc and .docx files • Maximum 50MB per file"
           />
         </CardContent>
       </Card>
@@ -119,6 +119,36 @@ const WordToPDFConverter = () => {
       )}
     </div>
   );
+
+  function handleRemoveFile(index: number) {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function handleConvert() {
+    if (files.length === 0) return;
+    setIsConverting(true);
+    setConvertedFiles([]);
+
+    try {
+      // Simulate conversion process
+      // In real implementation, convert Word to PDF here
+      const converted = files.map((file) => URL.createObjectURL(file));
+      setConvertedFiles(converted);
+    } catch (error) {
+      console.error('Conversion failed', error);
+    } finally {
+      setIsConverting(false);
+    }
+  }
+
+  function handleDownload(url: string) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'converted.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 };
 
 export default WordToPDFConverter;

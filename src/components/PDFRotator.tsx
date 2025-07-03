@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { RotateCw, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,9 +25,7 @@ const PDFRotator = () => {
   };
 
   const handleFileSelect = () => {
-    if (fileInputRef.current && fileInputRef.current.files) {
-      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
-    }
+    // File selection is now handled by FileUploadZone
   };
 
   const handleRemoveFile = (index: number) => {

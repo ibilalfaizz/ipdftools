@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,16 +47,14 @@ const PDFToTextConverter = () => {
   };
 
   const handleFileSelect = () => {
-    if (fileInputRef.current && fileInputRef.current.files) {
-      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
-    }
+    // File selection is now handled by FileUploadZone
   };
 
-  const handleRemoveFile = (index: number) => {
+  function handleRemoveFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  }
 
-  const handleConvert = async () => {
+  async function handleConvert() {
     if (files.length === 0) return;
     setIsConverting(true);
     setConvertedFiles([]);
@@ -78,9 +75,9 @@ const PDFToTextConverter = () => {
     } finally {
       setIsConverting(false);
     }
-  };
+  }
 
-  const handleDownload = (file: {filename: string, content: string}) => {
+  function handleDownload(file: {filename: string, content: string}) {
     const blob = new Blob([file.content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -90,7 +87,7 @@ const PDFToTextConverter = () => {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">

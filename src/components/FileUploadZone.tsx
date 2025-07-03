@@ -4,9 +4,9 @@ import { Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface FileUploadZoneProps {
-  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
-  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
-  onFileSelect: (files: FileList | null) => void;
+  onDrop: (acceptedFiles: File[]) => void;
+  onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+  onFileSelect: () => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
   acceptedFormats?: string;
   title?: string;
@@ -22,9 +22,23 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   title = "Drop PDF files here or click to browse",
   description = "Support for multiple files • Maximum 50MB per file"
 }) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    onDrop(files);
+  };
+
+  const handleFileInputChange = () => {
+    if (fileInputRef.current?.files) {
+      const files = Array.from(fileInputRef.current.files);
+      onDrop(files);
+    }
+    onFileSelect();
+  };
+
   return (
     <div
-      onDrop={onDrop}
+      onDrop={handleDrop}
       onDragOver={onDragOver}
       className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 cursor-pointer group"
       onClick={() => fileInputRef.current?.click()}
@@ -57,7 +71,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         type="file"
         multiple
         accept={acceptedFormats}
-        onChange={(e) => onFileSelect(e.target.files)}
+        onChange={handleFileInputChange}
         className="hidden"
       />
     </div>

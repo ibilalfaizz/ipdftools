@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,16 +33,14 @@ const PDFToWordConverter = () => {
   };
 
   const handleFileSelect = () => {
-    if (fileInputRef.current && fileInputRef.current.files) {
-      setFiles((prev) => [...prev, ...Array.from(fileInputRef.current.files)]);
-    }
+    // File selection is now handled by FileUploadZone
   };
 
-  const handleRemoveFile = (index: number) => {
+  function handleRemoveFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  }
 
-  const handleConvert = async () => {
+  async function handleConvert() {
     if (files.length === 0) return;
     setConvertedFiles([]);
 
@@ -53,15 +50,14 @@ const PDFToWordConverter = () => {
     });
 
     convert(formData);
-  };
+  }
 
-  const handleDownload = (file: any) => {
-    // Mock implementation - create a blob for download
+  function handleDownload(file: any) {
     const blob = new Blob(['Mock Word content'], { 
       type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
     });
     saveAs(blob, file.filename);
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
