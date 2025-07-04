@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -119,36 +120,6 @@ const WordToPDFConverter = () => {
       )}
     </div>
   );
-
-  function handleRemoveFile(index: number) {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  async function handleConvert() {
-    if (files.length === 0) return;
-    setIsConverting(true);
-    setConvertedFiles([]);
-
-    try {
-      // Simulate conversion process
-      // In real implementation, convert Word to PDF here
-      const converted = files.map((file) => URL.createObjectURL(file));
-      setConvertedFiles(converted);
-    } catch (error) {
-      console.error('Conversion failed', error);
-    } finally {
-      setIsConverting(false);
-    }
-  }
-
-  function handleDownload(url: string) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'converted.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
 };
 
 export default WordToPDFConverter;

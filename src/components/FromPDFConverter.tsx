@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Upload, Download, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -128,10 +127,9 @@ const FromPDFConverter = () => {
     }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
-    if (droppedFiles.length === 0) {
+  const handleDrop = (acceptedFiles: File[]) => {
+    const pdfFiles = acceptedFiles.filter(file => file.type === 'application/pdf');
+    if (pdfFiles.length === 0) {
       toast({
         title: "Invalid Files",
         description: "Please select PDF files only.",
@@ -139,26 +137,15 @@ const FromPDFConverter = () => {
       });
       return;
     }
-    handleFiles(droppedFiles);
+    handleFiles(pdfFiles);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
-  const handleFileSelect = (fileList: FileList | null) => {
-    if (fileList) {
-      const selectedFiles = Array.from(fileList).filter(file => file.type === 'application/pdf');
-      if (selectedFiles.length === 0) {
-        toast({
-          title: "Invalid Files",
-          description: "Please select PDF files only.",
-          variant: "destructive",
-        });
-        return;
-      }
-      handleFiles(selectedFiles);
-    }
+  const handleFileSelect = () => {
+    // File selection is handled in FileUploadZone
   };
 
   const handleFiles = (newFiles: File[]) => {

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Image, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -121,39 +122,6 @@ const PDFToJPGConverter = () => {
       )}
     </div>
   );
-
-  function handleRemoveFile(index: number) {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  async function handleConvert() {
-    if (files.length === 0) return;
-    setIsConverting(true);
-    setConvertedFiles([]);
-
-    try {
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append('files', file);
-      });
-
-      const result = await convertPdfToJpg(formData);
-      setConvertedFiles(result as any[]);
-    } catch (error) {
-      console.error('Conversion failed', error);
-    } finally {
-      setIsConverting(false);
-    }
-  }
-
-  function handleDownload(url: string) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'converted.jpg';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
 };
 
 export default PDFToJPGConverter;

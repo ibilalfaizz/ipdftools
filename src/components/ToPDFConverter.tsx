@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Upload, Download, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -114,21 +113,16 @@ const ToPDFConverter = () => {
     return await pdfDoc.save();
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    handleFiles(droppedFiles);
+  const handleDrop = (acceptedFiles: File[]) => {
+    handleFiles(acceptedFiles);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
-  const handleFileSelect = (fileList: FileList | null) => {
-    if (fileList) {
-      const selectedFiles = Array.from(fileList);
-      handleFiles(selectedFiles);
-    }
+  const handleFileSelect = () => {
+    // File selection is handled in FileUploadZone
   };
 
   const handleFiles = (newFiles: File[]) => {
