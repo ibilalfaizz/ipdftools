@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 interface PDFFile {
   id: string;
   file: File;
+  name: string;
+  size: number;
 }
 
 interface FileListProps {
