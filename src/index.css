@@ -45,6 +45,10 @@
     --sidebar-accent-foreground: 356 79% 56%;
     --sidebar-border: 0 0% 91%;
     --sidebar-ring: 356 79% 56%;
+    
+    /* Brand colors - subtle integration */
+    --brand-primary: 356 79% 56%; /* #db3e43 converted to HSL */
+    --brand-dark: 0 0% 1.6%; /* #040404 converted to HSL */
   }
 
   .dark {
@@ -93,5 +97,33 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Subtle brand color integration */
+@layer components {
+  /* Apply brand colors to specific elements */
+  .brand-gradient {
+    background: linear-gradient(135deg, #db3e43 0%, #e85459 100%);
+  }
+  
+  .brand-accent {
+    color: #db3e43;
+  }
+  
+  .brand-hover:hover {
+    color: #db3e43;
+  }
+  
+  .brand-border {
+    border-color: #db3e43;
+  }
+  
+  .brand-bg-subtle {
+    background-color: rgba(219, 62, 67, 0.05);
+  }
+  
+  .brand-text-dark {
+    color: #040404;
   }
 }
