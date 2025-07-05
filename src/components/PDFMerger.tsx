@@ -27,9 +27,9 @@ const PDFMerger = () => {
     setFiles(prev => [...prev, ...newFiles]);
   }, []);
 
-  const handleFileSelect = useCallback((files: FileList | null) => {
-    if (files) {
-      const newFiles = Array.from(files).map(file => ({
+  const handleFileSelect = useCallback(() => {
+    if (fileInputRef.current?.files) {
+      const newFiles = Array.from(fileInputRef.current.files).map(file => ({
         id: Math.random().toString(36).substr(2, 9),
         file
       }));
@@ -58,7 +58,9 @@ const PDFMerger = () => {
     try {
       const fileArray = files.map(f => f.file);
       const mergedPdf = await mergePDFs(fileArray);
-      const url = URL.createObjectURL(mergedPdf);
+      // Handle the response correctly - it should be a blob
+      const blob = mergedPdf instanceof Blob ? mergedPdf : new Blob([mergedPdf]);
+      const url = URL.createObjectURL(blob);
       setMergedPdfUrl(url);
     } catch (error) {
       console.error('Error merging PDFs:', error);
@@ -81,7 +83,7 @@ const PDFMerger = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
+        <div className="inline-flex p-4 bg-gradient-to-r from-primary to-primary/80 rounded-full mb-4">
           <Upload className="h-8 w-8 text-white" />
         </div>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('merge.title')}</h1>
