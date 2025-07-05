@@ -1,8 +1,11 @@
+import React, { useState } from "react";
+import { X, GripVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-import React, { useState } from 'react';
-import { X, GripVertical } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { PDFFile } from './PDFMerger';
+interface PDFFile {
+  id: string;
+  file: File;
+}
 
 interface FileListProps {
   files: PDFFile[];
@@ -14,30 +17,30 @@ const FileList: React.FC<FileListProps> = ({ files, onRemove, onReorder }) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
   };
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    
+
     if (draggedIndex !== null && draggedIndex !== dropIndex) {
       onReorder(draggedIndex, dropIndex);
     }
-    
+
     setDraggedIndex(null);
   };
 
@@ -66,19 +69,22 @@ const FileList: React.FC<FileListProps> = ({ files, onRemove, onReorder }) => {
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
             className={`flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 cursor-move ${
-              draggedIndex === index ? 'opacity-50 scale-95' : ''
+              draggedIndex === index ? "opacity-50 scale-95" : ""
             }`}
           >
             <div className="flex items-center space-x-3 flex-1 min-w-0">
               <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              
+
               <div className="flex items-center space-x-3 flex-1 min-w-0">
                 <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <span className="text-red-600 font-bold text-sm">PDF</span>
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate" title={file.name}>
+                  <p
+                    className="font-medium text-gray-900 truncate"
+                    title={file.name}
+                  >
                     {file.name}
                   </p>
                   <p className="text-sm text-gray-500">
@@ -91,7 +97,7 @@ const FileList: React.FC<FileListProps> = ({ files, onRemove, onReorder }) => {
                 <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                   #{index + 1}
                 </span>
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
