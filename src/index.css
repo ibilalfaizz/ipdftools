@@ -95,33 +95,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* Custom color overrides for the specific theme */
-.bg-gradient-to-r.from-blue-500.to-purple-500,
-.bg-gradient-to-r.from-blue-600.to-purple-600 {
-  background: linear-gradient(to right, #db3e43, #040404) !important;
-}
-
-.bg-gradient-to-br.from-blue-50.via-white.to-purple-50 {
-  background: linear-gradient(to bottom right, #fef2f2, #ffffff, #f9fafb) !important;
-}
-
-.text-blue-600,
-.text-purple-600 {
-  color: #db3e43 !important;
-}
-
-.bg-clip-text.text-transparent.bg-gradient-to-r.from-blue-600.to-purple-600 {
-  background: linear-gradient(to right, #db3e43, #040404);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hover\:from-blue-600:hover {
-  --tw-gradient-from: #db3e43 !important;
-}
-
-.hover\:to-purple-600:hover {
-  --tw-gradient-to: #040404 !important;
-}
