@@ -27,6 +27,10 @@ const PDFMerger = () => {
     setFiles(prev => [...prev, ...newFiles]);
   }, []);
 
+  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  }, []);
+
   const handleFileSelect = useCallback(() => {
     if (fileInputRef.current?.files) {
       const newFiles = Array.from(fileInputRef.current.files).map(file => ({
@@ -57,11 +61,15 @@ const PDFMerger = () => {
     setIsProcessing(true);
     try {
       const fileArray = files.map(f => f.file);
-      const mergedPdf = await mergePDFs(fileArray);
-      // Handle the response correctly - it should be a blob
-      const blob = mergedPdf instanceof Blob ? mergedPdf : new Blob([mergedPdf]);
-      const url = URL.createObjectURL(blob);
-      setMergedPdfUrl(url);
+      const response = await mergePDFs(fileArray);
+      
+      // Handle the API response correctly
+      if (response.success && response.downloadUrl) {
+        // If we get a download URL, use it directly
+        setMergedPdfUrl(response.downloadUrl);
+      } else {
+        console.error('Failed to merge PDFs:', response.error);
+      }
     } catch (error) {
       console.error('Error merging PDFs:', error);
     } finally {
@@ -94,6 +102,7 @@ const PDFMerger = () => {
         <CardContent className="p-6">
           <FileUploadZone
             onDrop={handleDrop}
+            onDragOver={handleDragOver}
             onFileSelect={handleFileSelect}
             fileInputRef={fileInputRef}
           />
