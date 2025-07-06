@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { FileText, Merge, Split, Minimize, RotateCw, ArrowRight, Upload, Download, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,7 @@ const Landing = () => {
       title: t('nav.merge'),
       description: "Combine multiple PDF files into a single document with ease.",
       path: "/merge",
-      color: "from-blue-500 to-purple-500",
+      color: "from-red-500 to-red-600",
       available: true
     },
     {
@@ -86,25 +87,25 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       <Header />
       <main className="container mx-auto px-4 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div className="mb-6">
-            <div className="inline-flex p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
+            <div className="inline-flex p-4 brand-gradient rounded-full mb-4">
               <FileText className="h-12 w-12 text-white" />
             </div>
           </div>
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
-            PDF Tools Hub
+          <h1 className="text-6xl font-bold brand-accent mb-6">
+            iPDFTOOLS
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             The ultimate collection of PDF tools. Merge, split, compress, convert, and rotate your documents 
             with professional-grade quality. Fast, secure, and completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+            <Button asChild size="lg" className="brand-gradient hover:opacity-90">
               <Link to="/merge">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -115,12 +116,12 @@ const Landing = () => {
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {features.map((feature, index) => (
-            <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/60 backdrop-blur-sm">
+            <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/60 backdrop-blur-sm hover:bg-red-50/30">
               <CardHeader className="text-center pb-4">
                 <div className={`inline-flex p-4 bg-gradient-to-r ${feature.color} rounded-full mb-4 mx-auto text-white group-hover:scale-110 transition-transform duration-300`}>
                   {feature.icon}
                 </div>
-                <CardTitle className="text-2xl font-bold text-gray-800">
+                <CardTitle className="text-2xl font-bold brand-text-dark">
                   {feature.title}
                 </CardTitle>
               </CardHeader>
@@ -129,7 +130,7 @@ const Landing = () => {
                   {feature.description}
                 </p>
                 {feature.available ? (
-                  <Button asChild className={`w-full bg-gradient-to-r ${feature.color} hover:shadow-lg transition-all duration-300`}>
+                  <Button asChild className={`w-full bg-gradient-to-r ${feature.color} hover:shadow-lg transition-all duration-300 border-0`}>
                     <Link to={feature.path}>
                       Use Tool <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -146,27 +147,27 @@ const Landing = () => {
 
         {/* Features List */}
         <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">Why Choose Our PDF Tools?</h2>
+          <h2 className="text-3xl font-bold brand-text-dark mb-8">Why Choose iPDFTOOLS?</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="h-8 w-8 brand-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">100% Secure</h3>
+              <h3 className="text-xl font-semibold brand-text-dark mb-2">100% Secure</h3>
               <p className="text-gray-600">All processing happens in your browser. Your files never leave your device.</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Minimize className="h-8 w-8 text-green-600" />
+              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Minimize className="h-8 w-8 brand-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Fast & Efficient</h3>
+              <h3 className="text-xl font-semibold brand-text-dark mb-2">Fast & Efficient</h3>
               <p className="text-gray-600">Lightning-fast processing with no file size limits or watermarks.</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Merge className="h-8 w-8 text-purple-600" />
+              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Merge className="h-8 w-8 brand-accent" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Easy to Use</h3>
+              <h3 className="text-xl font-semibold brand-text-dark mb-2">Easy to Use</h3>
               <p className="text-gray-600">Intuitive interface that works on any device. No registration required.</p>
             </div>
           </div>
