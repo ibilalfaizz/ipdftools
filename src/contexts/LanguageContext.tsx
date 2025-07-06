@@ -35,6 +35,15 @@ const translations = {
     'common.conversion_failed': 'Conversion Failed',
     'common.no_files_selected': 'No Files Selected',
     'common.invalid_files': 'Invalid Files',
+    'common.selected_files': 'Selected Files',
+    'common.processing': 'Processing...',
+    'common.success': 'Success!',
+    'common.downloading': 'Downloading...',
+    
+    // Landing/Merge
+    'merge.title': 'PDF Merger',
+    'merge.description': 'Combine multiple PDF files into one document',
+    'merge.merge_button': 'Merge PDFs',
     
     // PDF to Word
     'pdf_to_word.title': 'PDF to Word Converter',
@@ -242,14 +251,28 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
+    console.log('Translation request for key:', key, 'Current language:', language);
+    
+    const currentTranslations = translations[language];
+    console.log('Current translations object:', currentTranslations);
+    
+    // Direct key lookup first
+    if (currentTranslations && currentTranslations[key]) {
+      console.log('Found direct translation:', currentTranslations[key]);
+      return currentTranslations[key];
+    }
+    
+    // Fallback: Try dot notation parsing (legacy support)
     const keys = key.split('.');
-    let value: any = translations[language];
+    let value: any = currentTranslations;
     
     for (const k of keys) {
       value = value?.[k];
     }
     
-    return value || key;
+    const result = value || key;
+    console.log('Final translation result:', result);
+    return result;
   };
 
   return (
