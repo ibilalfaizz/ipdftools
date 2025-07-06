@@ -1,5 +1,5 @@
-
-import React from 'react';
+import { Heart } from "lucide-react";
+import React from "react";
 
 const Footer = () => {
   return (
@@ -7,10 +7,17 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <p className="brand-text-dark font-medium mb-2">
-            © 2024 iPDFTOOLS. Built with React & TailwindCSS.
+            © 2025 iPDFTOOLS. Built with{" "}
+            <Heart className="inline bg-red fill-red-500 text-red-500" /> by{" "}
+            <a href="https://bilalfaiz.com/" className="brand-accent underline">
+              {" "}
+              Bilal Faiz
+            </a>
+            .
           </p>
           <p className="text-sm text-gray-500">
-            All processing is done securely in your browser. Your files are never stored on our servers.
+            All processing is done securely in your browser. Your files are
+            never stored on our servers.
           </p>
           <div className="mt-4 text-xs text-gray-400">
             Professional PDF tools for everyone - Free, Fast, and Secure
