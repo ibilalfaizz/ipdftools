@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
@@ -15,17 +14,33 @@ interface FileUploadZoneProps {
 }
 
 const FileUploadZone: React.FC<FileUploadZoneProps> = ({ onDrop, onDragOver, onFileSelect, fileInputRef }) => {
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop });
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({ 
+    onDrop,
+    noClick: true // Disable dropzone's default click behavior
+  });
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
 
   return (
     <div
       {...getRootProps()}
-      className={`border-2 border-dashed rounded-md p-6 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700 transition-colors duration-300 ${
+      className={`border-2 border-dashed rounded-md p-6 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700 transition-colors duration-300 cursor-pointer ${
         isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
       }`}
       onDragOver={onDragOver}
+      onClick={handleClick}
     >
-      <input {...getInputProps()} type="file" multiple onChange={onFileSelect} ref={fileInputRef} className="hidden" accept="image/jpeg, image/png"/>
+      <input 
+        {...getInputProps()} 
+        type="file" 
+        multiple 
+        onChange={onFileSelect} 
+        ref={fileInputRef} 
+        className="hidden" 
+        accept="image/jpeg, image/png"
+      />
       <Download className="h-6 w-6 text-gray-400 mb-2" />
       <p className="text-gray-500 dark:text-gray-400 text-sm">
         {isDragActive ? 'Drop the images here...' : 'Drag and drop images here, or click to select files'}

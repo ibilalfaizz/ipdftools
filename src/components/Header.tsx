@@ -1,8 +1,16 @@
+
 import React from "react";
 import { FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "../contexts/LanguageContext";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const Header = () => {
   const location = useLocation();
@@ -17,30 +25,62 @@ const Header = () => {
       color: "hover:text-green-600",
     },
     { href: "/rotate", label: t("nav.rotate"), color: "hover:text-indigo-600" },
+  ];
+
+  const allTools = [
+    {
+      href: "/merge",
+      label: t("nav.merge"),
+      description: "Combine multiple PDF files into one",
+      color: "from-red-500 to-red-600",
+    },
+    {
+      href: "/split",
+      label: t("nav.split"),
+      description: "Split PDF into multiple documents",
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      href: "/compress",
+      label: t("nav.compress"),
+      description: "Reduce PDF file size",
+      color: "from-green-500 to-teal-500",
+    },
+    {
+      href: "/rotate",
+      label: t("nav.rotate"),
+      description: "Rotate PDF pages",
+      color: "from-indigo-500 to-cyan-500",
+    },
     {
       href: "/pdf-to-word",
       label: t("nav.pdf_to_word"),
-      color: "hover:text-blue-600",
+      description: "Convert PDF to Word documents",
+      color: "from-blue-500 to-green-500",
     },
     {
       href: "/pdf-to-jpg",
       label: t("nav.pdf_to_jpg"),
-      color: "hover:text-purple-600",
+      description: "Convert PDF to JPG images",
+      color: "from-purple-500 to-pink-500",
     },
     {
       href: "/pdf-to-text",
       label: t("nav.pdf_to_text"),
-      color: "hover:text-green-600",
+      description: "Extract text from PDF",
+      color: "from-green-500 to-blue-500",
     },
     {
       href: "/word-to-pdf",
       label: t("nav.word_to_pdf"),
-      color: "hover:text-blue-600",
+      description: "Convert Word to PDF",
+      color: "from-blue-500 to-purple-500",
     },
     {
       href: "/jpg-to-pdf",
       label: t("nav.jpg_to_pdf"),
-      color: "hover:text-orange-600",
+      description: "Convert images to PDF",
+      color: "from-orange-500 to-yellow-500",
     },
   ];
 
@@ -54,17 +94,39 @@ const Header = () => {
               alt="Logo"
               className="h-20 w-auto object-cover"
             />
-            {/* <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
-              <FileText className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              PDF Tools
-            </span> */}
           </Link>
 
           <div className="flex items-center space-x-4">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-gray-600 hover:text-blue-600">
+                    All PDF Tools
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-6 w-[800px] grid-cols-3">
+                      {allTools.map((tool) => (
+                        <Link
+                          key={tool.href}
+                          to={tool.href}
+                          className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none group-hover:text-blue-600">
+                            {tool.label}
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            {tool.description}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
             <nav className="hidden md:flex space-x-6">
-              {navItems.slice(0, 4).map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
