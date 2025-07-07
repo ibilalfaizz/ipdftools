@@ -108,25 +108,47 @@ const JPGToPDFConverter = () => {
 
         await new Promise((resolve, reject) => {
           img.onload = () => {
-            const width = img.width;
-            const height = img.height;
+            const imgWidth = img.width;
+            const imgHeight = img.height;
+            const aspectRatio = imgWidth / imgHeight;
 
-            // Calculate appropriate page size based on image dimensions
-            const aspectRatio = width / height;
+            // Standard A4 dimensions in points
+            const a4Width = 595.28;
+            const a4Height = 841.89;
+
             let pageWidth, pageHeight;
-            
+            let imgDisplayWidth, imgDisplayHeight;
+
+            // Determine if image is landscape or portrait
             if (aspectRatio > 1) {
-              // Landscape orientation
-              pageWidth = Math.min(width, 841.89); // A4 landscape width
-              pageHeight = pageWidth / aspectRatio;
+              // Landscape image - use A4 landscape
+              pageWidth = a4Height;
+              pageHeight = a4Width;
             } else {
-              // Portrait orientation
-              pageHeight = Math.min(height, 595.28); // A4 portrait height
-              pageWidth = pageHeight * aspectRatio;
+              // Portrait image - use A4 portrait
+              pageWidth = a4Width;
+              pageHeight = a4Height;
             }
 
+            // Calculate scaled dimensions to fit the image within the page
+            const pageAspectRatio = pageWidth / pageHeight;
+            
+            if (aspectRatio > pageAspectRatio) {
+              // Image is wider relative to page - fit to width
+              imgDisplayWidth = pageWidth;
+              imgDisplayHeight = pageWidth / aspectRatio;
+            } else {
+              // Image is taller relative to page - fit to height
+              imgDisplayHeight = pageHeight;
+              imgDisplayWidth = pageHeight * aspectRatio;
+            }
+
+            // Center the image on the page
+            const x = (pageWidth - imgDisplayWidth) / 2;
+            const y = (pageHeight - imgDisplayHeight) / 2;
+
             pdf.addPage([pageWidth, pageHeight]);
-            pdf.addImage(imageUrl, 'JPEG', 0, 0, pageWidth, pageHeight);
+            pdf.addImage(imageUrl, 'JPEG', x, y, imgDisplayWidth, imgDisplayHeight);
             resolve(null);
           };
 
