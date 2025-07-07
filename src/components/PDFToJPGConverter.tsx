@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Image, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,8 +7,11 @@ import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up the worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Set up the worker with a more reliable approach
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url
+).toString();
 
 interface ConvertedFile {
   name: string;
@@ -56,42 +58,59 @@ const PDFToJPGConverter = () => {
   };
 
   const convertPDFToJPG = async (file: File): Promise<ConvertedFile[]> => {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    const convertedPages: ConvertedFile[] = [];
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better quality
+    try {
+      console.log('Starting PDF conversion for file:', file.name);
+      const arrayBuffer = await file.arrayBuffer();
+      console.log('File loaded as array buffer, size:', arrayBuffer.byteLength);
       
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d')!;
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      };
-
-      await page.render(renderContext).promise;
+      const pdf = await pdfjsLib.getDocument({ 
+        data: arrayBuffer,
+        verbosity: 0 // Reduce console noise
+      }).promise;
+      console.log('PDF loaded successfully, pages:', pdf.numPages);
       
-      // Convert canvas to blob
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', 0.9);
-      });
+      const convertedPages: ConvertedFile[] = [];
 
-      const url = URL.createObjectURL(blob);
-      const fileName = `${file.name.replace('.pdf', '')}_page_${pageNum}.jpg`;
-      
-      convertedPages.push({
-        name: fileName,
-        url: url,
-        pageNumber: pageNum
-      });
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        console.log(`Processing page ${pageNum}/${pdf.numPages}`);
+        const page = await pdf.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 2.0 });
+        
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d')!;
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+
+        await page.render(renderContext).promise;
+        console.log(`Page ${pageNum} rendered to canvas`);
+        
+        // Convert canvas to blob
+        const blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', 0.9);
+        });
+
+        const url = URL.createObjectURL(blob);
+        const fileName = `${file.name.replace('.pdf', '')}_page_${pageNum}.jpg`;
+        
+        convertedPages.push({
+          name: fileName,
+          url: url,
+          pageNumber: pageNum
+        });
+        console.log(`Page ${pageNum} converted successfully`);
+      }
+
+      console.log('All pages converted successfully');
+      return convertedPages;
+    } catch (error) {
+      console.error('Error in convertPDFToJPG:', error);
+      throw error;
     }
-
-    return convertedPages;
   };
 
   const handleConvert = async () => {
@@ -108,9 +127,11 @@ const PDFToJPGConverter = () => {
     setConvertedFiles([]);
 
     try {
+      console.log('Starting conversion process for', files.length, 'files');
       const allConvertedFiles: ConvertedFile[] = [];
       
       for (const file of files) {
+        console.log('Converting file:', file.name);
         const convertedPages = await convertPDFToJPG(file);
         allConvertedFiles.push(...convertedPages);
       }
@@ -120,8 +141,9 @@ const PDFToJPGConverter = () => {
         title: t('common.conversion_complete'),
         description: `${allConvertedFiles.length} JPG image(s) created`,
       });
+      console.log('Conversion completed successfully');
     } catch (error) {
-      console.error('Conversion failed', error);
+      console.error('Conversion failed:', error);
       toast({
         variant: "destructive",
         title: t('common.conversion_failed'),
