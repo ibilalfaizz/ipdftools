@@ -4,18 +4,43 @@ import { Image, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
-import { convertPdfToJpg } from '../lib/api';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Set up the worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+interface ConvertedFile {
+  name: string;
+  url: string;
+  pageNumber: number;
+}
 
 const PDFToJPGConverter = () => {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
-  const [convertedFiles, setConvertedFiles] = useState<any[]>([]);
+  const [convertedFiles, setConvertedFiles] = useState<ConvertedFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (acceptedFiles: File[]) => {
-    setFiles((prev) => [...prev, ...acceptedFiles]);
+    const pdfFiles = acceptedFiles.filter(file => file.type === 'application/pdf');
+    if (pdfFiles.length !== acceptedFiles.length) {
+      toast({
+        variant: "destructive",
+        title: "Invalid Files",
+        description: "Please select PDF files only.",
+      });
+    }
+    if (pdfFiles.length > 0) {
+      setFiles((prev) => [...prev, ...pdfFiles]);
+      toast({
+        title: t('common.files_added'),
+        description: `${pdfFiles.length} PDF file(s) added`,
+      });
+    }
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -30,33 +55,96 @@ const PDFToJPGConverter = () => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const convertPDFToJPG = async (file: File): Promise<ConvertedFile[]> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const convertedPages: ConvertedFile[] = [];
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better quality
+      
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d')!;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+
+      await page.render(renderContext).promise;
+      
+      // Convert canvas to blob
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', 0.9);
+      });
+
+      const url = URL.createObjectURL(blob);
+      const fileName = `${file.name.replace('.pdf', '')}_page_${pageNum}.jpg`;
+      
+      convertedPages.push({
+        name: fileName,
+        url: url,
+        pageNumber: pageNum
+      });
+    }
+
+    return convertedPages;
+  };
+
   const handleConvert = async () => {
-    if (files.length === 0) return;
+    if (files.length === 0) {
+      toast({
+        variant: "destructive",
+        title: t('common.no_files_selected'),
+        description: "Please select PDF files to convert.",
+      });
+      return;
+    }
+
     setIsConverting(true);
     setConvertedFiles([]);
 
     try {
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append('files', file);
-      });
+      const allConvertedFiles: ConvertedFile[] = [];
+      
+      for (const file of files) {
+        const convertedPages = await convertPDFToJPG(file);
+        allConvertedFiles.push(...convertedPages);
+      }
 
-      const result = await convertPdfToJpg(formData);
-      setConvertedFiles(result as any[]);
+      setConvertedFiles(allConvertedFiles);
+      toast({
+        title: t('common.conversion_complete'),
+        description: `${allConvertedFiles.length} JPG image(s) created`,
+      });
     } catch (error) {
       console.error('Conversion failed', error);
+      toast({
+        variant: "destructive",
+        title: t('common.conversion_failed'),
+        description: "Failed to convert PDF to JPG. Please try again.",
+      });
     } finally {
       setIsConverting(false);
     }
   };
 
-  const handleDownload = (url: string) => {
+  const handleDownload = (url: string, filename: string) => {
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'converted.jpg';
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleDownloadAll = () => {
+    convertedFiles.forEach((file) => {
+      handleDownload(file.url, file.name);
+    });
   };
 
   return (
@@ -76,6 +164,9 @@ const PDFToJPGConverter = () => {
             onDragOver={handleDragOver}
             onFileSelect={handleFileSelect}
             fileInputRef={fileInputRef}
+            acceptedFormats=".pdf,application/pdf"
+            title="Drop PDF files here or click to browse"
+            description="Support for multiple PDF files • Each page will be converted to JPG"
           />
         </CardContent>
       </Card>
@@ -85,9 +176,9 @@ const PDFToJPGConverter = () => {
           <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
           <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
             {files.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
-                <span>{file.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
+              <li key={index} className="flex justify-between items-center py-2">
+                <span className="text-gray-600">{file.name}</span>
+                <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
                   {t('common.remove')}
                 </Button>
               </li>
@@ -97,21 +188,36 @@ const PDFToJPGConverter = () => {
       )}
 
       <div className="flex justify-center mb-6">
-        <Button onClick={handleConvert} disabled={files.length === 0 || isConverting}>
+        <Button 
+          onClick={handleConvert} 
+          disabled={files.length === 0 || isConverting}
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+        >
           {isConverting ? t('common.converting') : t('pdf_to_jpg.convert_button')}
         </Button>
       </div>
 
       {convertedFiles.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">{t('common.conversion_complete')}:</h2>
+            <Button 
+              onClick={handleDownloadAll}
+              className="bg-green-600 text-white hover:bg-green-700"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {t('common.download_all')}
+            </Button>
+          </div>
           <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
             {convertedFiles.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
-                <a href={file.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                  {file.filename}
-                </a>
-                <Button variant="ghost" size="sm" onClick={() => handleDownload(file.url)}>
+              <li key={index} className="flex justify-between items-center py-2">
+                <span className="text-blue-600">{file.name}</span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleDownload(file.url, file.name)}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   {t('common.download')}
                 </Button>
