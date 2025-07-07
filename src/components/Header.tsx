@@ -104,7 +104,7 @@ const Header = () => {
                     All PDF Tools
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid gap-3 p-6 w-[800px] grid-cols-3">
+                    <div className="grid gap-3 p-4 w-[600px] max-w-[90vw] grid-cols-2 md:grid-cols-3 max-h-[70vh] overflow-y-auto">
                       {allTools.map((tool) => (
                         <Link
                           key={tool.href}
@@ -114,7 +114,7 @@ const Header = () => {
                           <div className="text-sm font-medium leading-none group-hover:text-blue-600">
                             {tool.label}
                           </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
                             {tool.description}
                           </p>
                         </Link>

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,7 @@ interface FileUploadZoneProps {
 const FileUploadZone: React.FC<FileUploadZoneProps> = ({ onDrop, onDragOver, onFileSelect, fileInputRef }) => {
   const {getRootProps, getInputProps, isDragActive} = useDropzone({ 
     onDrop,
-    noClick: true // Disable dropzone's default click behavior
+    noClick: true
   });
 
   const handleClick = () => {
@@ -52,7 +53,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({ onDrop, onDragOver, onF
 const JPGToPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [conversionLoading, setConversionLoading] = useState(false);
-  const [downloading, setDownloading] = useState(false);
+  const [convertedPdf, setConvertedPdf] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
   const { toast } = useToast()
@@ -95,6 +96,9 @@ const JPGToPDFConverter = () => {
       const { jsPDF } = await import('jspdf');
       const pdf = new jsPDF();
 
+      // Remove the default first page
+      pdf.deletePage(1);
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const imageUrl = await readFileAsDataURL(file);
@@ -107,13 +111,22 @@ const JPGToPDFConverter = () => {
             const width = img.width;
             const height = img.height;
 
-            if (width > height) {
-              pdf.addPage([width, height]);
+            // Calculate appropriate page size based on image dimensions
+            const aspectRatio = width / height;
+            let pageWidth, pageHeight;
+            
+            if (aspectRatio > 1) {
+              // Landscape orientation
+              pageWidth = Math.min(width, 841.89); // A4 landscape width
+              pageHeight = pageWidth / aspectRatio;
             } else {
-              pdf.addPage([height, width]);
+              // Portrait orientation
+              pageHeight = Math.min(height, 595.28); // A4 portrait height
+              pageWidth = pageHeight * aspectRatio;
             }
 
-            pdf.addImage(imageUrl, 'JPEG', 0, 0, width, height);
+            pdf.addPage([pageWidth, pageHeight]);
+            pdf.addImage(imageUrl, 'JPEG', 0, 0, pageWidth, pageHeight);
             resolve(null);
           };
 
@@ -122,14 +135,10 @@ const JPGToPDFConverter = () => {
             reject(error);
           };
         });
-
-        if (i < files.length - 1) {
-          pdf.addPage();
-        }
       }
 
       setConversionLoading(false);
-      downloadPdf(pdf);
+      setConvertedPdf(pdf);
       toast({
         title: t('common.conversion_complete'),
         description: t('common.conversion_complete').toLowerCase(),
@@ -162,10 +171,10 @@ const JPGToPDFConverter = () => {
     });
   };
 
-  const downloadPdf = (pdf: any) => {
-    setDownloading(true);
-    pdf.save('converted.pdf');
-    setDownloading(false);
+  const handleDownload = () => {
+    if (convertedPdf) {
+      convertedPdf.save('converted.pdf');
+    }
   };
 
   return (
@@ -205,7 +214,7 @@ const JPGToPDFConverter = () => {
         </div>
       )}
 
-      <div className="text-center">
+      <div className="text-center space-y-4">
         <Button
           className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:from-orange-600 hover:to-yellow-600 font-semibold py-3 px-6 rounded-md transition-colors duration-300"
           onClick={convertToPdf}
@@ -213,13 +222,17 @@ const JPGToPDFConverter = () => {
         >
           {conversionLoading ? t('common.converting') : t('common.convert')}
         </Button>
-      </div>
 
-      {downloading && (
-        <div className="text-center mt-4">
-          <p className="text-gray-600">{t('common.downloading')}</p>
-        </div>
-      )}
+        {convertedPdf && (
+          <Button
+            className="bg-green-600 text-white hover:bg-green-700 font-semibold py-3 px-6 rounded-md transition-colors duration-300 ml-4"
+            onClick={handleDownload}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            {t('common.download')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
