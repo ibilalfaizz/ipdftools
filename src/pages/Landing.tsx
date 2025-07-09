@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   FileText,
@@ -18,14 +19,13 @@ import Footer from "../components/Footer";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const Landing = () => {
-  const { t } = useLanguage();
+  const { t, getLocalizedPath } = useLanguage();
 
   const features = [
     {
       icon: <Merge className="w-8 h-8" />,
       title: t("nav.merge"),
-      description:
-        "Combine multiple PDF files into a single document with ease.",
+      description: t("landing.merge_desc"),
       path: "/merge",
       color: "from-red-500 to-red-600",
       available: true,
@@ -33,8 +33,7 @@ const Landing = () => {
     {
       icon: <Split className="w-8 h-8" />,
       title: t("nav.split"),
-      description:
-        "Extract pages from your PDF or split into multiple documents.",
+      description: t("landing.split_desc"),
       path: "/split",
       color: "from-orange-500 to-red-500",
       available: true,
@@ -42,7 +41,7 @@ const Landing = () => {
     {
       icon: <Minimize className="w-8 h-8" />,
       title: t("nav.compress"),
-      description: "Reduce PDF file size while maintaining quality.",
+      description: t("landing.compress_desc"),
       path: "/compress",
       color: "from-green-500 to-teal-500",
       available: true,
@@ -50,7 +49,7 @@ const Landing = () => {
     {
       icon: <RotateCw className="w-8 h-8" />,
       title: t("nav.rotate"),
-      description: "Rotate PDF pages to the correct orientation.",
+      description: t("landing.rotate_desc"),
       path: "/rotate",
       color: "from-indigo-500 to-cyan-500",
       available: true,
@@ -58,7 +57,7 @@ const Landing = () => {
     {
       icon: <FileText className="w-8 h-8" />,
       title: t("nav.pdf_to_word"),
-      description: "Convert PDF files to editable Word documents.",
+      description: t("landing.pdf_to_word_desc"),
       path: "/pdf-to-word",
       color: "from-blue-500 to-green-500",
       available: true,
@@ -66,7 +65,7 @@ const Landing = () => {
     {
       icon: <Image className="w-8 h-8" />,
       title: t("nav.pdf_to_jpg"),
-      description: "Convert PDF pages to high-quality JPG images.",
+      description: t("landing.pdf_to_jpg_desc"),
       path: "/pdf-to-jpg",
       color: "from-purple-500 to-pink-500",
       available: true,
@@ -74,7 +73,7 @@ const Landing = () => {
     {
       icon: <FileText className="w-8 h-8" />,
       title: t("nav.pdf_to_text"),
-      description: "Extract text content from PDF documents.",
+      description: t("landing.pdf_to_text_desc"),
       path: "/pdf-to-text",
       color: "from-green-500 to-blue-500",
       available: true,
@@ -82,7 +81,7 @@ const Landing = () => {
     {
       icon: <Upload className="w-8 h-8" />,
       title: t("nav.word_to_pdf"),
-      description: "Convert Word documents to PDF format.",
+      description: t("landing.word_to_pdf_desc"),
       path: "/word-to-pdf",
       color: "from-blue-500 to-purple-500",
       available: true,
@@ -90,7 +89,7 @@ const Landing = () => {
     {
       icon: <Download className="w-8 h-8" />,
       title: t("nav.jpg_to_pdf"),
-      description: "Convert JPG and PNG images to PDF documents.",
+      description: t("landing.jpg_to_pdf_desc"),
       path: "/jpg-to-pdf",
       color: "from-orange-500 to-yellow-500",
       available: true,
@@ -105,15 +104,12 @@ const Landing = () => {
         <div className="text-center mb-16">
           <div className="mb-6">
             <div className="inline-flex p-4 rounded-full mb-4 brand-gradient">
-              {/* <img src="/logo-icon-white.svg" className="h-12 w-12" /> */}
               <FileText className="h-12 w-12 text-white" />
             </div>
           </div>
-          <h1 className="text-6xl font-bold brand-accent mb-6">iPDFTOOLS</h1>
+          <h1 className="text-6xl font-bold brand-accent mb-6">{t("landing.hero_title")}</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            The ultimate collection of PDF tools. Merge, split, compress,
-            convert, and rotate your documents with professional-grade quality.
-            Fast, secure, and completely free.
+            {t("landing.hero_subtitle")}
           </p>
         </div>
 
@@ -143,7 +139,7 @@ const Landing = () => {
                     asChild
                     className={`w-full bg-gradient-to-r ${feature.color} hover:shadow-lg transition-all duration-300 border-0`}
                   >
-                    <Link to={feature.path}>
+                    <Link to={getLocalizedPath(feature.path)}>
                       Use Tool <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -160,7 +156,7 @@ const Landing = () => {
         {/* Features List */}
         <div className="mt-20 text-center">
           <h2 className="text-3xl font-bold brand-text-dark mb-8">
-            Why Choose i<span className="brand-accent">PDF</span>TOOLS?
+            {t("landing.why_choose_title")}
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
@@ -168,11 +164,10 @@ const Landing = () => {
                 <FileText className="h-8 w-8 brand-accent" />
               </div>
               <h3 className="text-xl font-semibold brand-text-dark mb-2">
-                100% Secure
+                {t("landing.secure_title")}
               </h3>
               <p className="text-gray-600">
-                All processing happens in your browser. Your files never leave
-                your device.
+                {t("landing.secure_desc")}
               </p>
             </div>
             <div className="text-center">
@@ -180,11 +175,10 @@ const Landing = () => {
                 <Minimize className="h-8 w-8 brand-accent" />
               </div>
               <h3 className="text-xl font-semibold brand-text-dark mb-2">
-                Fast & Efficient
+                {t("landing.fast_title")}
               </h3>
               <p className="text-gray-600">
-                Lightning-fast processing with no file size limits or
-                watermarks.
+                {t("landing.fast_desc")}
               </p>
             </div>
             <div className="text-center">
@@ -192,11 +186,10 @@ const Landing = () => {
                 <Merge className="h-8 w-8 brand-accent" />
               </div>
               <h3 className="text-xl font-semibold brand-text-dark mb-2">
-                Easy to Use
+                {t("landing.easy_title")}
               </h3>
               <p className="text-gray-600">
-                Intuitive interface that works on any device. No registration
-                required.
+                {t("landing.easy_desc")}
               </p>
             </div>
           </div>

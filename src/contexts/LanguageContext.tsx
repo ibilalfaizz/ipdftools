@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export type Language = 'en' | 'es' | 'fr';
@@ -35,6 +36,28 @@ const translations = {
     'url.pdf_to_text': 'pdf-to-text',
     'url.word_to_pdf': 'word-to-pdf',
     'url.jpg_to_pdf': 'jpg-to-pdf',
+    
+    // Landing page descriptions
+    'landing.merge_desc': 'Combine multiple PDF files into a single document with ease.',
+    'landing.split_desc': 'Extract pages from your PDF or split into multiple documents.',
+    'landing.compress_desc': 'Reduce PDF file size while maintaining quality.',
+    'landing.rotate_desc': 'Rotate PDF pages to the correct orientation.',
+    'landing.pdf_to_word_desc': 'Convert PDF files to editable Word documents.',
+    'landing.pdf_to_jpg_desc': 'Convert PDF pages to high-quality JPG images.',
+    'landing.pdf_to_text_desc': 'Extract text content from PDF documents.',
+    'landing.word_to_pdf_desc': 'Convert Word documents to PDF format.',
+    'landing.jpg_to_pdf_desc': 'Convert JPG and PNG images to PDF documents.',
+    
+    // Landing page content
+    'landing.hero_title': 'iPDFTOOLS',
+    'landing.hero_subtitle': 'The ultimate collection of PDF tools. Merge, split, compress, convert, and rotate your documents with professional-grade quality. Fast, secure, and completely free.',
+    'landing.why_choose_title': 'Why Choose iPDFTOOLS?',
+    'landing.secure_title': '100% Secure',
+    'landing.secure_desc': 'All processing happens in your browser. Your files never leave your device.',
+    'landing.fast_title': 'Fast & Efficient',
+    'landing.fast_desc': 'Lightning-fast processing with no file size limits or watermarks.',
+    'landing.easy_title': 'Easy to Use',
+    'landing.easy_desc': 'Intuitive interface that works on any device. No registration required.',
     
     // Common
     'common.select_files': 'Select Files',
@@ -131,6 +154,28 @@ const translations = {
     'url.word_to_pdf': 'word-a-pdf',
     'url.jpg_to_pdf': 'jpg-a-pdf',
     
+    // Landing page descriptions
+    'landing.merge_desc': 'Combina múltiples archivos PDF en un solo documento con facilidad.',
+    'landing.split_desc': 'Extrae páginas de tu PDF o divide en múltiples documentos.',
+    'landing.compress_desc': 'Reduce el tamaño del archivo PDF manteniendo la calidad.',
+    'landing.rotate_desc': 'Rota las páginas PDF a la orientación correcta.',
+    'landing.pdf_to_word_desc': 'Convierte archivos PDF a documentos Word editables.',
+    'landing.pdf_to_jpg_desc': 'Convierte páginas PDF a imágenes JPG de alta calidad.',
+    'landing.pdf_to_text_desc': 'Extrae contenido de texto de documentos PDF.',
+    'landing.word_to_pdf_desc': 'Convierte documentos Word a formato PDF.',
+    'landing.jpg_to_pdf_desc': 'Convierte imágenes JPG y PNG a documentos PDF.',
+    
+    // Landing page content
+    'landing.hero_title': 'iPDFTOOLS',
+    'landing.hero_subtitle': 'La colección definitiva de herramientas PDF. Combina, divide, comprime, convierte y rota tus documentos con calidad profesional. Rápido, seguro y completamente gratis.',
+    'landing.why_choose_title': '¿Por qué elegir iPDFTOOLS?',
+    'landing.secure_title': '100% Seguro',
+    'landing.secure_desc': 'Todo el procesamiento ocurre en tu navegador. Tus archivos nunca salen de tu dispositivo.',
+    'landing.fast_title': 'Rápido y Eficiente',
+    'landing.fast_desc': 'Procesamiento ultrarrápido sin límites de tamaño de archivo ni marcas de agua.',
+    'landing.easy_title': 'Fácil de Usar',
+    'landing.easy_desc': 'Interfaz intuitiva que funciona en cualquier dispositivo. No requiere registro.',
+    
     // Common
     'common.select_files': 'Seleccionar Archivos',
     'common.convert': 'Convertir',
@@ -216,6 +261,28 @@ const translations = {
     'url.pdf_to_text': 'pdf-vers-texte',
     'url.word_to_pdf': 'word-vers-pdf',
     'url.jpg_to_pdf': 'jpg-vers-pdf',
+    
+    // Landing page descriptions
+    'landing.merge_desc': 'Combinez plusieurs fichiers PDF en un seul document avec facilité.',
+    'landing.split_desc': 'Extrayez des pages de votre PDF ou divisez en plusieurs documents.',
+    'landing.compress_desc': 'Réduisez la taille du fichier PDF tout en maintenant la qualité.',
+    'landing.rotate_desc': 'Faites pivoter les pages PDF vers la bonne orientation.',
+    'landing.pdf_to_word_desc': 'Convertissez les fichiers PDF en documents Word éditables.',
+    'landing.pdf_to_jpg_desc': 'Convertissez les pages PDF en images JPG de haute qualité.',
+    'landing.pdf_to_text_desc': 'Extrayez le contenu textuel des documents PDF.',
+    'landing.word_to_pdf_desc': 'Convertissez les documents Word au format PDF.',
+    'landing.jpg_to_pdf_desc': 'Convertissez les images JPG et PNG en documents PDF.',
+    
+    // Landing page content
+    'landing.hero_title': 'iPDFTOOLS',
+    'landing.hero_subtitle': 'La collection ultime d\'outils PDF. Fusionnez, divisez, compressez, convertissez et faites pivoter vos documents avec une qualité professionnelle. Rapide, sécurisé et entièrement gratuit.',
+    'landing.why_choose_title': 'Pourquoi choisir iPDFTOOLS?',
+    'landing.secure_title': '100% Sécurisé',
+    'landing.secure_desc': 'Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',
+    'landing.fast_title': 'Rapide et Efficace',
+    'landing.fast_desc': 'Traitement ultra-rapide sans limites de taille de fichier ni filigranes.',
+    'landing.easy_title': 'Facile à Utiliser',
+    'landing.easy_desc': 'Interface intuitive qui fonctionne sur n\'importe quel appareil. Aucune inscription requise.',
     
     // Common
     'common.select_files': 'Sélectionner des Fichiers',
