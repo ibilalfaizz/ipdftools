@@ -9,7 +9,12 @@ const Footer = () => {
           <p className="brand-text-dark font-medium mb-2">
             © 2025 iPDFTOOLS. Built with{" "}
             <Heart className="inline bg-red fill-red-500 text-red-500" /> by{" "}
-            <a href="https://bilalfaiz.com/" className="brand-accent underline">
+            <a
+              href="https://bilalfaiz.com/"
+              className="brand-accent underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {" "}
               Bilal Faiz
             </a>
