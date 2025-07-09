@@ -6,6 +6,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  getLocalizedPath: (path: string) => string;
+  getOriginalPath: (localizedPath: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -22,6 +24,17 @@ const translations = {
     'nav.pdf_to_text': 'PDF to Text',
     'nav.word_to_pdf': 'Word to PDF',
     'nav.jpg_to_pdf': 'JPG to PDF',
+    
+    // URL paths
+    'url.merge': 'merge',
+    'url.split': 'split',
+    'url.compress': 'compress',
+    'url.rotate': 'rotate',
+    'url.pdf_to_word': 'pdf-to-word',
+    'url.pdf_to_jpg': 'pdf-to-jpg',
+    'url.pdf_to_text': 'pdf-to-text',
+    'url.word_to_pdf': 'word-to-pdf',
+    'url.jpg_to_pdf': 'jpg-to-pdf',
     
     // Common
     'common.select_files': 'Select Files',
@@ -107,6 +120,17 @@ const translations = {
     'nav.word_to_pdf': 'Word a PDF',
     'nav.jpg_to_pdf': 'JPG a PDF',
     
+    // URL paths
+    'url.merge': 'combinar',
+    'url.split': 'dividir',
+    'url.compress': 'comprimir',
+    'url.rotate': 'rotar',
+    'url.pdf_to_word': 'pdf-a-word',
+    'url.pdf_to_jpg': 'pdf-a-jpg',
+    'url.pdf_to_text': 'pdf-a-texto',
+    'url.word_to_pdf': 'word-a-pdf',
+    'url.jpg_to_pdf': 'jpg-a-pdf',
+    
     // Common
     'common.select_files': 'Seleccionar Archivos',
     'common.convert': 'Convertir',
@@ -182,6 +206,17 @@ const translations = {
     'nav.word_to_pdf': 'Word vers PDF',
     'nav.jpg_to_pdf': 'JPG vers PDF',
     
+    // URL paths
+    'url.merge': 'fusionner',
+    'url.split': 'diviser',
+    'url.compress': 'compresser',
+    'url.rotate': 'rotation',
+    'url.pdf_to_word': 'pdf-vers-word',
+    'url.pdf_to_jpg': 'pdf-vers-jpg',
+    'url.pdf_to_text': 'pdf-vers-texte',
+    'url.word_to_pdf': 'word-vers-pdf',
+    'url.jpg_to_pdf': 'jpg-vers-pdf',
+    
     // Common
     'common.select_files': 'Sélectionner des Fichiers',
     'common.convert': 'Convertir',
@@ -247,6 +282,21 @@ const translations = {
   }
 };
 
+// Path mapping for URL localization
+const pathMapping = {
+  'merge': ['merge', 'combinar', 'fusionner'],
+  'split': ['split', 'dividir', 'diviser'],
+  'compress': ['compress', 'comprimir', 'compresser'],
+  'rotate': ['rotate', 'rotar', 'rotation'],
+  'pdf-to-word': ['pdf-to-word', 'pdf-a-word', 'pdf-vers-word'],
+  'pdf-to-jpg': ['pdf-to-jpg', 'pdf-a-jpg', 'pdf-vers-jpg'],
+  'pdf-to-text': ['pdf-to-text', 'pdf-a-texto', 'pdf-vers-texte'],
+  'word-to-pdf': ['word-to-pdf', 'word-a-pdf', 'word-vers-pdf'],
+  'jpg-to-pdf': ['jpg-to-pdf', 'jpg-a-pdf', 'jpg-vers-pdf'],
+};
+
+const languageIndex = { 'en': 0, 'es': 1, 'fr': 2 };
+
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
 
@@ -275,8 +325,33 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     return result;
   };
 
+  const getLocalizedPath = (originalPath: string): string => {
+    const cleanPath = originalPath.replace('/', '');
+    const langIndex = languageIndex[language];
+    
+    for (const [original, translations] of Object.entries(pathMapping)) {
+      if (original === cleanPath) {
+        return `/${translations[langIndex]}`;
+      }
+    }
+    
+    return originalPath;
+  };
+
+  const getOriginalPath = (localizedPath: string): string => {
+    const cleanPath = localizedPath.replace('/', '');
+    
+    for (const [original, translations] of Object.entries(pathMapping)) {
+      if (translations.includes(cleanPath)) {
+        return `/${original}`;
+      }
+    }
+    
+    return localizedPath;
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, getLocalizedPath, getOriginalPath }}>
       {children}
     </LanguageContext.Provider>
   );

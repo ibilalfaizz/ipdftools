@@ -14,7 +14,10 @@ import {
 
 const Header = () => {
   const location = useLocation();
-  const { t } = useLanguage();
+  const { t, getLocalizedPath, getOriginalPath } = useLanguage();
+
+  // Get the original path for comparison
+  const currentOriginalPath = getOriginalPath(location.pathname);
 
   const navItems = [
     { href: "/merge", label: t("nav.merge"), color: "hover:text-blue-600" },
@@ -108,7 +111,7 @@ const Header = () => {
                       {allTools.map((tool) => (
                         <Link
                           key={tool.href}
-                          to={tool.href}
+                          to={getLocalizedPath(tool.href)}
                           className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="text-sm font-medium leading-none group-hover:text-blue-600">
@@ -129,9 +132,9 @@ const Header = () => {
               {navItems.map((item) => (
                 <Link
                   key={item.href}
-                  to={item.href}
+                  to={getLocalizedPath(item.href)}
                   className={`font-medium transition-colors text-sm ${
-                    location.pathname === item.href
+                    currentOriginalPath === item.href
                       ? "text-blue-600"
                       : `text-gray-600 ${item.color}`
                   }`}

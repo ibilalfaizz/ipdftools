@@ -1,9 +1,10 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Landing from "./pages/Landing";
@@ -21,6 +22,44 @@ import JPGToPDFPage from "./pages/JPGToPDFPage";
 
 const queryClient = new QueryClient();
 
+// Component to handle localized routing
+const LocalizedRouter = () => {
+  const { getOriginalPath, getLocalizedPath } = useLanguage();
+  const location = useLocation();
+  
+  // Get the original path for the current location
+  const originalPath = getOriginalPath(location.pathname);
+  
+  // Route mapping
+  const routes = [
+    { original: '/merge', component: <MergePage /> },
+    { original: '/split', component: <SplitPage /> },
+    { original: '/compress', component: <CompressPage /> },
+    { original: '/to-pdf', component: <ToPDFPage /> },
+    { original: '/from-pdf', component: <FromPDFPage /> },
+    { original: '/rotate', component: <RotatePage /> },
+    { original: '/pdf-to-word', component: <PDFToWordPage /> },
+    { original: '/pdf-to-jpg', component: <PDFToJPGPage /> },
+    { original: '/pdf-to-text', component: <PDFToTextPage /> },
+    { original: '/word-to-pdf', component: <WordToPDFPage /> },
+    { original: '/jpg-to-pdf', component: <JPGToPDFPage /> },
+  ];
+
+  // Find matching route
+  const matchedRoute = routes.find(route => route.original === originalPath);
+  
+  if (matchedRoute) {
+    return matchedRoute.component;
+  }
+
+  // Handle root path
+  if (location.pathname === '/') {
+    return <Landing />;
+  }
+
+  return <NotFound />;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
@@ -29,21 +68,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Landing />} />
-            {/* <Route path="/landing" element={<Landing />} /> */}
-            <Route path="/merge" element={<MergePage />} />
-            <Route path="/split" element={<SplitPage />} />
-            <Route path="/compress" element={<CompressPage />} />
-            <Route path="/to-pdf" element={<ToPDFPage />} />
-            <Route path="/from-pdf" element={<FromPDFPage />} />
-            <Route path="/rotate" element={<RotatePage />} />
-            <Route path="/pdf-to-word" element={<PDFToWordPage />} />
-            <Route path="/pdf-to-jpg" element={<PDFToJPGPage />} />
-            <Route path="/pdf-to-text" element={<PDFToTextPage />} />
-            <Route path="/word-to-pdf" element={<WordToPDFPage />} />
-            <Route path="/jpg-to-pdf" element={<JPGToPDFPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="/*" element={<LocalizedRouter />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
