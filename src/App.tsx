@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { HelmetProvider } from 'react-helmet-async';
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { SEOProvider } from "./contexts/SEOContext";
-import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Landing from "./pages/Landing";
 import MergePage from "./pages/MergePage";
@@ -26,8 +25,40 @@ const queryClient = new QueryClient();
 
 // Component to handle localized routing
 const LocalizedRouter = () => {
-  const { getOriginalPath, getLocalizedPath } = useLanguage();
+  const { getOriginalPath, getLocalizedPath, language, setLanguage } = useLanguage();
   const location = useLocation();
+  
+  // Detect language from URL on initial load
+  React.useEffect(() => {
+    const path = location.pathname;
+    
+    // Check if the current path is a localized path
+    const pathMapping = {
+      '/combinar': 'es',
+      '/fusionner': 'fr',
+      '/dividir': 'es',
+      '/diviser': 'fr',
+      '/comprimir': 'es',
+      '/compresser': 'fr',
+      '/rotar': 'es',
+      '/rotation': 'fr',
+      '/pdf-a-word': 'es',
+      '/pdf-vers-word': 'fr',
+      '/pdf-a-jpg': 'es',
+      '/pdf-vers-jpg': 'fr',
+      '/pdf-a-texto': 'es',
+      '/pdf-vers-texte': 'fr',
+      '/word-a-pdf': 'es',
+      '/word-vers-pdf': 'fr',
+      '/jpg-a-pdf': 'es',
+      '/jpg-vers-pdf': 'fr',
+    };
+    
+    const detectedLanguage = pathMapping[path as keyof typeof pathMapping];
+    if (detectedLanguage && detectedLanguage !== language) {
+      setLanguage(detectedLanguage as 'en' | 'es' | 'fr');
+    }
+  }, [location.pathname, language, setLanguage]);
   
   // Get the original path for the current location
   const originalPath = getOriginalPath(location.pathname);
@@ -72,7 +103,36 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/*" element={<LocalizedRouter />} />
+                {/* Handle all localized routes */}
+                <Route path="/merge" element={<LocalizedRouter />} />
+                <Route path="/combinar" element={<LocalizedRouter />} />
+                <Route path="/fusionner" element={<LocalizedRouter />} />
+                <Route path="/split" element={<LocalizedRouter />} />
+                <Route path="/dividir" element={<LocalizedRouter />} />
+                <Route path="/diviser" element={<LocalizedRouter />} />
+                <Route path="/compress" element={<LocalizedRouter />} />
+                <Route path="/comprimir" element={<LocalizedRouter />} />
+                <Route path="/compresser" element={<LocalizedRouter />} />
+                <Route path="/rotate" element={<LocalizedRouter />} />
+                <Route path="/rotar" element={<LocalizedRouter />} />
+                <Route path="/rotation" element={<LocalizedRouter />} />
+                <Route path="/pdf-to-word" element={<LocalizedRouter />} />
+                <Route path="/pdf-a-word" element={<LocalizedRouter />} />
+                <Route path="/pdf-vers-word" element={<LocalizedRouter />} />
+                <Route path="/pdf-to-jpg" element={<LocalizedRouter />} />
+                <Route path="/pdf-a-jpg" element={<LocalizedRouter />} />
+                <Route path="/pdf-vers-jpg" element={<LocalizedRouter />} />
+                <Route path="/pdf-to-text" element={<LocalizedRouter />} />
+                <Route path="/pdf-a-texto" element={<LocalizedRouter />} />
+                <Route path="/pdf-vers-texte" element={<LocalizedRouter />} />
+                <Route path="/word-to-pdf" element={<LocalizedRouter />} />
+                <Route path="/word-a-pdf" element={<LocalizedRouter />} />
+                <Route path="/word-vers-pdf" element={<LocalizedRouter />} />
+                <Route path="/jpg-to-pdf" element={<LocalizedRouter />} />
+                <Route path="/jpg-a-pdf" element={<LocalizedRouter />} />
+                <Route path="/jpg-vers-pdf" element={<LocalizedRouter />} />
+                <Route path="/" element={<Landing />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
           </TooltipProvider>

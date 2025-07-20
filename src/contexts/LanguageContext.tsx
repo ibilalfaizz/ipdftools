@@ -433,7 +433,19 @@ const pathMapping = {
 const languageIndex = { 'en': 0, 'es': 1, 'fr': 2 };
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(() => {
+    // Try to detect language from localStorage first
+    const savedLanguage = localStorage.getItem('preferred-language') as Language;
+    if (savedLanguage && ['en', 'es', 'fr'].includes(savedLanguage)) {
+      return savedLanguage;
+    }
+    return 'en';
+  });
+
+  // Save language preference to localStorage when it changes
+  React.useEffect(() => {
+    localStorage.setItem('preferred-language', language);
+  }, [language]);
 
   const t = (key: string): string => {
     console.log('Translation request for key:', key, 'Current language:', language);
