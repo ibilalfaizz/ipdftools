@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  ReactNode,
+} from "react";
 import { languageIndex, pathMapping } from '@/lib/urlPaths';
 
 export type Language = 'en' | 'es' | 'fr';
@@ -539,18 +546,30 @@ const translations = {
 };
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    // Try to detect language from localStorage first
-    const savedLanguage = localStorage.getItem('preferred-language') as Language;
-    if (savedLanguage && ['en', 'es', 'fr'].includes(savedLanguage)) {
-      return savedLanguage;
-    }
-    return 'en';
-  });
+  const [language, setLanguage] = useState<Language>("en");
+  const skipNextPersist = useRef(true);
 
-  // Save language preference to localStorage when it changes
-  React.useEffect(() => {
-    localStorage.setItem('preferred-language', language);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("preferred-language") as Language;
+      if (saved && ["en", "es", "fr"].includes(saved)) {
+        setLanguage(saved);
+      }
+    } catch {
+      /* private mode / SSR */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (skipNextPersist.current) {
+      skipNextPersist.current = false;
+      return;
+    }
+    try {
+      localStorage.setItem("preferred-language", language);
+    } catch {
+      /* ignore */
+    }
   }, [language]);
 
   const t = (key: string): string => {
