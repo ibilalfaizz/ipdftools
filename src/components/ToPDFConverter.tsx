@@ -169,7 +169,9 @@ const ToPDFConverter = () => {
           pdfBytes = await createPDFFromText(placeholderText, file.name);
         }
         
-        const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const pdfBlob = new Blob([new Uint8Array(pdfBytes)], {
+          type: "application/pdf",
+        });
         const url = URL.createObjectURL(pdfBlob);
         
         converted.push({

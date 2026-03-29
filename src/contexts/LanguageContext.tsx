@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { languageIndex, pathMapping } from '@/lib/urlPaths';
 
 export type Language = 'en' | 'es' | 'fr';
 
@@ -15,6 +16,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const translations = {
   en: {
     // Navigation
+    'nav.pdf_tools': 'PDF tools',
     'nav.merge': 'Merge',
     'nav.split': 'Split',
     'nav.compress': 'Compress',
@@ -24,6 +26,10 @@ const translations = {
     'nav.pdf_to_text': 'PDF to Text',
     'nav.word_to_pdf': 'Word to PDF',
     'nav.jpg_to_pdf': 'JPG to PDF',
+    'nav.image_tools': 'Image tools',
+    'nav.image_resize': 'Bulk image resizer',
+    'nav.image_compress': 'Bulk image compressor',
+    'nav.image_webp': 'Bulk WebP converter',
     
     // URL paths
     'url.merge': 'merge',
@@ -46,6 +52,9 @@ const translations = {
     'landing.pdf_to_text_desc': 'Extract text content from PDF documents.',
     'landing.word_to_pdf_desc': 'Convert Word documents to PDF format.',
     'landing.jpg_to_pdf_desc': 'Convert JPG and PNG images to PDF documents.',
+    'landing.image_resize_desc': 'Bulk-resize photos to the same width and height (center crop).',
+    'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
+    'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
     
     // Landing page content
     'landing.hero_title': 'iPDFTOOLS',
@@ -152,9 +161,42 @@ const translations = {
     'seo.word_to_pdf.description': 'Convert Word documents to PDF format for free. Reliable DOC/DOCX to PDF conversion tool.',
     'seo.jpg_to_pdf.title': 'JPG to PDF Converter - Convert Images to PDF Online',
     'seo.jpg_to_pdf.description': 'Convert JPG and PNG images to PDF documents for free. Create PDF files from your images.',
+    'seo.image_resize.title': 'Bulk Image Resizer Online — Width & Height',
+    'seo.image_resize.description': 'Resize many images to the same pixel size. Download as one ZIP or as separate files.',
+    'seo.image_compress.title': 'Bulk Lossless Image Compressor Online',
+    'seo.image_compress.description': 'Shrink PNG, WebP, and JPEG without quality loss. ZIP or individual downloads.',
+    'seo.image_webp.title': 'Bulk WebP Converter Online',
+    'seo.image_webp.description': 'Convert many images to WebP. Download a ZIP or each file on its own.',
+    'image_resize.title': 'Bulk image resizer',
+    'image_resize.description': 'Set target width and height (pixels). Each image is cropped to cover the box, centered.',
+    'image_resize.width': 'Width (px)',
+    'image_resize.height': 'Height (px)',
+    'image_resize.process': 'Resize',
+    'image_resize.drop_title': 'Drop images here or click to browse',
+    'image_resize.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_compress.title': 'Bulk image compressor (lossless)',
+    'image_compress.description': 'Re-encodes images losslessly where possible for a smaller file size.',
+    'image_compress.process': 'Compress',
+    'image_compress.drop_title': 'Drop images here or click to browse',
+    'image_compress.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_webp.title': 'Bulk WebP converter',
+    'image_webp.description': 'Convert images to WebP at high quality (quality 90).',
+    'image_webp.process': 'Convert',
+    'image_webp.drop_title': 'Drop images here or click to browse',
+    'image_webp.drop_desc': 'Most raster formats • Multiple files',
+    'image_tools.result_ready': 'Ready — download as images or ZIP.',
+    'image_tools.download_images': 'Download images',
+    'image_tools.download_zip': 'Download ZIP',
+    'image_tools.files_added': 'Images selected',
+    'image_tools.clear': 'Clear',
+    'image_tools.processing': 'Processing…',
+    'image_tools.success': 'Download started',
+    'image_tools.error': 'Something went wrong',
+    'image_tools.no_files': 'Please add at least one image.',
   },
   es: {
     // Navigation
+    'nav.pdf_tools': 'Herramientas PDF',
     'nav.merge': 'Combinar',
     'nav.split': 'Dividir',
     'nav.compress': 'Comprimir',
@@ -164,6 +206,10 @@ const translations = {
     'nav.pdf_to_text': 'PDF a Texto',
     'nav.word_to_pdf': 'Word a PDF',
     'nav.jpg_to_pdf': 'JPG a PDF',
+    'nav.image_tools': 'Herramientas de imagen',
+    'nav.image_resize': 'Redimensionador masivo',
+    'nav.image_compress': 'Compresor masivo',
+    'nav.image_webp': 'Conversor WebP masivo',
     
     // URL paths
     'url.merge': 'combinar',
@@ -186,6 +232,9 @@ const translations = {
     'landing.pdf_to_text_desc': 'Extrae contenido de texto de documentos PDF.',
     'landing.word_to_pdf_desc': 'Convierte documentos Word a formato PDF.',
     'landing.jpg_to_pdf_desc': 'Convierte imágenes JPG y PNG a documentos PDF.',
+    'landing.image_resize_desc': 'Redimensiona muchas fotos al mismo ancho y alto (recorte centrado).',
+    'landing.image_compress_desc': 'Recompresión sin pérdida en lote para PNG, WebP y JPEG más ligeros.',
+    'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
     
     // Landing page content
     'landing.hero_title': 'iPDFTOOLS',
@@ -283,9 +332,42 @@ const translations = {
     'seo.word_to_pdf.description': 'Convierte documentos Word a formato PDF gratis. Herramienta confiable de conversión DOC/DOCX a PDF.',
     'seo.jpg_to_pdf.title': 'JPG a PDF - Convertir Imágenes a PDF Online',
     'seo.jpg_to_pdf.description': 'Convierte imágenes JPG y PNG a documentos PDF gratis. Crea archivos PDF desde tus imágenes.',
+    'seo.image_resize.title': 'Redimensionador masivo de imágenes online',
+    'seo.image_resize.description': 'Mismo tamaño en píxeles para muchas imágenes. ZIP o archivos sueltos.',
+    'seo.image_compress.title': 'Compresor masivo sin pérdida online',
+    'seo.image_compress.description': 'Reduce PNG, WebP y JPEG sin perder calidad. ZIP o descargas individuales.',
+    'seo.image_webp.title': 'Conversor masivo a WebP online',
+    'seo.image_webp.description': 'Muchas imágenes a WebP. Un ZIP o un archivo por imagen.',
+    'image_resize.title': 'Redimensionador masivo de imágenes',
+    'image_resize.description': 'Ancho y alto en píxeles. Cada imagen se recorta al centro (cover).',
+    'image_resize.width': 'Ancho (px)',
+    'image_resize.height': 'Alto (px)',
+    'image_resize.process': 'Redimensionar',
+    'image_resize.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_resize.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_compress.title': 'Compresor masivo (sin pérdida)',
+    'image_compress.description': 'Re-codifica sin pérdida cuando es posible para archivos más pequeños.',
+    'image_compress.process': 'Comprimir',
+    'image_compress.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_compress.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_webp.title': 'Conversor masivo a WebP',
+    'image_webp.description': 'Convierte a WebP en alta calidad (90).',
+    'image_webp.process': 'Convertir',
+    'image_webp.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_webp.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
+    'image_tools.download_images': 'Descargar imágenes',
+    'image_tools.download_zip': 'Descargar ZIP',
+    'image_tools.files_added': 'Imágenes seleccionadas',
+    'image_tools.clear': 'Vaciar',
+    'image_tools.processing': 'Procesando…',
+    'image_tools.success': 'Descarga iniciada',
+    'image_tools.error': 'Algo salió mal',
+    'image_tools.no_files': 'Añade al menos una imagen.',
   },
   fr: {
     // Navigation
+    'nav.pdf_tools': 'Outils PDF',
     'nav.merge': 'Fusionner',
     'nav.split': 'Diviser',
     'nav.compress': 'Compresser',
@@ -295,6 +377,10 @@ const translations = {
     'nav.pdf_to_text': 'PDF vers Texte',
     'nav.word_to_pdf': 'Word vers PDF',
     'nav.jpg_to_pdf': 'JPG vers PDF',
+    'nav.image_tools': 'Outils image',
+    'nav.image_resize': 'Redimensionnement masse',
+    'nav.image_compress': 'Compression masse',
+    'nav.image_webp': 'Conversion WebP masse',
     
     // URL paths
     'url.merge': 'fusionner',
@@ -317,6 +403,9 @@ const translations = {
     'landing.pdf_to_text_desc': 'Extrayez le contenu textuel des documents PDF.',
     'landing.word_to_pdf_desc': 'Convertissez les documents Word au format PDF.',
     'landing.jpg_to_pdf_desc': 'Convertissez les images JPG et PNG en documents PDF.',
+    'landing.image_resize_desc': 'Redimensionnez en masse au même format (recadrage centré).',
+    'landing.image_compress_desc': 'Recompression sans perte par lot pour des PNG, WebP et JPEG plus légers.',
+    'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
     
     // Landing page content
     'landing.hero_title': 'iPDFTOOLS',
@@ -414,23 +503,40 @@ const translations = {
     'seo.word_to_pdf.description': 'Convertissez les documents Word au format PDF gratuitement. Outil fiable de conversion DOC/DOCX vers PDF.',
     'seo.jpg_to_pdf.title': 'JPG vers PDF - Convertir Images en PDF en Ligne',
     'seo.jpg_to_pdf.description': 'Convertissez les images JPG et PNG en documents PDF gratuitement. Créez des fichiers PDF à partir de vos images.',
+    'seo.image_resize.title': 'Redimensionnement d\'images en masse en ligne',
+    'seo.image_resize.description': 'Même taille en pixels pour beaucoup d\'images. ZIP ou fichiers séparés.',
+    'seo.image_compress.title': 'Compression sans perte en masse en ligne',
+    'seo.image_compress.description': 'Allégez PNG, WebP et JPEG sans perte. ZIP ou téléchargements séparés.',
+    'seo.image_webp.title': 'Conversion WebP en masse en ligne',
+    'seo.image_webp.description': 'Passez de nombreuses images en WebP. Archive ZIP ou un fichier par image.',
+    'image_resize.title': 'Redimensionnement d\'images en masse',
+    'image_resize.description': 'Largeur et hauteur en pixels. Chaque image est recadrée au centre (cover).',
+    'image_resize.width': 'Largeur (px)',
+    'image_resize.height': 'Hauteur (px)',
+    'image_resize.process': 'Redimensionner',
+    'image_resize.drop_title': 'Déposez des images ici ou cliquez',
+    'image_resize.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_compress.title': 'Compression d\'images en masse (sans perte)',
+    'image_compress.description': 'Ré-encode sans perte lorsque possible pour des fichiers plus petits.',
+    'image_compress.process': 'Compresser',
+    'image_compress.drop_title': 'Déposez des images ici ou cliquez',
+    'image_compress.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_webp.title': 'Conversion WebP en masse',
+    'image_webp.description': 'Conversion en WebP haute qualité (90).',
+    'image_webp.process': 'Convertir',
+    'image_webp.drop_title': 'Déposez des images ici ou cliquez',
+    'image_webp.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',
+    'image_tools.download_images': 'Télécharger les images',
+    'image_tools.download_zip': 'Télécharger ZIP',
+    'image_tools.files_added': 'Images sélectionnées',
+    'image_tools.clear': 'Effacer',
+    'image_tools.processing': 'Traitement…',
+    'image_tools.success': 'Téléchargement démarré',
+    'image_tools.error': 'Une erreur s\'est produite',
+    'image_tools.no_files': 'Ajoutez au moins une image.',
   }
 };
-
-// Path mapping for URL localization
-const pathMapping = {
-  'merge': ['merge', 'combinar', 'fusionner'],
-  'split': ['split', 'dividir', 'diviser'],
-  'compress': ['compress', 'comprimir', 'compresser'],
-  'rotate': ['rotate', 'rotar', 'rotation'],
-  'pdf-to-word': ['pdf-to-word', 'pdf-a-word', 'pdf-vers-word'],
-  'pdf-to-jpg': ['pdf-to-jpg', 'pdf-a-jpg', 'pdf-vers-jpg'],
-  'pdf-to-text': ['pdf-to-text', 'pdf-a-texto', 'pdf-vers-texte'],
-  'word-to-pdf': ['word-to-pdf', 'word-a-pdf', 'word-vers-pdf'],
-  'jpg-to-pdf': ['jpg-to-pdf', 'jpg-a-pdf', 'jpg-vers-pdf'],
-};
-
-const languageIndex = { 'en': 0, 'es': 1, 'fr': 2 };
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
