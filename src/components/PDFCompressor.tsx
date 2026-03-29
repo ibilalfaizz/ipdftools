@@ -63,7 +63,9 @@ const PDFCompressor = () => {
         addDefaultPage: false,
       });
 
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(pdfBytes)], {
+        type: "application/pdf",
+      });
       setCompressedPdfBlob(blob);
       setCompressedSize(blob.size);
       

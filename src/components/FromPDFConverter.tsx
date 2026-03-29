@@ -78,7 +78,8 @@ const FromPDFConverter = () => {
         if (context) {
           await page.render({
             canvasContext: context,
-            viewport: viewport
+            viewport,
+            canvas,
           }).promise;
         }
         

@@ -7,11 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up the worker with a more reliable approach
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url
-).toString();
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 interface ConvertedFile {
   name: string;
@@ -81,12 +77,13 @@ const PDFToJPGConverter = () => {
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
-
-        await page.render(renderContext).promise;
+        await page
+          .render({
+            canvasContext: context,
+            viewport,
+            canvas,
+          })
+          .promise;
         console.log(`Page ${pageNum} rendered to canvas`);
         
         // Convert canvas to blob

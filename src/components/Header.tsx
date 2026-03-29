@@ -1,7 +1,8 @@
+"use client";
 
 import React from "react";
-import { FileText } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
@@ -13,22 +14,35 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const Header = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const { t, getLocalizedPath, getOriginalPath } = useLanguage();
 
   // Get the original path for comparison
-  const currentOriginalPath = getOriginalPath(location.pathname);
+  const currentOriginalPath = getOriginalPath(pathname);
 
-  const navItems = [
-    { href: "/merge", label: t("nav.merge"), color: "hover:text-blue-600" },
-    { href: "/split", label: t("nav.split"), color: "hover:text-orange-600" },
+  const imageTools = [
     {
-      href: "/compress",
-      label: t("nav.compress"),
-      color: "hover:text-green-600",
+      href: "/image-resize",
+      label: t("nav.image_resize"),
+      description: t("landing.image_resize_desc"),
+      color: "from-violet-500 to-fuchsia-500",
     },
-    { href: "/rotate", label: t("nav.rotate"), color: "hover:text-indigo-600" },
+    {
+      href: "/image-compress",
+      label: t("nav.image_compress"),
+      description: t("landing.image_compress_desc"),
+      color: "from-emerald-500 to-teal-500",
+    },
+    {
+      href: "/image-webp",
+      label: t("nav.image_webp"),
+      description: t("landing.image_webp_desc"),
+      color: "from-amber-500 to-orange-500",
+    },
   ];
+
+  const imageToolHrefs = ["/image-resize", "/image-compress", "/image-webp"];
+  const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
   const allTools = [
     {
@@ -87,11 +101,14 @@ const Header = () => {
     },
   ];
 
+  const pdfToolHrefs = allTools.map((tool) => tool.href);
+  const onPdfToolRoute = pdfToolHrefs.includes(currentOriginalPath);
+
   return (
     <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-3">
             <img
               src="/logo.svg"
               alt="Logo"
@@ -103,15 +120,21 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-gray-600 hover:text-blue-600">
-                    All PDF Tools
+                  <NavigationMenuTrigger
+                    className={
+                      onPdfToolRoute
+                        ? "text-blue-600"
+                        : "text-gray-600 hover:text-blue-600"
+                    }
+                  >
+                    {t("nav.pdf_tools")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-4 w-[600px] max-w-[90vw] grid-cols-2 md:grid-cols-3 max-h-[70vh] overflow-y-auto">
                       {allTools.map((tool) => (
                         <Link
                           key={tool.href}
-                          to={getLocalizedPath(tool.href)}
+                          href={getLocalizedPath(tool.href)}
                           className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="text-sm font-medium leading-none group-hover:text-blue-600">
@@ -125,24 +148,38 @@ const Header = () => {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger
+                    className={
+                      onImageToolRoute
+                        ? "text-violet-600"
+                        : "text-gray-600 hover:text-violet-600"
+                    }
+                  >
+                    {t("nav.image_tools")}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 w-[420px] max-w-[90vw]">
+                      {imageTools.map((tool) => (
+                        <Link
+                          key={tool.href}
+                          href={getLocalizedPath(tool.href)}
+                          className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none group-hover:text-violet-600">
+                            {tool.label}
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            {tool.description}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
 
-            <nav className="hidden md:flex space-x-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={getLocalizedPath(item.href)}
-                  className={`font-medium transition-colors text-sm ${
-                    currentOriginalPath === item.href
-                      ? "text-blue-600"
-                      : `text-gray-600 ${item.color}`
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
             <LanguageSelector />
           </div>
         </div>

@@ -133,7 +133,9 @@ const PDFSplitter = () => {
         copiedPages.forEach(page => newPdf.addPage(page));
         
         const pdfBytes = await newPdf.save();
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const blob = new Blob([new Uint8Array(pdfBytes)], {
+          type: "application/pdf",
+        });
         blobs.push(blob);
         
         if (splitOption.type === 'individual') {

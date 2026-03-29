@@ -1,6 +1,12 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useLanguage } from './LanguageContext';
+import {
+  englishPathToLocalized,
+  slugToOriginalPath,
+  type LocaleCode,
+} from '@/lib/urlPaths';
+import { getSiteUrl } from '@/lib/site-url';
 
 interface SEOContextType {
   generatePageTitle: (toolName: string) => string;
@@ -12,7 +18,7 @@ interface SEOContextType {
 const SEOContext = createContext<SEOContextType | undefined>(undefined);
 
 export const SEOProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
 
   const generatePageTitle = (toolName: string): string => {
     const title = t(`seo.${toolName}.title`);
@@ -25,57 +31,20 @@ export const SEOProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const generateCanonicalUrl = (path: string): string => {
-    const baseUrl = 'https://ipdftools.lovable.app';
+    const baseUrl = getSiteUrl();
     return `${baseUrl}${path}`;
   };
 
   const generateHrefLang = (path: string): Array<{ lang: string; url: string }> => {
-    const baseUrl = 'https://ipdftools.lovable.app';
-    const originalPath = path.replace(/^\/(combinar|fusionner|dividir|diviser|comprimir|compresser|rotar|rotation|pdf-a-word|pdf-vers-word|pdf-a-jpg|pdf-vers-jpg|pdf-a-texto|pdf-vers-texte|word-a-pdf|word-vers-pdf|jpg-a-pdf|jpg-vers-pdf)/, (match) => {
-      // Map localized paths back to original English paths
-      const pathMap: { [key: string]: string } = {
-        'combinar': '/merge',
-        'fusionner': '/merge',
-        'dividir': '/split',
-        'diviser': '/split',
-        'comprimir': '/compress',
-        'compresser': '/compress',
-        'rotar': '/rotate',
-        'rotation': '/rotate',
-        'pdf-a-word': '/pdf-to-word',
-        'pdf-vers-word': '/pdf-to-word',
-        'pdf-a-jpg': '/pdf-to-jpg',
-        'pdf-vers-jpg': '/pdf-to-jpg',
-        'pdf-a-texto': '/pdf-to-text',
-        'pdf-vers-texte': '/pdf-to-text',
-        'word-a-pdf': '/word-to-pdf',
-        'word-vers-pdf': '/word-to-pdf',
-        'jpg-a-pdf': '/jpg-to-pdf',
-        'jpg-vers-pdf': '/jpg-to-pdf',
-      };
-      return pathMap[match.substring(1)] || match;
-    });
+    const baseUrl = getSiteUrl();
+    const trimmed = path.startsWith('/') ? path : `/${path}`;
+    const segment = trimmed.replace(/^\//, '').split('/')[0] ?? '';
+    const englishPath = slugToOriginalPath(segment) ?? (segment ? `/${segment}` : trimmed);
 
-    const langPaths = {
-      'en': originalPath,
-      'es': originalPath.replace('/merge', '/combinar')
-        .replace('/split', '/dividir')
-        .replace('/compress', '/comprimir')
-        .replace('/rotate', '/rotar')
-        .replace('/pdf-to-word', '/pdf-a-word')
-        .replace('/pdf-to-jpg', '/pdf-a-jpg')
-        .replace('/pdf-to-text', '/pdf-a-texto')
-        .replace('/word-to-pdf', '/word-a-pdf')
-        .replace('/jpg-to-pdf', '/jpg-a-pdf'),
-      'fr': originalPath.replace('/merge', '/fusionner')
-        .replace('/split', '/diviser')
-        .replace('/compress', '/compresser')
-        .replace('/rotate', '/rotation')
-        .replace('/pdf-to-word', '/pdf-vers-word')
-        .replace('/pdf-to-jpg', '/pdf-vers-jpg')
-        .replace('/pdf-to-text', '/pdf-vers-texte')
-        .replace('/word-to-pdf', '/word-vers-pdf')
-        .replace('/jpg-to-pdf', '/jpg-vers-pdf'),
+    const langPaths: Record<LocaleCode, string> = {
+      en: englishPathToLocalized(englishPath, 'en'),
+      es: englishPathToLocalized(englishPath, 'es'),
+      fr: englishPathToLocalized(englishPath, 'fr'),
     };
 
     return [
