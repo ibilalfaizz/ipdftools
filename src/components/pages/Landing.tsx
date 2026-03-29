@@ -20,7 +20,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Header from "../Header";
 import Footer from "../Footer";
-import SEOHead from "../SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Landing = () => {
@@ -127,7 +126,6 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
-      <SEOHead />
       <Header />
       <main className="container mx-auto px-4 py-16">
         {/* Hero Section */}
