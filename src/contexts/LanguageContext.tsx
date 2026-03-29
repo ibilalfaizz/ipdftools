@@ -573,28 +573,20 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   }, [language]);
 
   const t = (key: string): string => {
-    console.log('Translation request for key:', key, 'Current language:', language);
-    
     const currentTranslations = translations[language];
-    console.log('Current translations object:', currentTranslations);
-    
-    // Direct key lookup first
+
     if (currentTranslations && currentTranslations[key]) {
-      console.log('Found direct translation:', currentTranslations[key]);
       return currentTranslations[key];
     }
-    
-    // Fallback: Try dot notation parsing (legacy support)
-    const keys = key.split('.');
-    let value: any = currentTranslations;
-    
+
+    const keys = key.split(".");
+    let value: unknown = currentTranslations;
+
     for (const k of keys) {
-      value = value?.[k];
+      value = (value as Record<string, unknown> | undefined)?.[k];
     }
-    
-    const result = value || key;
-    console.log('Final translation result:', result);
-    return result;
+
+    return (typeof value === "string" ? value : key) || key;
   };
 
   const getLocalizedPath = (originalPath: string): string => {
