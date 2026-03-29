@@ -7,13 +7,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import FileUploadZone from "./FileUploadZone";
+import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
 
 type TranslationPrefix = "image_resize" | "image_compress" | "image_webp";
 
 type Props = {
-  apiPath: string;
+  /** Runs in the browser — no server upload (avoids serverless body limits). */
+  processFiles: (files: File[]) => Promise<ClientImageProcessResult>;
   translationPrefix: TranslationPrefix;
-  appendToFormData?: (fd: FormData) => void;
   children?: React.ReactNode;
 };
 
@@ -32,9 +33,8 @@ function base64ToBlob(base64: string, contentType: string): Blob {
 }
 
 export default function ImageToolsBatchForm({
-  apiPath,
+  processFiles,
   translationPrefix,
-  appendToFormData,
   children,
 }: Props) {
   const { t } = useLanguage();
@@ -112,39 +112,34 @@ export default function ImageToolsBatchForm({
     setBusy(true);
     setResult(null);
     try {
-      const fd = new FormData();
-      files.forEach((f) => fd.append("images", f));
-      appendToFormData?.(fd);
-      const res = await fetch(apiPath, { method: "POST", body: fd });
-      const body = (await res.json().catch(() => ({}))) as {
-        files?: ResultFile[];
-        zipSuggestedName?: string;
-        error?: string;
-      };
-
-      if (!res.ok) {
-        toast({
-          title: body.error ?? t("image_tools.error"),
-          variant: "destructive",
-        });
-        return;
-      }
-
+      const body = await processFiles(files);
       if (!Array.isArray(body.files) || body.files.length === 0) {
         toast({
-          title: body.error ?? t("image_tools.error"),
+          title: t("image_tools.error"),
           variant: "destructive",
         });
         return;
       }
-
       setResult({
         files: body.files,
         zipSuggestedName: body.zipSuggestedName ?? "images.zip",
       });
       toast({ title: t("image_tools.result_ready") });
-    } catch {
-      toast({ title: t("image_tools.error"), variant: "destructive" });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "WEBP_ENCODE_UNSUPPORTED") {
+        toast({
+          title: t("image_tools.webp_unsupported"),
+          variant: "destructive",
+        });
+      } else if (msg === "NO_VALID_IMAGES") {
+        toast({
+          title: t("image_tools.error"),
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: t("image_tools.error"), variant: "destructive" });
+      }
     } finally {
       setBusy(false);
     }
@@ -189,7 +184,7 @@ export default function ImageToolsBatchForm({
         className="w-full"
         size="lg"
         disabled={busy}
-        onClick={submit}
+        onClick={() => void submit()}
       >
         {busy ? (
           <Loader2 className="mr-2 h-5 w-5 animate-spin inline" />

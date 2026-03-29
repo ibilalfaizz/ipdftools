@@ -57,7 +57,6 @@ function legacyToolRedirects() {
 const nextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", ...radixReactPackages],
-    serverComponentsExternalPackages: ["sharp"],
   },
   webpack: (config) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };

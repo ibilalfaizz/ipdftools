@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Header from "../Header";
 import Footer from "../Footer";
-import SEOHead from "../SEOHead";
 import ImageToolsBatchForm from "../ImageToolsBatchForm";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { processResizeBatch } from "@/lib/client-image-jobs";
 
 export default function ImageResizePage() {
   const { t } = useLanguage();
@@ -17,7 +17,6 @@ export default function ImageResizePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
-      <SEOHead toolName="image_resize" />
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -30,12 +29,10 @@ export default function ImageResizePage() {
             </CardHeader>
             <CardContent>
               <ImageToolsBatchForm
-                apiPath="/api/resize"
                 translationPrefix="image_resize"
-                appendToFormData={(fd) => {
-                  fd.append("width", String(width));
-                  fd.append("height", String(height));
-                }}
+                processFiles={(files) =>
+                  processResizeBatch(files, width, height)
+                }
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">

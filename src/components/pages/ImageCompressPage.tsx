@@ -3,16 +3,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "../Header";
 import Footer from "../Footer";
-import SEOHead from "../SEOHead";
 import ImageToolsBatchForm from "../ImageToolsBatchForm";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { processCompressBatch } from "@/lib/client-image-jobs";
 
 export default function ImageCompressPage() {
   const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
-      <SEOHead toolName="image_compress" />
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
@@ -25,8 +24,8 @@ export default function ImageCompressPage() {
             </CardHeader>
             <CardContent>
               <ImageToolsBatchForm
-                apiPath="/api/compress"
                 translationPrefix="image_compress"
+                processFiles={(files) => processCompressBatch(files)}
               />
             </CardContent>
           </Card>
