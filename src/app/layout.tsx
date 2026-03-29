@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-import "@/app/globals.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "iPDFTOOLS - Free Online PDF Tools",
