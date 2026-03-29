@@ -1,21 +1,39 @@
+"use client";
 
-import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useLanguage, Language } from '../contexts/LanguageContext';
+import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useLanguage, Language } from "../contexts/LanguageContext";
 
 const LanguageSelector = () => {
-  const { language, setLanguage } = useLanguage();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { language, setLanguage, getOriginalPath, getLocalizedPathForLanguage } =
+    useLanguage();
 
   const languages: { code: Language; name: string; flag: string }[] = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
   ];
 
-  const currentLanguage = languages.find(lang => lang.code === language);
+  const currentLanguage = languages.find((lang) => lang.code === language);
 
   return (
-    <Select value={language} onValueChange={(value: Language) => setLanguage(value)}>
+    <Select
+      value={language}
+      onValueChange={(value: Language) => {
+        setLanguage(value);
+        const orig = getOriginalPath(pathname);
+        router.push(getLocalizedPathForLanguage(orig, value));
+      }}
+    >
       <SelectTrigger className="w-32">
         <SelectValue>
           <span className="flex items-center space-x-2">

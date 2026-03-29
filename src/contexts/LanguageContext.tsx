@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   createContext,
   useContext,
@@ -6,15 +8,22 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { languageIndex, pathMapping } from '@/lib/urlPaths';
+import { usePathname } from "next/navigation";
+import {
+  homePath,
+  isLocalePrefix,
+  slugToOriginalPath,
+  toolPath,
+} from "@/lib/urlPaths";
 
-export type Language = 'en' | 'es' | 'fr';
+export type Language = "en" | "es" | "fr";
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
   getLocalizedPath: (path: string) => string;
+  getLocalizedPathForLanguage: (originalPath: string, lang: Language) => string;
   getOriginalPath: (localizedPath: string) => string;
 }
 
@@ -546,10 +555,16 @@ const translations = {
 };
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const pathname = usePathname();
   const [language, setLanguage] = useState<Language>("en");
   const skipNextPersist = useRef(true);
 
   useEffect(() => {
+    const parts = pathname.split("/").filter(Boolean);
+    if (parts[0] && isLocalePrefix(parts[0])) {
+      setLanguage(parts[0]);
+      return;
+    }
     try {
       const saved = localStorage.getItem("preferred-language") as Language;
       if (saved && ["en", "es", "fr"].includes(saved)) {
@@ -558,7 +573,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     } catch {
       /* private mode / SSR */
     }
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (skipNextPersist.current) {
@@ -590,32 +605,52 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   };
 
   const getLocalizedPath = (originalPath: string): string => {
-    const cleanPath = originalPath.replace('/', '');
-    const langIndex = languageIndex[language];
-    
-    for (const [original, translations] of Object.entries(pathMapping)) {
-      if (original === cleanPath) {
-        return `/${translations[langIndex]}`;
-      }
+    if (originalPath === "/" || originalPath === "") {
+      return homePath(language);
     }
-    
-    return originalPath;
+    const withSlash = originalPath.startsWith("/") ? originalPath : `/${originalPath}`;
+    return toolPath(language, withSlash);
+  };
+
+  const getLocalizedPathForLanguage = (
+    originalPath: string,
+    lang: Language
+  ): string => {
+    if (originalPath === "/" || originalPath === "") {
+      return homePath(lang);
+    }
+    const withSlash = originalPath.startsWith("/") ? originalPath : `/${originalPath}`;
+    return toolPath(lang, withSlash);
   };
 
   const getOriginalPath = (localizedPath: string): string => {
-    const cleanPath = localizedPath.replace('/', '');
-    
-    for (const [original, translations] of Object.entries(pathMapping)) {
-      if (translations.includes(cleanPath)) {
-        return `/${original}`;
-      }
+    const parts = localizedPath.split("/").filter(Boolean);
+    if (parts.length === 1 && isLocalePrefix(parts[0])) {
+      return "/";
     }
-    
+    if (parts.length >= 2 && isLocalePrefix(parts[0])) {
+      const slug = parts[1];
+      const orig = slugToOriginalPath(slug);
+      return orig ?? `/${slug}`;
+    }
+    if (parts.length === 1) {
+      const orig = slugToOriginalPath(parts[0]);
+      if (orig) return orig;
+    }
     return localizedPath;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, getLocalizedPath, getOriginalPath }}>
+    <LanguageContext.Provider
+      value={{
+        language,
+        setLanguage,
+        t,
+        getLocalizedPath,
+        getLocalizedPathForLanguage,
+        getOriginalPath,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );
