@@ -1,5 +1,5 @@
-import Landing from "@/pages/Landing";
+import { redirect } from "next/navigation";
 
-export default function HomePage() {
-  return <Landing />;
+export default function RootPage() {
+  redirect("/en");
 }

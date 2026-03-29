@@ -1,12 +1,12 @@
-
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useLanguage } from './LanguageContext';
+import React, { createContext, useContext, ReactNode } from "react";
+import { useLanguage } from "./LanguageContext";
 import {
-  englishPathToLocalized,
+  homePath,
+  isLocalePrefix,
   slugToOriginalPath,
-  type LocaleCode,
-} from '@/lib/urlPaths';
-import { getSiteUrl } from '@/lib/site-url';
+  toolPath,
+} from "@/lib/urlPaths";
+import { getSiteUrl } from "@/lib/site-url";
 
 interface SEOContextType {
   generatePageTitle: (toolName: string) => string;
@@ -22,7 +22,7 @@ export const SEOProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const generatePageTitle = (toolName: string): string => {
     const title = t(`seo.${toolName}.title`);
-    const siteName = t('seo.site_name');
+    const siteName = t("seo.site_name");
     return `${title} - ${siteName}`;
   };
 
@@ -32,36 +32,62 @@ export const SEOProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const generateCanonicalUrl = (path: string): string => {
     const baseUrl = getSiteUrl();
-    return `${baseUrl}${path}`;
+    const p = path.startsWith("/") ? path : `/${path}`;
+    return `${baseUrl}${p}`;
   };
 
   const generateHrefLang = (path: string): Array<{ lang: string; url: string }> => {
     const baseUrl = getSiteUrl();
-    const trimmed = path.startsWith('/') ? path : `/${path}`;
-    const segment = trimmed.replace(/^\//, '').split('/')[0] ?? '';
-    const englishPath = slugToOriginalPath(segment) ?? (segment ? `/${segment}` : trimmed);
+    const trimmed = path.startsWith("/") ? path : `/${path}`;
+    const parts = trimmed.split("/").filter(Boolean);
 
-    const langPaths: Record<LocaleCode, string> = {
-      en: englishPathToLocalized(englishPath, 'en'),
-      es: englishPathToLocalized(englishPath, 'es'),
-      fr: englishPathToLocalized(englishPath, 'fr'),
-    };
+    if (parts.length === 1 && isLocalePrefix(parts[0])) {
+      return [
+        { lang: "en", url: `${baseUrl}${homePath("en")}` },
+        { lang: "es", url: `${baseUrl}${homePath("es")}` },
+        { lang: "fr", url: `${baseUrl}${homePath("fr")}` },
+        { lang: "x-default", url: `${baseUrl}${homePath("en")}` },
+      ];
+    }
 
+    if (parts.length >= 2 && isLocalePrefix(parts[0])) {
+      const slug = parts[1];
+      const englishPath = slugToOriginalPath(slug);
+      if (!englishPath) {
+        return [{ lang: "x-default", url: `${baseUrl}${trimmed}` }];
+      }
+      return [
+        { lang: "en", url: `${baseUrl}${toolPath("en", englishPath)}` },
+        { lang: "es", url: `${baseUrl}${toolPath("es", englishPath)}` },
+        { lang: "fr", url: `${baseUrl}${toolPath("fr", englishPath)}` },
+        { lang: "x-default", url: `${baseUrl}${toolPath("en", englishPath)}` },
+      ];
+    }
+
+    const segment = parts[0] ?? "";
+    const op = slugToOriginalPath(segment);
+    if (op) {
+      return [
+        { lang: "en", url: `${baseUrl}${toolPath("en", op)}` },
+        { lang: "es", url: `${baseUrl}${toolPath("es", op)}` },
+        { lang: "fr", url: `${baseUrl}${toolPath("fr", op)}` },
+        { lang: "x-default", url: `${baseUrl}${toolPath("en", op)}` },
+      ];
+    }
     return [
-      { lang: 'en', url: `${baseUrl}${langPaths.en}` },
-      { lang: 'es', url: `${baseUrl}${langPaths.es}` },
-      { lang: 'fr', url: `${baseUrl}${langPaths.fr}` },
-      { lang: 'x-default', url: `${baseUrl}${langPaths.en}` },
+      { lang: "x-default", url: `${baseUrl}${trimmed}` },
     ];
   };
 
   return (
-    <SEOContext.Provider value={{
-      generatePageTitle,
-      generatePageDescription,
-      generateCanonicalUrl,
-      generateHrefLang,
-    }}>
+    <SEOContext.Provider
+      value={{
+        generatePageTitle,
+        generatePageDescription,
+        generateCanonicalUrl,
+        generateHrefLang,
+      }}
+    >
       {children}
     </SEOContext.Provider>
   );
@@ -70,7 +96,7 @@ export const SEOProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 export const useSEO = () => {
   const context = useContext(SEOContext);
   if (context === undefined) {
-    throw new Error('useSEO must be used within a SEOProvider');
+    throw new Error("useSEO must be used within a SEOProvider");
   }
   return context;
 };

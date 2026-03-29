@@ -17,6 +17,28 @@ export const pathMapping: Record<string, string[]> = {
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };
 
+export const LOCALE_CODES: LocaleCode[] = ["en", "es", "fr"];
+
+export function isLocalePrefix(s: string): s is LocaleCode {
+  return s === "en" || s === "es" || s === "fr";
+}
+
+/** `/merge` + locale `es` → `/es/combinar` */
+export function toolPath(locale: LocaleCode, englishPath: string): string {
+  const clean = englishPath.replace(/^\//, "");
+  const idx = languageIndex[locale];
+  for (const [original, translations] of Object.entries(pathMapping)) {
+    if (original === clean) {
+      return `/${locale}/${translations[idx]}`;
+    }
+  }
+  return `/${locale}/${clean}`;
+}
+
+export function homePath(locale: LocaleCode): string {
+  return `/${locale}`;
+}
+
 /** Map any localized slug to canonical English path, e.g. combinar -> /merge */
 export function slugToOriginalPath(slug: string): string | null {
   for (const [original, translations] of Object.entries(pathMapping)) {
@@ -42,10 +64,25 @@ export function englishPathToLocalized(
   return pathWithSlash;
 }
 
-export function allLocalizedSlugs(): string[] {
-  const slugs = new Set<string>();
-  for (const translations of Object.values(pathMapping)) {
-    for (const s of translations) slugs.add(s);
+/** Verify `/es` + `rotar` matches the Spanish slug for that tool */
+export function isValidLocaleToolPair(
+  locale: LocaleCode,
+  toolSlug: string
+): boolean {
+  const originalPath = slugToOriginalPath(toolSlug);
+  if (!originalPath) return false;
+  const expected = toolPath(locale, originalPath).replace(/^\//, "");
+  const actual = `${locale}/${toolSlug}`;
+  return expected === actual;
+}
+
+export function allLocaleToolStaticParams(): { locale: LocaleCode; tool: string }[] {
+  const out: { locale: LocaleCode; tool: string }[] = [];
+  for (const locale of LOCALE_CODES) {
+    const idx = languageIndex[locale];
+    for (const translations of Object.values(pathMapping)) {
+      out.push({ locale, tool: translations[idx] });
+    }
   }
-  return Array.from(slugs);
+  return out;
 }

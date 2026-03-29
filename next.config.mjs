@@ -10,20 +10,64 @@ const radixReactPackages = Object.keys(dependencies).filter((name) =>
   name.startsWith("@radix-ui/react-")
 );
 
+/** Keep in sync with `src/lib/urlPaths.ts` `pathMapping`. */
+const pathMapping = {
+  merge: ["merge", "combinar", "fusionner"],
+  split: ["split", "dividir", "diviser"],
+  compress: ["compress", "comprimir", "compresser"],
+  rotate: ["rotate", "rotar", "rotation"],
+  "pdf-to-word": ["pdf-to-word", "pdf-a-word", "pdf-vers-word"],
+  "pdf-to-jpg": ["pdf-to-jpg", "pdf-a-jpg", "pdf-vers-jpg"],
+  "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
+  "word-to-pdf": ["word-to-pdf", "word-a-pdf", "word-vers-pdf"],
+  "jpg-to-pdf": ["jpg-to-pdf", "jpg-a-pdf", "jpg-vers-pdf"],
+  "image-resize": ["image-resize", "redimensionar-imagen", "redimensionner-image"],
+  "image-compress": ["image-compress", "comprimir-imagen", "compresser-image"],
+  "image-webp": ["image-webp", "imagen-webp", "convertir-webp"],
+};
+
+/**
+ * Permanent redirects (Next uses HTTP 308) so crawlers and browsers treat old
+ * indexed URLs as moved to locale-prefixed URLs — avoids duplicate indexing.
+ */
+function legacyToolRedirects() {
+  const out = [];
+  for (const translations of Object.values(pathMapping)) {
+    const [en, es, fr] = translations;
+    out.push({
+      source: `/${en}`,
+      destination: `/en/${en}`,
+      permanent: true,
+    });
+    out.push({
+      source: `/${es}`,
+      destination: `/es/${es}`,
+      permanent: true,
+    });
+    out.push({
+      source: `/${fr}`,
+      destination: `/fr/${fr}`,
+      permanent: true,
+    });
+  }
+  return out;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // Tree-shake Radix entrypoints; reduces one giant vendor chunk and helps avoid stale
-    // `./vendor-chunks/@radix-ui.js` references after incremental dev rebuilds.
     optimizePackageImports: ["lucide-react", ...radixReactPackages],
     serverComponentsExternalPackages: ["sharp"],
   },
   webpack: (config) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };
-    // Do not set `config.cache = false` in dev: it breaks Next’s vendor-chunk layout and
-    // leads to missing files like `./vendor-chunks/@radix-ui.js`. Use `npm run dev:clean` if
-    // `.next` gets corrupted (common on synced/container paths).
     return config;
+  },
+  async redirects() {
+    return [
+      { source: "/", destination: "/en", permanent: true },
+      ...legacyToolRedirects(),
+    ];
   },
 };
 
