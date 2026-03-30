@@ -25,6 +25,11 @@ export const pathMapping: Record<string, string[]> = {
     "convertir-webp-masivo",
     "conversion-webp-masse",
   ],
+  "bulk-image-crop": [
+    "bulk-image-crop",
+    "recortar-imagen-masivo",
+    "recadrer-images-masse",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

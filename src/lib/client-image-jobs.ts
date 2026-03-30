@@ -272,3 +272,78 @@ export async function processWebpBatch(
   }
   return { files: filesOut, zipSuggestedName: "converted-webp.zip" };
 }
+
+/** Crop rectangle relative to each image (0–1), from the preview image’s pixel crop. */
+export type NormalizedCrop = {
+  nx: number;
+  ny: number;
+  nw: number;
+  nh: number;
+};
+
+export async function processCropBatch(
+  files: File[],
+  norm: NormalizedCrop
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  const nx = Math.min(1, Math.max(0, norm.nx));
+  const ny = Math.min(1, Math.max(0, norm.ny));
+  let nw = Math.min(1 - nx, Math.max(0, norm.nw));
+  let nh = Math.min(1 - ny, Math.max(0, norm.nh));
+  if (nw <= 0 || nh <= 0) {
+    throw new Error("INVALID_CROP");
+  }
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const iw = bitmap.width;
+      const ih = bitmap.height;
+      let x = Math.round(nx * iw);
+      let y = Math.round(ny * ih);
+      let w = Math.round(nw * iw);
+      let h = Math.round(nh * ih);
+      w = Math.max(1, Math.min(w, iw));
+      h = Math.max(1, Math.min(h, ih));
+      x = Math.max(0, Math.min(x, iw - w));
+      y = Math.max(0, Math.min(y, ih - h));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) continue;
+      ctx.drawImage(bitmap, x, y, w, h, 0, 0, w, h);
+
+      const kind = outputKindForMime(file.type);
+      const blob = await encodeResizeOutput(canvas, kind);
+      const ext =
+        blob.type === "image/png"
+          ? "png"
+          : blob.type === "image/webp"
+            ? "webp"
+            : "jpg";
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_crop_${w}x${h}.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch {
+      // skip
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "cropped-images.zip" };
+}

@@ -9,9 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { useLanguage, Language } from "../contexts/LanguageContext";
 
-const LanguageSelector = () => {
+type LanguageSelectorProps = {
+  /** Merged into `SelectTrigger` (e.g. compact width on mobile). */
+  triggerClassName?: string;
+};
+
+const LanguageSelector = ({ triggerClassName }: LanguageSelectorProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const { language, setLanguage, getOriginalPath, getLocalizedPathForLanguage } =
@@ -34,7 +40,9 @@ const LanguageSelector = () => {
         router.push(getLocalizedPathForLanguage(orig, value));
       }}
     >
-      <SelectTrigger className="w-32">
+      <SelectTrigger
+        className={cn("w-32 min-w-0", triggerClassName)}
+      >
         <SelectValue>
           <span className="flex items-center space-x-2">
             <span>{currentLanguage?.flag}</span>

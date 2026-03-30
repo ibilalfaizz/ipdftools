@@ -44,9 +44,14 @@ const translations = {
     'nav.word_to_pdf': 'Word to PDF',
     'nav.jpg_to_pdf': 'JPG to PDF',
     'nav.image_tools': 'Image tools',
+    'nav.menu': 'Menu',
+    'tool_search.placeholder': 'Search tools…',
+    'tool_search.search_tools': 'Search tools',
+    'tool_search.no_results': 'No tools match your search.',
     'nav.image_resize': 'Bulk image resizer',
     'nav.image_compress': 'Bulk image compressor',
     'nav.image_webp': 'Bulk WebP converter',
+    'nav.image_crop': 'Bulk image crop',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -72,6 +77,7 @@ const translations = {
     'landing.image_resize_desc': 'Bulk-resize photos to the same width and height (center crop).',
     'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
     'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
+    'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -187,6 +193,7 @@ const translations = {
     'image_tools.sidebar_heading': 'Files & options',
     'image_tools.open_options': 'Open options',
     'image_tools.clear': 'Clear',
+    'image_tools.add_more': 'Add more images',
     'image_tools.processing': 'Processing…',
     'image_tools.success': 'Download started',
     'image_tools.error': 'Something went wrong',
@@ -207,9 +214,14 @@ const translations = {
     'nav.word_to_pdf': 'Word a PDF',
     'nav.jpg_to_pdf': 'JPG a PDF',
     'nav.image_tools': 'Herramientas de imagen',
+    'nav.menu': 'Menú',
+    'tool_search.placeholder': 'Buscar herramientas…',
+    'tool_search.search_tools': 'Buscar herramientas',
+    'tool_search.no_results': 'Ninguna herramienta coincide.',
     'nav.image_resize': 'Redimensionador masivo',
     'nav.image_compress': 'Compresor masivo',
     'nav.image_webp': 'Conversor WebP masivo',
+    'nav.image_crop': 'Recorte masivo',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -235,6 +247,7 @@ const translations = {
     'landing.image_resize_desc': 'Redimensiona muchas fotos al mismo ancho y alto (recorte centrado).',
     'landing.image_compress_desc': 'Recompresión sin pérdida en lote para PNG, WebP y JPEG más ligeros.',
     'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
+    'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -334,6 +347,19 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_webp.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_crop.title': 'Recorte masivo de imágenes',
+    'image_crop.description':
+      'Arrastra los tiradores o usa ancho, alto, X e Y. La vista previa es la primera imagen; el mismo recorte relativo se aplica a todas.',
+    'image_crop.options_heading': 'Opciones de recorte',
+    'image_crop.width': 'Ancho (px)',
+    'image_crop.height': 'Alto (px)',
+    'image_crop.x': 'Posición X (px)',
+    'image_crop.y': 'Posición Y (px)',
+    'image_crop.process': 'Recortar',
+    'image_crop.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_crop.batch_hint':
+      'Se aplica la misma zona de recorte (relativa a cada imagen) a todos los archivos.',
     'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
     'image_tools.download_images': 'Descargar imágenes',
     'image_tools.download_zip': 'Descargar ZIP',
@@ -341,6 +367,7 @@ const translations = {
     'image_tools.sidebar_heading': 'Archivos y opciones',
     'image_tools.open_options': 'Abrir opciones',
     'image_tools.clear': 'Vaciar',
+    'image_tools.add_more': 'Añadir más imágenes',
     'image_tools.processing': 'Procesando…',
     'image_tools.success': 'Descarga iniciada',
     'image_tools.error': 'Algo salió mal',
@@ -361,9 +388,14 @@ const translations = {
     'nav.word_to_pdf': 'Word vers PDF',
     'nav.jpg_to_pdf': 'JPG vers PDF',
     'nav.image_tools': 'Outils image',
+    'nav.menu': 'Menu',
+    'tool_search.placeholder': 'Rechercher un outil…',
+    'tool_search.search_tools': 'Rechercher des outils',
+    'tool_search.no_results': 'Aucun outil ne correspond.',
     'nav.image_resize': 'Redimensionnement masse',
     'nav.image_compress': 'Compression masse',
     'nav.image_webp': 'Conversion WebP masse',
+    'nav.image_crop': 'Recadrage masse',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -389,6 +421,7 @@ const translations = {
     'landing.image_resize_desc': 'Redimensionnez en masse au même format (recadrage centré).',
     'landing.image_compress_desc': 'Recompression sans perte par lot pour des PNG, WebP et JPEG plus légers.',
     'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
+    'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -488,6 +521,19 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Déposez des images ici ou cliquez',
     'image_webp.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_crop.title': 'Recadrage d\'images en masse',
+    'image_crop.description':
+      'Faites glisser les poignées ou saisissez largeur, hauteur, X et Y. L\'aperçu est la première image ; le même recadrage relatif s\'applique à tous les fichiers.',
+    'image_crop.options_heading': 'Options de recadrage',
+    'image_crop.width': 'Largeur (px)',
+    'image_crop.height': 'Hauteur (px)',
+    'image_crop.x': 'Position X (px)',
+    'image_crop.y': 'Position Y (px)',
+    'image_crop.process': 'Recadrer',
+    'image_crop.drop_title': 'Déposez des images ici ou cliquez',
+    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_crop.batch_hint':
+      'La même zone de recadrage (relative à chaque image) est appliquée à chaque fichier.',
     'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',
     'image_tools.download_images': 'Télécharger les images',
     'image_tools.download_zip': 'Télécharger ZIP',
@@ -495,6 +541,7 @@ const translations = {
     'image_tools.sidebar_heading': 'Fichiers et options',
     'image_tools.open_options': 'Ouvrir les options',
     'image_tools.clear': 'Effacer',
+    'image_tools.add_more': 'Ajouter des images',
     'image_tools.processing': 'Traitement…',
     'image_tools.success': 'Téléchargement démarré',
     'image_tools.error': 'Une erreur s\'est produite',

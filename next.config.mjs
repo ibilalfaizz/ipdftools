@@ -36,6 +36,11 @@ const pathMapping = {
     "convertir-webp-masivo",
     "conversion-webp-masse",
   ],
+  "bulk-image-crop": [
+    "bulk-image-crop",
+    "recortar-imagen-masivo",
+    "recadrer-images-masse",
+  ],
 };
 
 /**

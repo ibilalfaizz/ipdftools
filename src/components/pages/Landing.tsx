@@ -14,12 +14,14 @@ import {
   Maximize2,
   Minimize2,
   Sparkles,
+  Crop,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Header from "../Header";
 import Footer from "../Footer";
+import ToolSearch from "../ToolSearch";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 /** One uniform treatment for all tool icons and CTAs (mint on dark teal). */
@@ -117,6 +119,13 @@ const Landing = () => {
       path: "/bulk-image-webp",
       available: true,
     },
+    {
+      icon: <Crop className="w-8 h-8" />,
+      title: t("nav.image_crop"),
+      description: t("landing.image_crop_desc"),
+      path: "/bulk-image-crop",
+      available: true,
+    },
   ];
 
   return (
@@ -140,9 +149,12 @@ const Landing = () => {
             </span>
             <span>{t("landing.hero_headline_after")}</span>
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
             {t("landing.hero_subtitle")}
           </p>
+          <div className="w-full max-w-xl mx-auto mb-10">
+            <ToolSearch variant="hero" />
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <Button
               asChild
