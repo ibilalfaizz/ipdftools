@@ -51,6 +51,11 @@ const pathMapping = {
     "recortar-imagenes",
     "recadrer-images",
   ],
+  "image-watermark": [
+    "image-watermark",
+    "marca-de-agua-imagen",
+    "filigrane-image",
+  ],
 };
 
 /**

@@ -40,6 +40,11 @@ export const pathMapping: Record<string, string[]> = {
     "recortar-imagenes",
     "recadrer-images",
   ],
+  "image-watermark": [
+    "image-watermark",
+    "marca-de-agua-imagen",
+    "filigrane-image",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

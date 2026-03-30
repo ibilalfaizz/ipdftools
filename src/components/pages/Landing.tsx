@@ -17,6 +17,7 @@ import {
   FileImage,
   Film,
   Crop,
+  Stamp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -140,6 +141,13 @@ const Landing = () => {
       title: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
       path: "/image-crop",
+      available: true,
+    },
+    {
+      icon: <Stamp className="w-8 h-8" />,
+      title: t("nav.image_watermark"),
+      description: t("landing.image_watermark_desc"),
+      path: "/image-watermark",
       available: true,
     },
   ];

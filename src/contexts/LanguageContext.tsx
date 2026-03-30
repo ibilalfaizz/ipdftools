@@ -54,6 +54,7 @@ const translations = {
     'nav.image_jpg': 'Bulk JPG converter',
     'nav.image_gif': 'Images to GIF',
     'nav.image_crop': 'Image crop',
+    'nav.image_watermark': 'Image watermark',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -83,6 +84,8 @@ const translations = {
     'landing.image_gif_desc':
       'Build an animated GIF from multiple photos. Set seconds per frame and loop in the sidebar.',
     'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
+    'landing.image_watermark_desc':
+      'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -219,6 +222,44 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • One image',
     'image_crop.batch_hint':
       'The same crop area (relative to each image) is applied to every file.',
+    'image_watermark.title': 'Image watermark',
+    'image_watermark.description':
+      'Upload a photo and stack multiple text and image watermarks. Drag a layer on the preview to move it; use the corner handle on images to resize. List order: top = in front.',
+    'image_watermark.canvas_hint':
+      'Click a layer on the preview or in the list to edit it. Drag to move; image layers have a corner handle to resize.',
+    'image_watermark.layers_heading': 'Watermark layers',
+    'image_watermark.layers_order_hint':
+      'First in the list is drawn behind; last is on top. Use arrows to change stacking.',
+    'image_watermark.add_text': 'Add text',
+    'image_watermark.add_image': 'Add image',
+    'image_watermark.edit_text_layer': 'Selected: text',
+    'image_watermark.edit_image_layer': 'Selected: image',
+    'image_watermark.bring_forward': 'Move up (in front)',
+    'image_watermark.send_backward': 'Move down (behind)',
+    'image_watermark.remove_layer': 'Remove layer',
+    'image_watermark.mode_text': 'Text',
+    'image_watermark.mode_image': 'Image',
+    'image_watermark.text_label': 'Watermark text',
+    'image_watermark.color_label': 'Text color',
+    'image_watermark.font_size_label': 'Text size',
+    'image_watermark.font_size_value': 'Relative scale {n} (approx. % of image height)',
+    'image_watermark.wm_image_label': 'Watermark image',
+    'image_watermark.wm_image_pick': 'Choose image…',
+    'image_watermark.wm_image_replace': 'Replace image…',
+    'image_watermark.image_size_label': 'Watermark width',
+    'image_watermark.image_size_value': '{n}% of main image width',
+    'image_watermark.opacity_label': 'Opacity',
+    'image_watermark.opacity_value': '{n}%',
+    'image_watermark.process': 'Apply watermark',
+    'image_watermark.download_png': 'Download PNG',
+    'image_watermark.error_no_text': 'Please enter watermark text.',
+    'image_watermark.error_no_wm_image': 'Please choose a watermark image.',
+    'image_watermark.error_no_layers':
+      'Add at least one text (non-empty) or image watermark.',
+    'image_watermark.error_decode':
+      'Could not read that image file. Try PNG or JPEG, or another browser.',
+    'image_watermark.drop_title': 'Drop an image here or click to browse',
+    'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • One image',
     'image_tools.result_ready': 'Ready — download as images or ZIP.',
     'image_tools.download_images': 'Download images',
     'image_tools.download_gif': 'Download GIF',
@@ -258,6 +299,7 @@ const translations = {
     'nav.image_jpg': 'Conversor JPG masivo',
     'nav.image_gif': 'Imágenes a GIF',
     'nav.image_crop': 'Recorte de imágenes',
+    'nav.image_watermark': 'Marca de agua',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -288,6 +330,8 @@ const translations = {
     'landing.image_gif_desc':
       'Crea un GIF animado desde varias fotos. Segundos por imagen y bucle en el panel.',
     'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
+    'landing.image_watermark_desc':
+      'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -415,6 +459,44 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Una imagen',
     'image_crop.batch_hint':
       'Se aplica la misma zona de recorte (relativa a cada imagen) a todos los archivos.',
+    'image_watermark.title': 'Marca de agua en imagen',
+    'image_watermark.description':
+      'Sube una foto y apila varias marcas de texto e imagen. Arrastra para mover; en imágenes usa la esquina para redimensionar. En la lista, arriba = delante.',
+    'image_watermark.canvas_hint':
+      'Elige una capa en la vista previa o en la lista. Arrastra para mover; las imágenes tienen un control en la esquina.',
+    'image_watermark.layers_heading': 'Capas de marca de agua',
+    'image_watermark.layers_order_hint':
+      'La primera de la lista se dibuja detrás; la última, delante. Flechas para el orden.',
+    'image_watermark.add_text': 'Añadir texto',
+    'image_watermark.add_image': 'Añadir imagen',
+    'image_watermark.edit_text_layer': 'Seleccionado: texto',
+    'image_watermark.edit_image_layer': 'Seleccionado: imagen',
+    'image_watermark.bring_forward': 'Subir (delante)',
+    'image_watermark.send_backward': 'Bajar (detrás)',
+    'image_watermark.remove_layer': 'Quitar capa',
+    'image_watermark.mode_text': 'Texto',
+    'image_watermark.mode_image': 'Imagen',
+    'image_watermark.text_label': 'Texto',
+    'image_watermark.color_label': 'Color del texto',
+    'image_watermark.font_size_label': 'Tamaño del texto',
+    'image_watermark.font_size_value': 'Escala relativa {n} (aprox. % de la altura)',
+    'image_watermark.wm_image_label': 'Imagen de marca de agua',
+    'image_watermark.wm_image_pick': 'Elegir imagen…',
+    'image_watermark.wm_image_replace': 'Cambiar imagen…',
+    'image_watermark.image_size_label': 'Ancho de la marca',
+    'image_watermark.image_size_value': '{n}% del ancho de la imagen principal',
+    'image_watermark.opacity_label': 'Opacidad',
+    'image_watermark.opacity_value': '{n}%',
+    'image_watermark.process': 'Aplicar marca de agua',
+    'image_watermark.download_png': 'Descargar PNG',
+    'image_watermark.error_no_text': 'Escribe el texto de la marca de agua.',
+    'image_watermark.error_no_wm_image': 'Elige una imagen para la marca de agua.',
+    'image_watermark.error_no_layers':
+      'Añade al menos un texto (no vacío) o una imagen de marca de agua.',
+    'image_watermark.error_decode':
+      'No se pudo leer esa imagen. Prueba PNG o JPEG u otro navegador.',
+    'image_watermark.drop_title': 'Suelta una imagen aquí o haz clic',
+    'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Una imagen',
     'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
     'image_tools.download_images': 'Descargar imágenes',
     'image_tools.download_gif': 'Descargar GIF',
@@ -454,6 +536,7 @@ const translations = {
     'nav.image_jpg': 'Conversion JPG masse',
     'nav.image_gif': 'Images vers GIF',
     'nav.image_crop': 'Recadrage d\'images',
+    'nav.image_watermark': 'Filigrane image',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -484,6 +567,8 @@ const translations = {
     'landing.image_gif_desc':
       'Créez un GIF animé à partir de photos. Délai par image et boucle dans le panneau.',
     'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
+    'landing.image_watermark_desc':
+      'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -611,6 +696,44 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Une image',
     'image_crop.batch_hint':
       'La même zone de recadrage (relative à chaque image) est appliquée à chaque fichier.',
+    'image_watermark.title': 'Filigrane sur image',
+    'image_watermark.description':
+      'Importez une photo et superposez plusieurs textes et images. Glissez pour déplacer ; pour les images, utilisez le coin pour redimensionner. Dans la liste, le bas = devant.',
+    'image_watermark.canvas_hint':
+      'Cliquez une couche sur l\'aperçu ou dans la liste. Glissez pour déplacer ; les images ont une poignée au coin.',
+    'image_watermark.layers_heading': 'Couches de filigrane',
+    'image_watermark.layers_order_hint':
+      'La première ligne est en arrière-plan ; la dernière au premier plan. Flèches pour l\'ordre.',
+    'image_watermark.add_text': 'Ajouter du texte',
+    'image_watermark.add_image': 'Ajouter une image',
+    'image_watermark.edit_text_layer': 'Sélection : texte',
+    'image_watermark.edit_image_layer': 'Sélection : image',
+    'image_watermark.bring_forward': 'Monter (devant)',
+    'image_watermark.send_backward': 'Descendre (derrière)',
+    'image_watermark.remove_layer': 'Supprimer la couche',
+    'image_watermark.mode_text': 'Texte',
+    'image_watermark.mode_image': 'Image',
+    'image_watermark.text_label': 'Texte du filigrane',
+    'image_watermark.color_label': 'Couleur du texte',
+    'image_watermark.font_size_label': 'Taille du texte',
+    'image_watermark.font_size_value': 'Échelle relative {n} (env. % de la hauteur)',
+    'image_watermark.wm_image_label': 'Image du filigrane',
+    'image_watermark.wm_image_pick': 'Choisir une image…',
+    'image_watermark.wm_image_replace': 'Remplacer l\'image…',
+    'image_watermark.image_size_label': 'Largeur du filigrane',
+    'image_watermark.image_size_value': '{n}% de la largeur de l\'image principale',
+    'image_watermark.opacity_label': 'Opacité',
+    'image_watermark.opacity_value': '{n}%',
+    'image_watermark.process': 'Appliquer le filigrane',
+    'image_watermark.download_png': 'Télécharger PNG',
+    'image_watermark.error_no_text': 'Saisissez le texte du filigrane.',
+    'image_watermark.error_no_wm_image': 'Choisissez une image de filigrane.',
+    'image_watermark.error_no_layers':
+      'Ajoutez au moins un texte (non vide) ou une image de filigrane.',
+    'image_watermark.error_decode':
+      'Impossible de lire cette image. Essayez PNG ou JPEG, ou un autre navigateur.',
+    'image_watermark.drop_title': 'Déposez une image ici ou cliquez',
+    'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Une image',
     'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',
     'image_tools.download_images': 'Télécharger les images',
     'image_tools.download_gif': 'Télécharger le GIF',

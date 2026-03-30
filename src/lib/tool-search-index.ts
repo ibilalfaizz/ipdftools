@@ -97,4 +97,10 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     descriptionKey: "landing.image_crop_desc",
     category: "image",
   },
+  {
+    href: "/image-watermark",
+    labelKey: "nav.image_watermark",
+    descriptionKey: "landing.image_watermark_desc",
+    category: "image",
+  },
 ];

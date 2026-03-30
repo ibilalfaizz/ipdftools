@@ -52,6 +52,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Crop Images Online — Visual Selector & Pixel Controls",
     "seo.image_crop.description":
       "Crop photos in your browser. Drag the frame or set width, height, and position. ZIP or single downloads.",
+    "seo.image_watermark.title": "Add Image or Text Watermark Online — Free in Your Browser",
+    "seo.image_watermark.description":
+      "Overlay text or a logo on your photo. Adjust size, opacity, and position, then download PNG or ZIP.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
@@ -103,6 +106,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Recorte de imágenes online",
     "seo.image_crop.description":
       "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
+    "seo.image_watermark.title": "Marca de agua en imágenes online",
+    "seo.image_watermark.description":
+      "Añade texto o un logo. Ajusta tamaño, opacidad y posición. Descarga PNG o ZIP.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
@@ -154,5 +160,8 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Recadrage d'images en ligne",
     "seo.image_crop.description":
       "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",
+    "seo.image_watermark.title": "Filigrane sur image en ligne",
+    "seo.image_watermark.description":
+      "Superposez du texte ou un logo. Réglez taille, opacité et position. Téléchargez PNG ou ZIP.",
   },
 };

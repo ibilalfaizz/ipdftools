@@ -61,6 +61,11 @@ const Header = () => {
       label: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
     },
+    {
+      href: "/image-watermark",
+      label: t("nav.image_watermark"),
+      description: t("landing.image_watermark_desc"),
+    },
   ];
 
   const imageToolHrefs = [
@@ -70,6 +75,7 @@ const Header = () => {
     "/bulk-image-jpg",
     "/bulk-image-gif",
     "/image-crop",
+    "/image-watermark",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
