@@ -51,7 +51,7 @@ const translations = {
     'nav.image_resize': 'Bulk image resizer',
     'nav.image_compress': 'Bulk image compressor',
     'nav.image_webp': 'Bulk WebP converter',
-    'nav.image_crop': 'Bulk image crop',
+    'nav.image_crop': 'Image crop',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -186,6 +186,19 @@ const translations = {
     'image_webp.process': 'Convert',
     'image_webp.drop_title': 'Drop images here or click to browse',
     'image_webp.drop_desc': 'Most raster formats • Multiple files',
+    'image_crop.title': 'Image crop',
+    'image_crop.description':
+      'Click and drag on the image to draw a crop (inside the bright area or on the dark edge). Drag corners and edges to resize; hold Alt and drag inside the box to move. Fine-tune with the numbers below. One image.',
+    'image_crop.options_heading': 'Crop options',
+    'image_crop.width': 'Width (px)',
+    'image_crop.height': 'Height (px)',
+    'image_crop.x': 'X position (px)',
+    'image_crop.y': 'Y position (px)',
+    'image_crop.process': 'Crop',
+    'image_crop.drop_title': 'Drop an image here or click to browse',
+    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • One image',
+    'image_crop.batch_hint':
+      'The same crop area (relative to each image) is applied to every file.',
     'image_tools.result_ready': 'Ready — download as images or ZIP.',
     'image_tools.download_images': 'Download images',
     'image_tools.download_zip': 'Download ZIP',
@@ -221,7 +234,7 @@ const translations = {
     'nav.image_resize': 'Redimensionador masivo',
     'nav.image_compress': 'Compresor masivo',
     'nav.image_webp': 'Conversor WebP masivo',
-    'nav.image_crop': 'Recorte masivo',
+    'nav.image_crop': 'Recorte de imágenes',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -347,17 +360,17 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_webp.drop_desc': 'La mayoría de formatos • Varios archivos',
-    'image_crop.title': 'Recorte masivo de imágenes',
+    'image_crop.title': 'Recorte de imágenes',
     'image_crop.description':
-      'Arrastra los tiradores o usa ancho, alto, X e Y. La vista previa es la primera imagen; el mismo recorte relativo se aplica a todas.',
+      'Arrastra sobre la imagen para dibujar el recorte (zona clara u oscura). Esquinas y bordes para redimensionar; mantén Alt y arrastra dentro para mover. Números abajo. Una imagen.',
     'image_crop.options_heading': 'Opciones de recorte',
     'image_crop.width': 'Ancho (px)',
     'image_crop.height': 'Alto (px)',
     'image_crop.x': 'Posición X (px)',
     'image_crop.y': 'Posición Y (px)',
     'image_crop.process': 'Recortar',
-    'image_crop.drop_title': 'Suelta imágenes aquí o haz clic',
-    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_crop.drop_title': 'Suelta una imagen aquí o haz clic',
+    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Una imagen',
     'image_crop.batch_hint':
       'Se aplica la misma zona de recorte (relativa a cada imagen) a todos los archivos.',
     'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
@@ -395,7 +408,7 @@ const translations = {
     'nav.image_resize': 'Redimensionnement masse',
     'nav.image_compress': 'Compression masse',
     'nav.image_webp': 'Conversion WebP masse',
-    'nav.image_crop': 'Recadrage masse',
+    'nav.image_crop': 'Recadrage d\'images',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -521,17 +534,17 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Déposez des images ici ou cliquez',
     'image_webp.drop_desc': 'La plupart des formats • Fichiers multiples',
-    'image_crop.title': 'Recadrage d\'images en masse',
+    'image_crop.title': 'Recadrage d\'images',
     'image_crop.description':
-      'Faites glisser les poignées ou saisissez largeur, hauteur, X et Y. L\'aperçu est la première image ; le même recadrage relatif s\'applique à tous les fichiers.',
+      'Glissez sur l\'image pour tracer la zone (clair ou assombri). Coins et bords pour redimensionner ; Alt + glisser à l\'intérieur pour déplacer. Valeurs ci-dessous. Une image.',
     'image_crop.options_heading': 'Options de recadrage',
     'image_crop.width': 'Largeur (px)',
     'image_crop.height': 'Hauteur (px)',
     'image_crop.x': 'Position X (px)',
     'image_crop.y': 'Position Y (px)',
     'image_crop.process': 'Recadrer',
-    'image_crop.drop_title': 'Déposez des images ici ou cliquez',
-    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_crop.drop_title': 'Déposez une image ici ou cliquez',
+    'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Une image',
     'image_crop.batch_hint':
       'La même zone de recadrage (relative à chaque image) est appliquée à chaque fichier.',
     'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',

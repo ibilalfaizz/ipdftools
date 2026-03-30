@@ -88,7 +88,7 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_webp.title": "Conversor masivo a WebP online",
     "seo.image_webp.description":
       "Muchas imágenes a WebP. Un ZIP o un archivo por imagen.",
-    "seo.image_crop.title": "Recorte masivo de imágenes online",
+    "seo.image_crop.title": "Recorte de imágenes online",
     "seo.image_crop.description":
       "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
   },
@@ -133,7 +133,7 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_webp.title": "Conversion WebP en masse en ligne",
     "seo.image_webp.description":
       "Passez de nombreuses images en WebP. Archive ZIP ou un fichier par image.",
-    "seo.image_crop.title": "Recadrage d'images en masse en ligne",
+    "seo.image_crop.title": "Recadrage d'images en ligne",
     "seo.image_crop.description":
       "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",
   },

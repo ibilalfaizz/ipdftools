@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export type PixelCrop = { x: number; y: number; w: number; h: number };
 
@@ -36,9 +37,9 @@ function clampCrop(c: PixelCrop, iw: number, ih: number): PixelCrop {
   return { x, y, w, h };
 }
 
-/** ~14% inset on each side (72% of width/height), centered — default selector size. */
+/** Default crop ~50% of each dimension so shaded “draw” area is easy to hit. */
 export function defaultCenteredCrop(iw: number, ih: number): PixelCrop {
-  const ratio = 0.72;
+  const ratio = 0.5;
   let w = Math.round(iw * ratio);
   let h = Math.round(ih * ratio);
   w = Math.max(MIN_CROP, Math.min(w, iw));
@@ -59,13 +60,75 @@ type DragMode =
   | "se"
   | "sw";
 
+function isInsideDrawRect(lx: number, ly: number, dr: DrawRect): boolean {
+  return (
+    lx >= dr.ox &&
+    lx <= dr.ox + dr.w &&
+    ly >= dr.oy &&
+    ly <= dr.oy + dr.h
+  );
+}
+
+function clientToPixel(
+  clientX: number,
+  clientY: number,
+  wrapRect: DOMRect,
+  dr: DrawRect,
+  iw: number,
+  ih: number
+): { px: number; py: number } | null {
+  const lx = clientX - wrapRect.left;
+  const ly = clientY - wrapRect.top;
+  if (!isInsideDrawRect(lx, ly, dr)) return null;
+  const ix = Math.max(dr.ox, Math.min(dr.ox + dr.w, lx));
+  const iy = Math.max(dr.oy, Math.min(dr.oy + dr.h, ly));
+  const px = (ix - dr.ox) / dr.scale;
+  const py = (iy - dr.oy) / dr.scale;
+  return {
+    px: Math.max(0, Math.min(iw - 1e-6, px)),
+    py: Math.max(0, Math.min(ih - 1e-6, py)),
+  };
+}
+
+function cropFromMarquee(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  iw: number,
+  ih: number
+): PixelCrop {
+  const x = Math.min(ax, bx);
+  const y = Math.min(ay, by);
+  const w = Math.abs(bx - ax);
+  const h = Math.abs(by - ay);
+  return clampCrop(
+    {
+      x: Math.floor(x),
+      y: Math.floor(y),
+      w: Math.round(w),
+      h: Math.round(h),
+    },
+    iw,
+    ih
+  );
+}
+
+/**
+ * Resize only when near the crop border (handles). The shaded area outside the crop
+ * must NOT use edge hitboxes that extend to infinity (e.g. lx ≤ cl+h2), or the whole
+ * dark band becomes “west edge” and only resize works — never a new marquee.
+ *
+ * Interior → move only when `wantInteriorMove` (Alt+drag). Otherwise interior draws.
+ */
 function hitTestHandle(
   lx: number,
   ly: number,
   cdX: number,
   cdY: number,
   cdW: number,
-  cdH: number
+  cdH: number,
+  wantInteriorMove: boolean
 ): DragMode | null {
   const h2 = HANDLE / 2;
   const cl = cdX;
@@ -73,27 +136,55 @@ function hitTestHandle(
   const ct = cdY;
   const cb = cdY + cdH;
 
-  // Corners first (resize handles)
-  if (lx <= cl + h2 && ly <= ct + h2) return "nw";
-  if (lx >= cr - h2 && ly <= ct + h2) return "ne";
-  if (lx <= cl + h2 && ly >= cb - h2) return "sw";
-  if (lx >= cr - h2 && ly >= cb - h2) return "se";
+  // Corners: tight boxes around each vertex (match visible handles).
+  if (lx >= cl - h2 && lx <= cl + h2 && ly >= ct - h2 && ly <= ct + h2) return "nw";
+  if (lx >= cr - h2 && lx <= cr + h2 && ly >= ct - h2 && ly <= ct + h2) return "ne";
+  if (lx >= cl - h2 && lx <= cl + h2 && ly >= cb - h2 && ly <= cb + h2) return "sw";
+  if (lx >= cr - h2 && lx <= cr + h2 && ly >= cb - h2 && ly <= cb + h2) return "se";
 
-  const onLeft = lx <= cl + h2;
-  const onRight = lx >= cr - h2;
-  const onTop = ly <= ct + h2;
-  const onBottom = ly >= cb - h2;
+  // Edges: bands centered on each side (exclude corner squares).
+  if (ly >= ct - h2 && ly <= ct + h2 && lx >= cl + h2 && lx <= cr - h2) return "n";
+  if (ly >= cb - h2 && ly <= cb + h2 && lx >= cl + h2 && lx <= cr - h2) return "s";
+  if (lx >= cl - h2 && lx <= cl + h2 && ly >= ct + h2 && ly <= cb - h2) return "w";
+  if (lx >= cr - h2 && lx <= cr + h2 && ly >= ct + h2 && ly <= cb - h2) return "e";
 
-  // Full edge strips (not corners) — works when crop is narrow; avoids empty "move" region
-  if (onTop && !onLeft && !onRight) return "n";
-  if (onBottom && !onLeft && !onRight) return "s";
-  if (onLeft && !onTop && !onBottom) return "w";
-  if (onRight && !onTop && !onBottom) return "e";
-
-  // Anything else inside the crop rect: drag to move
-  if (lx >= cl && lx <= cr && ly >= ct && ly <= cb) return "move";
+  if (lx >= cl && lx <= cr && ly >= ct && ly <= cb) {
+    return wantInteriorMove ? "move" : null;
+  }
 
   return null;
+}
+
+/** Resize on handles/edges; move inside crop only with Alt; else crosshair (draw). */
+function getCursorForPosition(
+  clientX: number,
+  clientY: number,
+  wrapRect: DOMRect,
+  dr: DrawRect,
+  crop: PixelCrop,
+  iw: number,
+  ih: number,
+  wantInteriorMove: boolean
+): string {
+  const lx = clientX - wrapRect.left;
+  const ly = clientY - wrapRect.top;
+  if (!isInsideDrawRect(lx, ly, dr)) return "";
+  const ec = crop.w >= 2 && crop.h >= 2 ? crop : defaultCenteredCrop(iw, ih);
+  const cdX = dr.ox + ec.x * dr.scale;
+  const cdY = dr.oy + ec.y * dr.scale;
+  const cdW = ec.w * dr.scale;
+  const cdH = ec.h * dr.scale;
+  const mode = hitTestHandle(
+    lx,
+    ly,
+    cdX,
+    cdY,
+    cdW,
+    cdH,
+    wantInteriorMove
+  );
+  if (mode) return getResizeCursor(mode);
+  return "crosshair";
 }
 
 type Props = {
@@ -102,7 +193,6 @@ type Props = {
   naturalH: number;
   crop: PixelCrop;
   onCropChange: (c: PixelCrop) => void;
-  /** Called when the image reports natural dimensions (reset crop in parent). */
   onImageDimensions?: (w: number, h: number) => void;
   className?: string;
 };
@@ -118,12 +208,20 @@ export default function ImageCropCanvas({
 }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const lastPointerRef = useRef<{ x: number; y: number } | null>(null);
+  const [altHeld, setAltHeld] = useState(false);
   const [drawRect, setDrawRect] = useState<DrawRect | null>(null);
+
   const dragRef = useRef<{
     mode: DragMode;
     startClientX: number;
     startClientY: number;
     crop: PixelCrop;
+  } | null>(null);
+
+  const freeMarqueeRef = useRef<{
+    startPx: { x: number; y: number };
   } | null>(null);
 
   const measure = useCallback(() => {
@@ -140,13 +238,56 @@ export default function ImageCropCanvas({
     return () => ro.disconnect();
   }, [measure, imageUrl, naturalW, naturalH]);
 
+  useEffect(() => {
+    const sync = (e: KeyboardEvent) => setAltHeld(e.altKey);
+    window.addEventListener("keydown", sync);
+    window.addEventListener("keyup", sync);
+    return () => {
+      window.removeEventListener("keydown", sync);
+      window.removeEventListener("keyup", sync);
+    };
+  }, []);
+
+  const setCursorFromClient = useCallback(
+    (clientX: number, clientY: number, altForMove?: boolean) => {
+      const node = overlayRef.current;
+      const wrap = wrapRef.current;
+      const el = imgRef.current;
+      const iw = el?.naturalWidth ?? naturalW;
+      const ih = el?.naturalHeight ?? naturalH;
+      if (!node || !wrap || !drawRect || iw < 1 || ih < 1) return;
+      lastPointerRef.current = { x: clientX, y: clientY };
+      const wantMove = altForMove ?? altHeld;
+      node.style.cursor = getCursorForPosition(
+        clientX,
+        clientY,
+        wrap.getBoundingClientRect(),
+        drawRect,
+        crop,
+        iw,
+        ih,
+        wantMove
+      );
+    },
+    [drawRect, crop, naturalW, naturalH, altHeld]
+  );
+
+  useEffect(() => {
+    const p = lastPointerRef.current;
+    if (p) setCursorFromClient(p.x, p.y);
+  }, [altHeld, setCursorFromClient]);
+
+  /**
+   * Corners/edges → resize. Alt + inside crop → move. Else → draw (marquee).
+   */
   const onPointerDown = (e: React.PointerEvent) => {
     const el = imgRef.current;
+    const wrap = wrapRef.current;
     const iw = el?.naturalWidth ?? naturalW;
     const ih = el?.naturalHeight ?? naturalH;
     if (e.button !== 0 || !drawRect || iw < 1 || ih < 1) return;
-    if (!el) return;
-    const b = el.getBoundingClientRect();
+    if (!el || !wrap) return;
+    const b = wrap.getBoundingClientRect();
     const lx = e.clientX - b.left;
     const ly = e.clientY - b.top;
     const ec =
@@ -155,25 +296,61 @@ export default function ImageCropCanvas({
     const cdY = drawRect.oy + ec.y * drawRect.scale;
     const cdW = ec.w * drawRect.scale;
     const cdH = ec.h * drawRect.scale;
-    const mode = hitTestHandle(lx, ly, cdX, cdY, cdW, cdH);
-    if (!mode) return;
+    const mode = hitTestHandle(lx, ly, cdX, cdY, cdW, cdH, e.altKey);
+    if (mode) {
+      e.preventDefault();
+      if (overlayRef.current) {
+        overlayRef.current.style.cursor = getResizeCursor(mode);
+      }
+      dragRef.current = {
+        mode,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        crop: { ...ec },
+      };
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      return;
+    }
+
+    const p = clientToPixel(e.clientX, e.clientY, b, drawRect, iw, ih);
+    if (!p) return;
     e.preventDefault();
-    dragRef.current = {
-      mode,
-      startClientX: e.clientX,
-      startClientY: e.clientY,
-      crop: { ...ec },
-    };
+    freeMarqueeRef.current = { startPx: { x: p.px, y: p.py } };
+    if (overlayRef.current) overlayRef.current.style.cursor = "crosshair";
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    const d = dragRef.current;
-    if (!d || !drawRect) return;
-    e.preventDefault();
     const el = imgRef.current;
+    const wrap = wrapRef.current;
     const iw = el?.naturalWidth ?? naturalW;
     const ih = el?.naturalHeight ?? naturalH;
+
+    if (freeMarqueeRef.current && drawRect && wrap && iw >= 1 && ih >= 1) {
+      e.preventDefault();
+      const b = wrap.getBoundingClientRect();
+      const end = clientToPixel(e.clientX, e.clientY, b, drawRect, iw, ih);
+      if (!end) return;
+      const { startPx } = freeMarqueeRef.current;
+      onCropChange(
+        cropFromMarquee(startPx.x, startPx.y, end.px, end.py, iw, ih)
+      );
+      if (overlayRef.current) overlayRef.current.style.cursor = "crosshair";
+      return;
+    }
+
+    const d = dragRef.current;
+    if (!d || !drawRect) {
+      if (drawRect && iw >= 1 && ih >= 1) {
+        setCursorFromClient(e.clientX, e.clientY, e.altKey);
+      }
+      return;
+    }
+
+    e.preventDefault();
+    if (overlayRef.current) {
+      overlayRef.current.style.cursor = getResizeCursor(d.mode);
+    }
     if (iw < 1 || ih < 1) return;
     const dx = (e.clientX - d.startClientX) / drawRect.scale;
     const dy = (e.clientY - d.startClientY) / drawRect.scale;
@@ -227,6 +404,14 @@ export default function ImageCropCanvas({
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
+    if (freeMarqueeRef.current) {
+      freeMarqueeRef.current = null;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
+    }
     if (dragRef.current) {
       dragRef.current = null;
       try {
@@ -235,6 +420,13 @@ export default function ImageCropCanvas({
         /* ignore */
       }
     }
+    setCursorFromClient(e.clientX, e.clientY, e.altKey);
+  };
+
+  const onPointerLeave = () => {
+    if (dragRef.current || freeMarqueeRef.current) return;
+    const node = overlayRef.current;
+    if (node) node.style.cursor = "";
   };
 
   const imgEl = imgRef.current;
@@ -245,37 +437,66 @@ export default function ImageCropCanvas({
     showOverlay && crop.w >= 2 && crop.h >= 2
       ? crop
       : defaultCenteredCrop(Math.max(1, iw0), Math.max(1, ih0));
-  const cdX = drawRect
-    ? drawRect.ox + ec.x * drawRect.scale
-    : 0;
-  const cdY = drawRect
-    ? drawRect.oy + ec.y * drawRect.scale
-    : 0;
+  const cdX = drawRect ? drawRect.ox + ec.x * drawRect.scale : 0;
+  const cdY = drawRect ? drawRect.oy + ec.y * drawRect.scale : 0;
   const cdW = drawRect ? ec.w * drawRect.scale : 0;
   const cdH = drawRect ? ec.h * drawRect.scale : 0;
 
-  const handles: { key: string; mode: DragMode; left: number; top: number }[] = [
-    { key: "nw", mode: "nw", left: cdX - HANDLE / 2, top: cdY - HANDLE / 2 },
-    { key: "n", mode: "n", left: cdX + cdW / 2 - HANDLE / 2, top: cdY - HANDLE / 2 },
-    { key: "ne", mode: "ne", left: cdX + cdW - HANDLE / 2, top: cdY - HANDLE / 2 },
-    { key: "w", mode: "w", left: cdX - HANDLE / 2, top: cdY + cdH / 2 - HANDLE / 2 },
-    { key: "e", mode: "e", left: cdX + cdW - HANDLE / 2, top: cdY + cdH / 2 - HANDLE / 2 },
-    { key: "sw", mode: "sw", left: cdX - HANDLE / 2, top: cdY + cdH - HANDLE / 2 },
-    { key: "s", mode: "s", left: cdX + cdW / 2 - HANDLE / 2, top: cdY + cdH - HANDLE / 2 },
-    { key: "se", mode: "se", left: cdX + cdW - HANDLE / 2, top: cdY + cdH - HANDLE / 2 },
-  ];
+  const handles: { key: string; mode: DragMode; left: number; top: number }[] =
+    [
+      { key: "nw", mode: "nw", left: cdX - HANDLE / 2, top: cdY - HANDLE / 2 },
+      {
+        key: "n",
+        mode: "n",
+        left: cdX + cdW / 2 - HANDLE / 2,
+        top: cdY - HANDLE / 2,
+      },
+      {
+        key: "ne",
+        mode: "ne",
+        left: cdX + cdW - HANDLE / 2,
+        top: cdY - HANDLE / 2,
+      },
+      {
+        key: "w",
+        mode: "w",
+        left: cdX - HANDLE / 2,
+        top: cdY + cdH / 2 - HANDLE / 2,
+      },
+      {
+        key: "e",
+        mode: "e",
+        left: cdX + cdW - HANDLE / 2,
+        top: cdY + cdH / 2 - HANDLE / 2,
+      },
+      {
+        key: "sw",
+        mode: "sw",
+        left: cdX - HANDLE / 2,
+        top: cdY + cdH - HANDLE / 2,
+      },
+      {
+        key: "s",
+        mode: "s",
+        left: cdX + cdW / 2 - HANDLE / 2,
+        top: cdY + cdH - HANDLE / 2,
+      },
+      {
+        key: "se",
+        mode: "se",
+        left: cdX + cdW - HANDLE / 2,
+        top: cdY + cdH - HANDLE / 2,
+      },
+    ];
 
   return (
-    <div
-      className={`relative inline-block max-w-full ${className ?? ""}`}
-    >
-      {/* Overlay must not share a padded box with the image or hit coords drift. */}
+    <div className={cn("relative inline-block max-w-full", className)}>
       <div ref={wrapRef} className="relative inline-block max-w-full">
         <img
           ref={imgRef}
           src={imageUrl}
           alt=""
-          className="block max-h-[min(65vh,560px)] w-auto max-w-full mx-auto select-none"
+          className="pointer-events-none mx-auto block max-h-[min(65vh,560px)] w-auto max-w-full select-none"
           draggable={false}
           onLoad={(e) => {
             measure();
@@ -284,94 +505,97 @@ export default function ImageCropCanvas({
           }}
         />
         {showOverlay ? (
-      <div
-        className="absolute inset-0 z-10 touch-none"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-      >
-        {/* Dim outside crop */}
-        <div
-          className="absolute bg-black/55 pointer-events-none"
-          style={{ left: 0, top: 0, right: 0, height: Math.max(0, cdY) }}
-        />
-        <div
-          className="absolute bg-black/55 pointer-events-none"
-          style={{ left: 0, right: 0, top: cdY + cdH, bottom: 0 }}
-        />
-        <div
-          className="absolute bg-black/55 pointer-events-none"
-          style={{ left: 0, top: cdY, width: Math.max(0, cdX), height: cdH }}
-        />
-        <div
-          className="absolute bg-black/55 pointer-events-none"
-          style={{ left: cdX + cdW, top: cdY, right: 0, height: cdH }}
-        />
-
-        {/* Crop frame + grid */}
-        <div
-          className="absolute border-2 border-[#d6ffd2] pointer-events-none box-border"
-          style={{ left: cdX, top: cdY, width: cdW, height: cdH }}
-        >
-          <svg
-            className="absolute inset-0 w-full h-full overflow-visible"
-            aria-hidden
-          >
-            <line
-              x1="33.333%"
-              y1="0"
-              x2="33.333%"
-              y2="100%"
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="66.666%"
-              y1="0"
-              x2="66.666%"
-              y2="100%"
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="0"
-              y1="33.333%"
-              x2="100%"
-              y2="33.333%"
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="0"
-              y1="66.666%"
-              x2="100%"
-              y2="66.666%"
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-            />
-          </svg>
-        </div>
-
-        {/* Handles (pointer events for hit area — main drag uses overlay) */}
-        {handles.map((h) => (
           <div
-            key={h.key}
-            className="absolute z-20 bg-[#d6ffd2] border border-[#00232d]/80 rounded-sm shadow-sm pointer-events-none"
-            style={{
-              left: h.left,
-              top: h.top,
-              width: HANDLE,
-              height: HANDLE,
-              cursor: getResizeCursor(h.mode),
-            }}
-          />
-        ))}
-      </div>
+            ref={overlayRef}
+            className="pointer-events-auto absolute inset-0 z-10 touch-none"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onPointerLeave={onPointerLeave}
+          >
+            <div
+              className="absolute bg-black/55 pointer-events-none"
+              style={{ left: 0, top: 0, right: 0, height: Math.max(0, cdY) }}
+            />
+            <div
+              className="absolute bg-black/55 pointer-events-none"
+              style={{ left: 0, right: 0, top: cdY + cdH, bottom: 0 }}
+            />
+            <div
+              className="absolute bg-black/55 pointer-events-none"
+              style={{
+                left: 0,
+                top: cdY,
+                width: Math.max(0, cdX),
+                height: cdH,
+              }}
+            />
+            <div
+              className="absolute bg-black/55 pointer-events-none"
+              style={{ left: cdX + cdW, top: cdY, right: 0, height: cdH }}
+            />
+
+            <div
+              className="pointer-events-none absolute box-border border-2 border-[#d6ffd2]"
+              style={{ left: cdX, top: cdY, width: cdW, height: cdH }}
+            >
+              <svg
+                className="absolute inset-0 h-full w-full overflow-visible"
+                aria-hidden
+              >
+                <line
+                  x1="33.333%"
+                  y1="0"
+                  x2="33.333%"
+                  y2="100%"
+                  stroke="rgba(255,255,255,0.55)"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="66.666%"
+                  y1="0"
+                  x2="66.666%"
+                  y2="100%"
+                  stroke="rgba(255,255,255,0.55)"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="0"
+                  y1="33.333%"
+                  x2="100%"
+                  y2="33.333%"
+                  stroke="rgba(255,255,255,0.55)"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="0"
+                  y1="66.666%"
+                  x2="100%"
+                  y2="66.666%"
+                  stroke="rgba(255,255,255,0.55)"
+                  strokeWidth="1"
+                  strokeDasharray="4 4"
+                />
+              </svg>
+            </div>
+
+            {handles.map((h) => (
+              <div
+                key={h.key}
+                className="pointer-events-none absolute z-20 rounded-sm border border-[#00232d]/80 bg-[#d6ffd2] shadow-sm"
+                style={{
+                  left: h.left,
+                  top: h.top,
+                  width: HANDLE,
+                  height: HANDLE,
+                }}
+              />
+            ))}
+          </div>
         ) : null}
       </div>
     </div>

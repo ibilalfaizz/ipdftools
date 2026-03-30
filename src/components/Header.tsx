@@ -47,7 +47,7 @@ const Header = () => {
       description: t("landing.image_webp_desc"),
     },
     {
-      href: "/bulk-image-crop",
+      href: "/image-crop",
       label: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
     },
@@ -57,7 +57,7 @@ const Header = () => {
     "/bulk-image-resize",
     "/bulk-image-compress",
     "/bulk-image-webp",
-    "/bulk-image-crop",
+    "/image-crop",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 

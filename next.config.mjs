@@ -36,10 +36,10 @@ const pathMapping = {
     "convertir-webp-masivo",
     "conversion-webp-masse",
   ],
-  "bulk-image-crop": [
-    "bulk-image-crop",
-    "recortar-imagen-masivo",
-    "recadrer-images-masse",
+  "image-crop": [
+    "image-crop",
+    "recortar-imagenes",
+    "recadrer-images",
   ],
 };
 
@@ -86,6 +86,32 @@ function imageToolSlugMigrationRedirects() {
         permanent: true,
       });
     }
+  }
+  return out;
+}
+
+/** `bulk-image-crop` → `image-crop` (removed “bulk” from slug). */
+function imageCropSlugMigrationRedirects() {
+  const old = [
+    "bulk-image-crop",
+    "recortar-imagen-masivo",
+    "recadrer-images-masse",
+  ];
+  const newSlugs = ["image-crop", "recortar-imagenes", "recadrer-images"];
+  const locales = ["en", "es", "fr"];
+  const out = [];
+  for (let i = 0; i < 3; i++) {
+    const locale = locales[i];
+    out.push({
+      source: `/${locale}/${old[i]}`,
+      destination: `/${locale}/${newSlugs[i]}`,
+      permanent: true,
+    });
+    out.push({
+      source: `/${old[i]}`,
+      destination: `/${locale}/${newSlugs[i]}`,
+      permanent: true,
+    });
   }
   return out;
 }
@@ -172,6 +198,7 @@ const nextConfig = {
     return [
       { source: "/", destination: "/en", permanent: true },
       ...imageToolSlugMigrationRedirects(),
+      ...imageCropSlugMigrationRedirects(),
       ...legacySeoSlugRedirects(),
       ...legacyToolRedirects(),
     ];
