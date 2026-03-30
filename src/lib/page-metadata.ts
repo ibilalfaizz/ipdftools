@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { LocaleCode } from "@/lib/urlPaths";
+import { pathMapping, type LocaleCode } from "@/lib/urlPaths";
 import {
   hrefLangAlternatesToLanguages,
   getHrefLangAlternates,
@@ -80,7 +80,13 @@ export function buildToolMetadata(
   return buildBaseMetadata(locale, pathname, pageTitle, description);
 }
 
-/** `/merge` → `merge`, `/pdf-to-word` → `pdf_to_word` */
+/** `/merge-pdf` or `/pdf-to-word` → `merge`, `pdf_to_word` (seo keys) */
 export function originalPathToSeoToolKey(originalPath: string): string {
-  return originalPath.replace(/^\//, "").replace(/-/g, "_");
+  const clean = originalPath.replace(/^\//, "");
+  for (const [original, translations] of Object.entries(pathMapping)) {
+    if (original === clean || translations[0] === clean) {
+      return original.replace(/-/g, "_");
+    }
+  }
+  return clean.replace(/-/g, "_");
 }

@@ -1,10 +1,10 @@
 export type LocaleCode = "en" | "es" | "fr";
 
 export const pathMapping: Record<string, string[]> = {
-  merge: ["merge", "combinar", "fusionner"],
-  split: ["split", "dividir", "diviser"],
-  compress: ["compress", "comprimir", "compresser"],
-  rotate: ["rotate", "rotar", "rotation"],
+  merge: ["merge-pdf", "combinar-pdf", "fusionner-pdf"],
+  split: ["split-pdf", "dividir-pdf", "diviser-pdf"],
+  compress: ["compress-pdf", "comprimir-pdf", "compresser-pdf"],
+  rotate: ["rotate-pdf", "rotar-pdf", "rotation-pdf"],
   "pdf-to-word": ["pdf-to-word", "pdf-a-word", "pdf-vers-word"],
   "pdf-to-jpg": ["pdf-to-jpg", "pdf-a-jpg", "pdf-vers-jpg"],
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
@@ -23,12 +23,12 @@ export function isLocalePrefix(s: string): s is LocaleCode {
   return s === "en" || s === "es" || s === "fr";
 }
 
-/** `/merge` + locale `es` → `/es/combinar` */
+/** English tool path (`/merge` or `/merge-pdf`) + locale → `/es/combinar-pdf` */
 export function toolPath(locale: LocaleCode, englishPath: string): string {
   const clean = englishPath.replace(/^\//, "");
   const idx = languageIndex[locale];
   for (const [original, translations] of Object.entries(pathMapping)) {
-    if (original === clean) {
+    if (original === clean || translations[0] === clean) {
       return `/${locale}/${translations[idx]}`;
     }
   }
@@ -39,11 +39,11 @@ export function homePath(locale: LocaleCode): string {
   return `/${locale}`;
 }
 
-/** Map any localized slug to canonical English path, e.g. combinar -> /merge */
+/** Map any localized slug to canonical English path, e.g. `combinar-pdf` → `/merge-pdf` */
 export function slugToOriginalPath(slug: string): string | null {
-  for (const [original, translations] of Object.entries(pathMapping)) {
+  for (const [, translations] of Object.entries(pathMapping)) {
     if (translations.includes(slug)) {
-      return `/${original}`;
+      return `/${translations[0]}`;
     }
   }
   return null;
@@ -57,7 +57,7 @@ export function englishPathToLocalized(
   const clean = pathWithSlash.replace(/^\//, "");
   const idx = languageIndex[lang];
   for (const [original, translations] of Object.entries(pathMapping)) {
-    if (original === clean) {
+    if (original === clean || translations[0] === clean) {
       return `/${translations[idx]}`;
     }
   }

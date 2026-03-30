@@ -46,25 +46,25 @@ const Header = () => {
 
   const allTools = [
     {
-      href: "/merge",
+      href: "/merge-pdf",
       label: t("nav.merge"),
       description: "Combine multiple PDF files into one",
       color: "from-red-500 to-red-600",
     },
     {
-      href: "/split",
+      href: "/split-pdf",
       label: t("nav.split"),
       description: "Split PDF into multiple documents",
       color: "from-orange-500 to-red-500",
     },
     {
-      href: "/compress",
+      href: "/compress-pdf",
       label: t("nav.compress"),
       description: "Reduce PDF file size",
       color: "from-green-500 to-teal-500",
     },
     {
-      href: "/rotate",
+      href: "/rotate-pdf",
       label: t("nav.rotate"),
       description: "Rotate PDF pages",
       color: "from-indigo-500 to-cyan-500",

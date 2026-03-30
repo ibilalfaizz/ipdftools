@@ -14,15 +14,15 @@ export default function ImageWebpPage() {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-            <CardHeader>
+        <div className="max-w-6xl mx-auto">
+          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden pb-5">
+            <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold text-gray-900">
                 {t("image_webp.title")}
               </CardTitle>
               <p className="text-gray-600">{t("image_webp.description")}</p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_webp"
                 processFiles={(files) => processWebpBatch(files)}
