@@ -73,10 +73,16 @@ const translations = {
     'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
     'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
     
-    // Landing page content
-    'landing.hero_title': 'iPDFTOOLS',
-    'landing.hero_subtitle': 'The ultimate collection of PDF tools. Merge, split, compress, convert, and rotate your documents with professional-grade quality. Fast, secure, and completely free.',
-    'landing.why_choose_title': 'Why Choose iPDFTOOLS?',
+    // Landing page content (hero: eyebrow + headline split for highlighted word)
+    'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
+    'landing.hero_headline_before': 'Process documents ',
+    'landing.hero_headline_highlight': 'in your browser',
+    'landing.hero_headline_after': '—private, fast, and completely free.',
+    'landing.hero_subtitle':
+      'We merge, split, compress, convert, and optimize PDFs and images on your device. No account required—your files stay on your machine, not our servers.',
+    'landing.hero_cta_primary': 'Browse tools',
+    'landing.hero_cta_secondary': 'Merge PDFs',
+    'landing.why_choose_title': 'Why choose us?',
     'landing.secure_title': '100% Secure',
     'landing.secure_desc': 'All processing happens in your browser. Your files never leave your device.',
     'landing.fast_title': 'Fast & Efficient',
@@ -231,9 +237,15 @@ const translations = {
     'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
     
     // Landing page content
-    'landing.hero_title': 'iPDFTOOLS',
-    'landing.hero_subtitle': 'La colección definitiva de herramientas PDF. Combina, divide, comprime, convierte y rota tus documentos con calidad profesional. Rápido, seguro y completamente gratis.',
-    'landing.why_choose_title': '¿Por qué elegir iPDFTOOLS?',
+    'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
+    'landing.hero_headline_before': 'Procesa documentos ',
+    'landing.hero_headline_highlight': 'en tu navegador',
+    'landing.hero_headline_after': '—privado, rápido y gratis.',
+    'landing.hero_subtitle':
+      'Combinamos, dividimos, comprimimos y convertimos en tu dispositivo. Sin cuenta—tus archivos se quedan en tu equipo, no en nuestros servidores.',
+    'landing.hero_cta_primary': 'Ver herramientas',
+    'landing.hero_cta_secondary': 'Combinar PDF',
+    'landing.why_choose_title': '¿Por qué elegirnos?',
     'landing.secure_title': '100% Seguro',
     'landing.secure_desc': 'Todo el procesamiento ocurre en tu navegador. Tus archivos nunca salen de tu dispositivo.',
     'landing.fast_title': 'Rápido y Eficiente',
@@ -379,9 +391,15 @@ const translations = {
     'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
     
     // Landing page content
-    'landing.hero_title': 'iPDFTOOLS',
-    'landing.hero_subtitle': 'La collection ultime d\'outils PDF. Fusionnez, divisez, compressez, convertissez et faites pivoter vos documents avec une qualité professionnelle. Rapide, sécurisé et entièrement gratuit.',
-    'landing.why_choose_title': 'Pourquoi choisir iPDFTOOLS?',
+    'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
+    'landing.hero_headline_before': 'Traitez vos documents ',
+    'landing.hero_headline_highlight': 'dans le navigateur',
+    'landing.hero_headline_after': '—privé, rapide et gratuit.',
+    'landing.hero_subtitle':
+      'Fusion, découpage, compression et conversion sur votre appareil. Sans compte—vos fichiers restent sur votre machine, pas sur nos serveurs.',
+    'landing.hero_cta_primary': 'Voir les outils',
+    'landing.hero_cta_secondary': 'Fusionner des PDF',
+    'landing.why_choose_title': 'Pourquoi nous choisir ?',
     'landing.secure_title': '100% Sécurisé',
     'landing.secure_desc': 'Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',
     'landing.fast_title': 'Rapide et Efficace',

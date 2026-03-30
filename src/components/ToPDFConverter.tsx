@@ -216,17 +216,17 @@ const ToPDFConverter = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
-        <div className="inline-flex p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-full mb-4">
-          <FileText className="h-8 w-8 text-white" />
+        <div className="inline-flex p-3 tool-icon-bubble rounded-full mb-4">
+          <FileText className="h-8 w-8" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">Convert to PDF</h1>
-        <p className="text-xl text-gray-600">
+        <h1 className="text-4xl font-bold text-foreground mb-4">Convert to PDF</h1>
+        <p className="text-xl text-muted-foreground">
           Convert various file formats to PDF with ease
         </p>
       </div>
 
       <div className="space-y-6">
-        <Card>
+        <Card className="border border-[#d6ffd2]/15 bg-[#103c44]/40">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Upload className="h-5 w-5" />
@@ -235,7 +235,7 @@ const ToPDFConverter = () => {
           </CardHeader>
           <CardContent>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Select file format (optional - auto-detect if not specified)
               </label>
               <Select value={selectedFormat} onValueChange={setSelectedFormat}>
@@ -265,19 +265,19 @@ const ToPDFConverter = () => {
         </Card>
 
         {files.length > 0 && (
-          <Card>
+          <Card className="border border-[#d6ffd2]/15 bg-[#103c44]/40">
             <CardHeader>
               <CardTitle>Selected Files ({files.length})</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2 mb-4">
                 {files.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/40">
                     <div className="flex items-center space-x-3">
-                      <FileText className="h-5 w-5 text-gray-500" />
+                      <FileText className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p className="font-medium text-foreground">{file.name}</p>
+                        <p className="text-sm text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                       </div>
                     </div>
                     <Button
@@ -294,7 +294,7 @@ const ToPDFConverter = () => {
               <Button
                 onClick={convertToPDF}
                 disabled={isConverting}
-                className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isConverting ? (
                   <>
@@ -313,11 +313,11 @@ const ToPDFConverter = () => {
         )}
 
         {convertedFiles.length > 0 && (
-          <Card>
+          <Card className="border border-[#d6ffd2]/15 bg-[#103c44]/40">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Converted Files</span>
-                <Button onClick={downloadAll} className="bg-green-600 hover:bg-green-700">
+                <Button onClick={downloadAll} className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Download className="mr-2 h-4 w-4" />
                   Download All
                 </Button>
@@ -326,15 +326,15 @@ const ToPDFConverter = () => {
             <CardContent>
               <div className="space-y-2">
                 {convertedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/40">
                     <div className="flex items-center space-x-3">
-                      <FileText className="h-5 w-5 text-green-600" />
-                      <span className="font-medium text-gray-900">{file.name}</span>
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span className="font-medium text-foreground">{file.name}</span>
                     </div>
                     <Button
                       onClick={() => downloadFile(file.url, file.name)}
                       size="sm"
-                      className="bg-green-600 hover:bg-green-700"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                       <Download className="mr-2 h-4 w-4" />
                       Download

@@ -22,6 +22,10 @@ import Header from "../Header";
 import Footer from "../Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+/** One uniform treatment for all tool icons and CTAs (mint on dark teal). */
+const toolIconClass =
+  "inline-flex p-4 rounded-full mb-4 mx-auto bg-[#103c44] text-[#d6ffd2] ring-1 ring-[#d6ffd2]/20 group-hover:scale-110 transition-transform duration-300";
+
 const Landing = () => {
   const { t, getLocalizedPath } = useLanguage();
 
@@ -31,7 +35,6 @@ const Landing = () => {
       title: t("nav.merge"),
       description: t("landing.merge_desc"),
       path: "/merge-pdf",
-      color: "from-red-500 to-red-600",
       available: true,
     },
     {
@@ -39,7 +42,6 @@ const Landing = () => {
       title: t("nav.split"),
       description: t("landing.split_desc"),
       path: "/split-pdf",
-      color: "from-orange-500 to-red-500",
       available: true,
     },
     {
@@ -47,7 +49,6 @@ const Landing = () => {
       title: t("nav.compress"),
       description: t("landing.compress_desc"),
       path: "/compress-pdf",
-      color: "from-green-500 to-teal-500",
       available: true,
     },
     {
@@ -55,7 +56,6 @@ const Landing = () => {
       title: t("nav.rotate"),
       description: t("landing.rotate_desc"),
       path: "/rotate-pdf",
-      color: "from-indigo-500 to-cyan-500",
       available: true,
     },
     {
@@ -63,7 +63,6 @@ const Landing = () => {
       title: t("nav.pdf_to_word"),
       description: t("landing.pdf_to_word_desc"),
       path: "/pdf-to-word",
-      color: "from-blue-500 to-green-500",
       available: true,
     },
     {
@@ -71,7 +70,6 @@ const Landing = () => {
       title: t("nav.pdf_to_jpg"),
       description: t("landing.pdf_to_jpg_desc"),
       path: "/pdf-to-jpg",
-      color: "from-purple-500 to-pink-500",
       available: true,
     },
     {
@@ -79,7 +77,6 @@ const Landing = () => {
       title: t("nav.pdf_to_text"),
       description: t("landing.pdf_to_text_desc"),
       path: "/pdf-to-text",
-      color: "from-green-500 to-blue-500",
       available: true,
     },
     {
@@ -87,7 +84,6 @@ const Landing = () => {
       title: t("nav.word_to_pdf"),
       description: t("landing.word_to_pdf_desc"),
       path: "/word-to-pdf",
-      color: "from-blue-500 to-purple-500",
       available: true,
     },
     {
@@ -95,7 +91,6 @@ const Landing = () => {
       title: t("nav.jpg_to_pdf"),
       description: t("landing.jpg_to_pdf_desc"),
       path: "/jpg-to-pdf",
-      color: "from-orange-500 to-yellow-500",
       available: true,
     },
     {
@@ -103,7 +98,6 @@ const Landing = () => {
       title: t("nav.image_resize"),
       description: t("landing.image_resize_desc"),
       path: "/image-resize",
-      color: "from-violet-500 to-fuchsia-500",
       available: true,
     },
     {
@@ -111,7 +105,6 @@ const Landing = () => {
       title: t("nav.image_compress"),
       description: t("landing.image_compress_desc"),
       path: "/image-compress",
-      color: "from-emerald-500 to-teal-500",
       available: true,
     },
     {
@@ -119,53 +112,76 @@ const Landing = () => {
       title: t("nav.image_webp"),
       description: t("landing.image_webp_desc"),
       path: "/image-webp",
-      color: "from-amber-500 to-orange-500",
       available: true,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
+    <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="mb-6">
-            <div className="inline-flex p-4 rounded-full mb-4 brand-gradient">
-              <FileText className="h-12 w-12 text-white" />
-            </div>
-          </div>
-          <h1 className="text-6xl font-bold brand-accent mb-6">{t("landing.hero_title")}</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        <section
+          className="text-center mb-20 max-w-4xl mx-auto pt-2 sm:pt-6"
+          aria-labelledby="landing-hero-heading"
+        >
+          <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[#d6ffd2] mb-6">
+            {t("landing.hero_eyebrow")}
+          </p>
+          <h1
+            id="landing-hero-heading"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.12] mb-6"
+          >
+            <span>{t("landing.hero_headline_before")}</span>
+            <span className="text-[#d6ffd2] [text-shadow:0_0_26px_rgba(214,255,210,0.55),0_0_52px_rgba(214,255,210,0.22)]">
+              {t("landing.hero_headline_highlight")}
+            </span>
+            <span>{t("landing.hero_headline_after")}</span>
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
             {t("landing.hero_subtitle")}
           </p>
-        </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Button
+              asChild
+              className="min-w-[200px] bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 font-semibold"
+            >
+              <a href="#tools">{t("landing.hero_cta_primary")}</a>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="min-w-[200px] border-2 border-[#d6ffd2]/35 bg-[#103c44]/50 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+            >
+              <Link href={getLocalizedPath("/merge-pdf")}>
+                {t("landing.hero_cta_secondary")}
+              </Link>
+            </Button>
+          </div>
+        </section>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div
+          id="tools"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto scroll-mt-24"
+        >
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/60 backdrop-blur-sm hover:bg-red-50/30"
+              className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
             >
               <CardHeader className="text-center pb-4">
-                <div
-                  className={`inline-flex p-4 bg-gradient-to-r ${feature.color} rounded-full mb-4 mx-auto text-white group-hover:scale-110 transition-transform duration-300`}
-                >
-                  {feature.icon}
-                </div>
-                <CardTitle className="text-2xl font-bold brand-text-dark">
+                <div className={toolIconClass}>{feature.icon}</div>
+                <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
                   {feature.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-gray-600 mb-6 text-lg">
+                <p className="text-[#d6ffd2]/75 mb-6 text-lg">
                   {feature.description}
                 </p>
                 {feature.available ? (
                   <Button
                     asChild
-                    className={`w-full bg-gradient-to-r ${feature.color} hover:shadow-lg transition-all duration-300 border-0`}
+                    className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
                   >
                     <Link href={getLocalizedPath(feature.path)}>
                       Use Tool <ArrowRight className="ml-2 h-4 w-4" />
@@ -181,42 +197,41 @@ const Landing = () => {
           ))}
         </div>
 
-        {/* Features List */}
         <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold brand-text-dark mb-8">
+          <h2 className="text-3xl font-bold text-[#d6ffd2] mb-8">
             {t("landing.why_choose_title")}
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-8 w-8 brand-accent" />
+              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
+                <FileText className="h-8 w-8 text-[#d6ffd2]" />
               </div>
-              <h3 className="text-xl font-semibold brand-text-dark mb-2">
+              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
                 {t("landing.secure_title")}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-[#d6ffd2]/75">
                 {t("landing.secure_desc")}
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
-                <Minimize className="h-8 w-8 brand-accent" />
+              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
+                <Minimize className="h-8 w-8 text-[#d6ffd2]" />
               </div>
-              <h3 className="text-xl font-semibold brand-text-dark mb-2">
+              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
                 {t("landing.fast_title")}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-[#d6ffd2]/75">
                 {t("landing.fast_desc")}
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 brand-bg-subtle rounded-full flex items-center justify-center mx-auto mb-4">
-                <Merge className="h-8 w-8 brand-accent" />
+              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
+                <Merge className="h-8 w-8 text-[#d6ffd2]" />
               </div>
-              <h3 className="text-xl font-semibold brand-text-dark mb-2">
+              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
                 {t("landing.easy_title")}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-[#d6ffd2]/75">
                 {t("landing.easy_desc")}
               </p>
             </div>

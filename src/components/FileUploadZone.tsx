@@ -45,19 +45,19 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
     <div
       onDrop={handleDrop}
       onDragOver={onDragOver}
-      className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 cursor-pointer group ${className}`}
+      className={`border-2 border-dashed border-[#d6ffd2]/25 rounded-xl p-8 text-center hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 cursor-pointer group ${className}`}
       onClick={() => fileInputRef.current?.click()}
     >
       <div className="flex flex-col items-center space-y-4">
-        <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full group-hover:scale-110 transition-transform duration-200">
-          <Upload className="w-8 h-8 text-white" />
+        <div className="p-4 tool-icon-bubble group-hover:scale-110 transition-transform duration-200">
+          <Upload className="w-8 h-8" />
         </div>
         
         <div>
-          <p className="text-xl font-semibold text-gray-700 mb-2">
+          <p className="text-xl font-semibold text-foreground mb-2">
             {title}
           </p>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             {description}
           </p>
         </div>
@@ -65,7 +65,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
         <Button
           type="button"
           variant="outline"
-          className="border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition-colors"
+          className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
           onClick={(e) => {
             e.stopPropagation();
             fileInputRef.current?.click();

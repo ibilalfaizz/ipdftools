@@ -215,14 +215,14 @@ const PDFSplitter = () => {
     <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearFile} sidebar={
       <>
         {file && (
-          <div className="rounded-lg border border-gray-100 bg-white p-3">
+          <div className="rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/50 p-3">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-red-600 font-bold text-sm">PDF</span>
+              <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center shrink-0 ring-1 ring-primary/20">
+                <span className="text-primary font-bold text-sm">PDF</span>
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-gray-900 truncate" title={file.name}>{file.name}</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-medium text-foreground truncate" title={file.name}>{file.name}</p>
+                <p className="text-sm text-muted-foreground">
                   {pageCount} pages • {(file.size / (1024 * 1024)).toFixed(2)} MB
                 </p>
               </div>
@@ -232,7 +232,7 @@ const PDFSplitter = () => {
 
         {file && pageCount > 0 && (
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-800">Split Options</h3>
+            <h3 className="text-sm font-semibold text-foreground">Split Options</h3>
 
             <div className="flex items-center space-x-3">
               <input
@@ -243,7 +243,7 @@ const PDFSplitter = () => {
                 onChange={() => setSplitOption({ type: 'individual' })}
                 className="w-4 h-4 text-orange-600"
               />
-              <Label htmlFor="individual" className="text-gray-700 text-sm">
+              <Label htmlFor="individual" className="text-foreground text-sm">
                 Split into individual pages ({pageCount} files)
               </Label>
             </div>
@@ -258,7 +258,7 @@ const PDFSplitter = () => {
                   onChange={() => setSplitOption({ type: 'range', ranges: '' })}
                   className="w-4 h-4 text-orange-600"
                 />
-                <Label htmlFor="range" className="text-gray-700 text-sm">
+                <Label htmlFor="range" className="text-foreground text-sm">
                   Split by custom page ranges
                 </Label>
               </div>
@@ -271,7 +271,7 @@ const PDFSplitter = () => {
                     onChange={(e) => setSplitOption({ type: 'range', ranges: e.target.value })}
                     className="max-w-full"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Enter page numbers and ranges separated by commas
                   </p>
                 </div>
@@ -281,24 +281,24 @@ const PDFSplitter = () => {
         )}
 
         {splitResult && (
-          <div className="rounded-lg border border-green-200 bg-green-50/80 p-3 space-y-3">
+          <div className="rounded-lg border border-[#d6ffd2]/25 bg-[#103c44]/60 p-3 space-y-3">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center space-x-2 min-w-0">
-                <Scissors className="w-5 h-5 text-green-600 shrink-0" />
+                <Scissors className="w-5 h-5 text-primary shrink-0" />
                 <div className="min-w-0">
-                  <p className="font-medium text-green-900 text-sm">PDF split successfully!</p>
-                  <p className="text-xs text-green-700">{splitResult.blobs.length} files ready</p>
+                  <p className="font-medium text-foreground text-sm">PDF split successfully!</p>
+                  <p className="text-xs text-muted-foreground">{splitResult.blobs.length} files ready</p>
                 </div>
               </div>
-              <Button type="button" size="sm" className="bg-green-600 hover:bg-green-700 shrink-0" onClick={downloadAll}>
+              <Button type="button" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shrink-0" onClick={downloadAll}>
                 Download All
               </Button>
             </div>
 
             <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
               {splitResult.filenames.map((filename, index) => (
-                <div key={index} className="flex items-center justify-between bg-white p-2 rounded border gap-2">
-                  <span className="text-xs text-gray-700 truncate flex-1" title={filename}>{filename}</span>
+                <div key={index} className="flex items-center justify-between bg-[#103c44]/40 p-2 rounded border border-[#d6ffd2]/15 gap-2">
+                  <span className="text-xs text-foreground truncate flex-1" title={filename}>{filename}</span>
                   <Button type="button" size="sm" variant="outline" className="shrink-0" onClick={() => downloadFile(index)}>
                     <Download className="w-3 h-3" />
                   </Button>
@@ -311,7 +311,7 @@ const PDFSplitter = () => {
         {file && !splitResult && (
           <Button
             type="button"
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             size="lg"
             onClick={() => void splitPDF()}
             disabled={isProcessing}

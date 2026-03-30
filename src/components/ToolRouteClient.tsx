@@ -4,7 +4,7 @@ import type { ComponentType } from "react";
 import dynamic from "next/dynamic";
 
 const loadFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 text-gray-600">
+  <div className="min-h-screen app-bg flex items-center justify-center text-muted-foreground">
     Loading…
   </div>
 );

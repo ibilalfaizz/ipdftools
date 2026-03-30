@@ -71,11 +71,11 @@ const WordToPDFConverter = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
-          <FileText className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+          <FileText className="h-8 w-8" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('word_to_pdf.title')}</h1>
-        <p className="text-xl text-gray-600">{t('word_to_pdf.description')}</p>
+        <h1 className="text-4xl font-bold text-foreground mb-4">{t('word_to_pdf.title')}</h1>
+        <p className="text-xl text-muted-foreground">{t('word_to_pdf.description')}</p>
       </div>
 
       <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
@@ -84,7 +84,7 @@ const WordToPDFConverter = () => {
             <p className="text-xs font-medium text-muted-foreground mb-2">
               {t('common.files_added')}
             </p>
-            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
               {files.map((file, index) => (
                 <li key={`${file.name}-${index}`} className="flex justify-between items-center gap-2">
                   <span className="truncate" title={file.name}>{file.name}</span>
@@ -98,7 +98,7 @@ const WordToPDFConverter = () => {
 
           <Button
             type="button"
-            className="w-full"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             size="lg"
             onClick={() => void handleConvert()}
             disabled={files.length === 0 || isConverting}
@@ -107,16 +107,16 @@ const WordToPDFConverter = () => {
           </Button>
 
           {convertedFiles.length > 0 && (
-            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-              <p className="text-sm font-medium text-gray-900">{t('common.conversion_complete')}</p>
-              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 rounded-lg border border-gray-100 bg-white p-3">
+            <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
+              <p className="text-sm font-medium text-foreground">{t('common.conversion_complete')}</p>
+              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 tool-list-box p-3">
                 {convertedFiles.map((url, index) => (
                   <li key={index} className="flex justify-between items-center gap-2">
                     <a
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline truncate"
+                      className="text-primary underline truncate"
                     >
                       {`converted_${index + 1}.pdf`}
                     </a>
