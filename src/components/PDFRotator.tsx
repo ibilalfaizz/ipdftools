@@ -73,11 +73,11 @@ const PDFRotator = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-4 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mb-4">
-          <RotateCw className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+          <RotateCw className="h-8 w-8" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('rotate.title')}</h1>
-        <p className="text-xl text-gray-600">{t('rotate.description')}</p>
+        <h1 className="text-4xl font-bold text-foreground mb-4">{t('rotate.title')}</h1>
+        <p className="text-xl text-muted-foreground">{t('rotate.description')}</p>
       </div>
 
       <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
@@ -86,7 +86,7 @@ const PDFRotator = () => {
             <p className="text-xs font-medium text-muted-foreground mb-2">
               {t('common.files_added')}
             </p>
-            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
               {files.map((file, index) => (
                 <li key={`${file.name}-${index}`} className="flex justify-between items-center gap-2">
                   <span className="truncate" title={file.name}>{file.name}</span>
@@ -99,7 +99,7 @@ const PDFRotator = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               {t('rotate.select_angle')}
             </label>
             <Select value={rotationAngle} onValueChange={setRotationAngle}>
@@ -125,9 +125,9 @@ const PDFRotator = () => {
           </Button>
 
           {rotatedFiles.length > 0 && (
-            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-              <p className="text-sm font-medium text-gray-900">{t('common.conversion_complete')}</p>
-              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 rounded-lg border border-gray-100 bg-white p-3">
+            <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
+              <p className="text-sm font-medium text-foreground">{t('common.conversion_complete')}</p>
+              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 tool-list-box p-3">
                 {rotatedFiles.map((file, index) => (
                   <li key={index} className="flex justify-between items-center gap-2">
                     <span className="truncate">{file.filename}</span>

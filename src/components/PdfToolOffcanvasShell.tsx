@@ -40,14 +40,14 @@ export default function PdfToolOffcanvasShell({
           side="right"
           hideOverlay
           hideCloseButton
-          className="w-full sm:max-w-md p-0 gap-0 flex flex-col border-l bg-gradient-to-b from-slate-50 to-white overflow-y-auto"
+          className="w-full sm:max-w-md p-0 gap-0 flex flex-col overflow-y-auto tool-side-panel"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>{t("image_tools.sidebar_heading")}</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col gap-5 px-6 pb-8 pt-14">
-            <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
-              <h3 className="text-sm font-semibold tracking-tight text-gray-900">
+            <div className="flex items-center justify-between gap-2 border-b border-[#d6ffd2]/15 pb-3">
+              <h3 className="text-sm font-semibold tracking-tight text-foreground">
                 {t("image_tools.sidebar_heading")}
               </h3>
               <Button

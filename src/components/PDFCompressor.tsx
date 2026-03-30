@@ -121,14 +121,14 @@ const PDFCompressor = () => {
     <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={removeFile} sidebar={
       <>
         {file && (
-          <div className="rounded-lg border border-gray-100 bg-white p-3">
+          <div className="rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/50 p-3">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-red-600 font-bold text-xs">PDF</span>
+              <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center shrink-0 ring-1 ring-primary/20">
+                <span className="text-primary font-bold text-xs">PDF</span>
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-gray-900 truncate" title={file.name}>{file.name}</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-medium text-foreground truncate" title={file.name}>{file.name}</p>
+                <p className="text-sm text-muted-foreground">
                   Original: {formatFileSize(originalSize)}
                   {compressedSize > 0 && (
                     <span className="ml-2 text-green-600">
@@ -144,7 +144,7 @@ const PDFCompressor = () => {
         {file && !compressedPdfBlob && (
           <Button
             type="button"
-            className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             size="lg"
             onClick={() => void compressPDF()}
             disabled={isProcessing}
@@ -164,14 +164,14 @@ const PDFCompressor = () => {
         )}
 
         {compressedPdfBlob && file && (
-          <div className="rounded-lg border border-green-200 bg-green-50/80 p-3 space-y-3">
-            <p className="text-sm font-medium text-green-900">PDF compressed successfully!</p>
-            <p className="text-sm text-green-700">
+          <div className="rounded-lg border border-[#d6ffd2]/25 bg-[#103c44]/60 p-3 space-y-3">
+            <p className="text-sm font-medium text-foreground">PDF compressed successfully!</p>
+            <p className="text-sm text-muted-foreground">
               Size reduced by {((originalSize - compressedSize) / originalSize * 100).toFixed(1)}%
             </p>
             <Button
               type="button"
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={downloadCompressedPDF}
             >
               <Download className="w-4 h-4 mr-2 inline" />

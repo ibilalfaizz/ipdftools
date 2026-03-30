@@ -94,11 +94,11 @@ const PDFMerger = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-4 bg-gradient-to-r from-primary to-primary/80 rounded-full mb-4">
-          <Upload className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+          <Upload className="h-8 w-8" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('merge.title')}</h1>
-        <p className="text-xl text-gray-600">{t('merge.description')}</p>
+        <h1 className="text-4xl font-bold text-foreground mb-4">{t('merge.title')}</h1>
+        <p className="text-xl text-muted-foreground">{t('merge.description')}</p>
       </div>
 
       <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
@@ -111,12 +111,12 @@ const PDFMerger = () => {
               {files.map((fileWithId, index) => (
                 <div
                   key={fileWithId.id}
-                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100"
+                  className="flex items-center justify-between p-3 rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/50"
                 >
                   <div className="flex items-center space-x-3 min-w-0">
-                    <GripVertical className="h-4 w-4 text-gray-400 shrink-0" />
+                    <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span className="text-sm font-medium shrink-0">{index + 1}.</span>
-                    <span className="text-sm text-gray-700 truncate" title={fileWithId.file.name}>
+                    <span className="text-sm text-foreground truncate" title={fileWithId.file.name}>
                       {fileWithId.file.name}
                     </span>
                   </div>
@@ -151,8 +151,8 @@ const PDFMerger = () => {
           </Button>
 
           {mergedPdfUrl && (
-            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-              <p className="text-sm font-medium text-green-700">{t('common.success')}</p>
+            <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
+              <p className="text-sm font-medium text-primary">{t('common.success')}</p>
               <Button type="button" className="w-full" onClick={handleDownload}>
                 <Download className="h-4 w-4 mr-2" />
                 {t('common.download')}

@@ -16,16 +16,16 @@ export default function ImageResizePage() {
   const [height, setHeight] = useState(1080);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
+    <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden pb-5">
+          <Card className="tool-page-card">
             <CardHeader className="pb-2">
-              <CardTitle className="text-2xl font-bold text-gray-900">
+              <CardTitle className="text-2xl font-bold text-foreground">
                 {t("image_resize.title")}
               </CardTitle>
-              <p className="text-gray-600">{t("image_resize.description")}</p>
+              <p className="text-muted-foreground">{t("image_resize.description")}</p>
             </CardHeader>
             <CardContent className="p-0">
               <ImageToolsBatchForm

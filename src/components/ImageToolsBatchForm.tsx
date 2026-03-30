@@ -157,8 +157,8 @@ export default function ImageToolsBatchForm({
 
   const sidebarInner = (
     <div className="flex flex-col gap-5 px-6 pb-8 pt-14">
-      <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
-        <h3 className="text-sm font-semibold tracking-tight text-gray-900">
+      <div className="flex items-center justify-between gap-2 border-b border-[#d6ffd2]/15 pb-3">
+        <h3 className="text-sm font-semibold tracking-tight text-foreground">
           {t("image_tools.sidebar_heading")}
         </h3>
         <Button
@@ -176,7 +176,7 @@ export default function ImageToolsBatchForm({
         <p className="text-xs font-medium text-muted-foreground mb-2">
           {t("image_tools.files_added")}: {files.length}
         </p>
-        <ul className="text-sm text-muted-foreground max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+        <ul className="text-sm text-muted-foreground max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
           {files.map((f) => (
             <li
               key={`${f.name}-${f.size}-${f.lastModified}`}
@@ -207,7 +207,7 @@ export default function ImageToolsBatchForm({
       </Button>
 
       {result && (
-        <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+        <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
           <Button
             type="button"
             size="sm"
@@ -262,7 +262,7 @@ export default function ImageToolsBatchForm({
           side="right"
           hideOverlay
           hideCloseButton
-          className="w-full sm:max-w-md p-0 gap-0 flex flex-col border-l bg-gradient-to-b from-slate-50 to-white overflow-y-auto"
+          className="w-full sm:max-w-md p-0 gap-0 flex flex-col overflow-y-auto tool-side-panel"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>{t("image_tools.sidebar_heading")}</SheetTitle>

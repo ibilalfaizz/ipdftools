@@ -163,11 +163,11 @@ const JPGToPDFConverter = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <div className="inline-flex p-4 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full mb-4">
-          <Download className="h-8 w-8 text-white" />
+        <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+          <Download className="h-8 w-8" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('jpg_to_pdf.title')}</h1>
-        <p className="text-xl text-gray-600">{t('jpg_to_pdf.description')}</p>
+        <h1 className="text-4xl font-bold text-foreground mb-4">{t('jpg_to_pdf.title')}</h1>
+        <p className="text-xl text-muted-foreground">{t('jpg_to_pdf.description')}</p>
       </div>
 
       <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
@@ -176,10 +176,10 @@ const JPGToPDFConverter = () => {
             <p className="text-xs font-medium text-muted-foreground mb-2">
               {t('common.files_added')}
             </p>
-            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
               {files.map((file, index) => (
                 <li key={`${file.name}-${index}`} className="flex items-center justify-between gap-2">
-                  <span className="text-gray-600 truncate" title={file.name}>{file.name}</span>
+                  <span className="text-foreground truncate" title={file.name}>{file.name}</span>
                   <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
                     {t('common.remove')}
                   </Button>
@@ -190,7 +190,7 @@ const JPGToPDFConverter = () => {
 
           <Button
             type="button"
-            className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:from-orange-600 hover:to-yellow-600"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
             size="lg"
             onClick={() => void convertToPdf()}
             disabled={conversionLoading}
@@ -199,10 +199,10 @@ const JPGToPDFConverter = () => {
           </Button>
 
           {convertedPdf && (
-            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+            <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
               <Button
                 type="button"
-                className="w-full bg-green-600 text-white hover:bg-green-700"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={handleDownload}
               >
                 <Download className="h-4 w-4 mr-2" />
