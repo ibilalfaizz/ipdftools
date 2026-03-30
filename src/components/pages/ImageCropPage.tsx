@@ -87,7 +87,7 @@ export default function ImageCropPage() {
   const onDrop = useCallback((incoming: File[]) => {
     const imgs = incoming.filter((f) => f.type.startsWith("image/"));
     if (imgs.length === 0) return;
-    setFiles((prev) => [...prev, ...imgs]);
+    setFiles([imgs[0]]);
     setResult(null);
   }, []);
 
@@ -218,35 +218,12 @@ export default function ImageCropPage() {
 
       <div>
         <p className="text-xs font-medium text-muted-foreground mb-2">
-          {t("image_tools.files_added")}: {files.length}
+          {t("image_tools.files_added")}
         </p>
-        <ul className="text-sm text-muted-foreground max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
-          {files.map((f) => (
-            <li
-              key={`${f.name}-${f.size}-${f.lastModified}`}
-              className="truncate"
-              title={f.name}
-            >
-              {f.name}
-            </li>
-          ))}
-        </ul>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="mt-2 w-full border-[#d6ffd2]/25"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          {t("image_tools.add_more")}
-        </Button>
+        <div className="text-sm text-muted-foreground tool-list-box p-3 truncate">
+          <span title={files[0]?.name}>{files[0]?.name}</span>
+        </div>
       </div>
-
-      {files.length > 1 ? (
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          {t("image_crop.batch_hint")}
-        </p>
-      ) : null}
 
       <div className="space-y-3 border-t border-[#d6ffd2]/15 pt-4">
         <p className="text-sm font-semibold text-foreground">
@@ -367,7 +344,9 @@ export default function ImageCropPage() {
               <p className="text-muted-foreground">{t("image_crop.description")}</p>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="w-full relative">
+              <div
+                className={`w-full relative transition-[padding] ${hasFiles ? "lg:pr-[min(28rem,calc(100%-1.5rem))]" : ""}`}
+              >
                 <div
                   className={`mx-auto w-full max-w-3xl p-2 ${hasFiles ? "hidden" : ""}`}
                 >
@@ -379,7 +358,7 @@ export default function ImageCropPage() {
                     onDrop={onDrop}
                     onDragOver={onDragOver}
                     onFileSelect={onFileSelect}
-                    multiple
+                    multiple={false}
                     className="min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
                   />
                 </div>
@@ -403,7 +382,7 @@ export default function ImageCropPage() {
                   </div>
                 ) : null}
 
-                <Sheet open={sheetControlledOpen} onOpenChange={() => {}}>
+                <Sheet modal={false} open={sheetControlledOpen} onOpenChange={() => {}}>
                   <SheetContent
                     side="right"
                     hideOverlay

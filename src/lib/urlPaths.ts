@@ -25,10 +25,10 @@ export const pathMapping: Record<string, string[]> = {
     "convertir-webp-masivo",
     "conversion-webp-masse",
   ],
-  "bulk-image-crop": [
-    "bulk-image-crop",
-    "recortar-imagen-masivo",
-    "recadrer-images-masse",
+  "image-crop": [
+    "image-crop",
+    "recortar-imagenes",
+    "recadrer-images",
   ],
 };
 

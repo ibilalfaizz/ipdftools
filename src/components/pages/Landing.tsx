@@ -123,7 +123,7 @@ const Landing = () => {
       icon: <Crop className="w-8 h-8" />,
       title: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
-      path: "/bulk-image-crop",
+      path: "/image-crop",
       available: true,
     },
   ];

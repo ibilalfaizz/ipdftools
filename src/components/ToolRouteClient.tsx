@@ -75,7 +75,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/bulk-image-resize": ImageResizePage,
   "/bulk-image-compress": ImageCompressPage,
   "/bulk-image-webp": ImageWebpPage,
-  "/bulk-image-crop": ImageCropPage,
+  "/image-crop": ImageCropPage,
 };
 
 export default function ToolRouteClient({
