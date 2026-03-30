@@ -47,6 +47,11 @@ const Header = () => {
       description: t("landing.image_webp_desc"),
     },
     {
+      href: "/bulk-image-jpg",
+      label: t("nav.image_jpg"),
+      description: t("landing.image_jpg_desc"),
+    },
+    {
       href: "/image-crop",
       label: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
@@ -57,6 +62,7 @@ const Header = () => {
     "/bulk-image-resize",
     "/bulk-image-compress",
     "/bulk-image-webp",
+    "/bulk-image-jpg",
     "/image-crop",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
@@ -131,18 +137,9 @@ const Header = () => {
             </Link>
 
             <div className="flex md:hidden items-center gap-0.5 shrink-0">
+              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
+
               <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
-                    aria-label={t("nav.menu")}
-                  >
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
                 <SheetTrigger asChild>
                   <Button
                     type="button"
@@ -152,6 +149,17 @@ const Header = () => {
                     aria-label={t("tool_search.search_tools")}
                   >
                     <Search className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    aria-label={t("nav.menu")}
+                  >
+                    <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent
@@ -209,8 +217,6 @@ const Header = () => {
                   </nav>
                 </SheetContent>
               </Sheet>
-
-              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
             </div>
           </div>
 
@@ -220,6 +226,8 @@ const Header = () => {
             </div>
 
             <div className="flex items-center space-x-4 shrink-0">
+              <LanguageSelector />
+
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -282,8 +290,6 @@ const Header = () => {
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
-
-              <LanguageSelector />
             </div>
           </div>
         </div>

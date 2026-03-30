@@ -51,6 +51,7 @@ const translations = {
     'nav.image_resize': 'Bulk image resizer',
     'nav.image_compress': 'Bulk image compressor',
     'nav.image_webp': 'Bulk WebP converter',
+    'nav.image_jpg': 'Bulk JPG converter',
     'nav.image_crop': 'Image crop',
     
     // URL paths
@@ -77,6 +78,7 @@ const translations = {
     'landing.image_resize_desc': 'Bulk-resize photos to the same width and height (center crop).',
     'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
     'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
+    'landing.image_jpg_desc': 'Bulk-convert PNG, WebP, GIF, and more to widely compatible JPEG files.',
     'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
@@ -186,6 +188,12 @@ const translations = {
     'image_webp.process': 'Convert',
     'image_webp.drop_title': 'Drop images here or click to browse',
     'image_webp.drop_desc': 'Most raster formats • Multiple files',
+    'image_jpg.title': 'Bulk JPG converter',
+    'image_jpg.description':
+      'Convert images to JPEG at high quality (quality 92). Ideal for sharing and compatibility.',
+    'image_jpg.process': 'Convert',
+    'image_jpg.drop_title': 'Drop images here or click to browse',
+    'image_jpg.drop_desc': 'Most raster formats • Multiple files',
     'image_crop.title': 'Image crop',
     'image_crop.description':
       'Click and drag on the image to draw a crop (inside the bright area or on the dark edge). Drag corners and edges to resize; hold Alt and drag inside the box to move. Fine-tune with the numbers below. One image.',
@@ -234,6 +242,7 @@ const translations = {
     'nav.image_resize': 'Redimensionador masivo',
     'nav.image_compress': 'Compresor masivo',
     'nav.image_webp': 'Conversor WebP masivo',
+    'nav.image_jpg': 'Conversor JPG masivo',
     'nav.image_crop': 'Recorte de imágenes',
     
     // URL paths
@@ -260,6 +269,8 @@ const translations = {
     'landing.image_resize_desc': 'Redimensiona muchas fotos al mismo ancho y alto (recorte centrado).',
     'landing.image_compress_desc': 'Recompresión sin pérdida en lote para PNG, WebP y JPEG más ligeros.',
     'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
+    'landing.image_jpg_desc':
+      'Convierte PNG, WebP, GIF y más a JPEG compatible con todo.',
     'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
     
     // Landing page content
@@ -360,6 +371,12 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_webp.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_jpg.title': 'Conversor masivo a JPG',
+    'image_jpg.description':
+      'Convierte a JPEG en alta calidad (92). Ideal para compartir y compatibilidad.',
+    'image_jpg.process': 'Convertir',
+    'image_jpg.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_jpg.drop_desc': 'La mayoría de formatos • Varios archivos',
     'image_crop.title': 'Recorte de imágenes',
     'image_crop.description':
       'Arrastra sobre la imagen para dibujar el recorte (zona clara u oscura). Esquinas y bordes para redimensionar; mantén Alt y arrastra dentro para mover. Números abajo. Una imagen.',
@@ -408,6 +425,7 @@ const translations = {
     'nav.image_resize': 'Redimensionnement masse',
     'nav.image_compress': 'Compression masse',
     'nav.image_webp': 'Conversion WebP masse',
+    'nav.image_jpg': 'Conversion JPG masse',
     'nav.image_crop': 'Recadrage d\'images',
     
     // URL paths
@@ -434,6 +452,8 @@ const translations = {
     'landing.image_resize_desc': 'Redimensionnez en masse au même format (recadrage centré).',
     'landing.image_compress_desc': 'Recompression sans perte par lot pour des PNG, WebP et JPEG plus légers.',
     'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
+    'landing.image_jpg_desc':
+      'PNG, WebP, GIF et plus en JPEG universellement compatible.',
     'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
     
     // Landing page content
@@ -534,6 +554,12 @@ const translations = {
     'image_webp.process': 'Convertir',
     'image_webp.drop_title': 'Déposez des images ici ou cliquez',
     'image_webp.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_jpg.title': 'Conversion JPG en masse',
+    'image_jpg.description':
+      'Conversion en JPEG haute qualité (92). Idéal pour le partage et la compatibilité.',
+    'image_jpg.process': 'Convertir',
+    'image_jpg.drop_title': 'Déposez des images ici ou cliquez',
+    'image_jpg.drop_desc': 'La plupart des formats • Fichiers multiples',
     'image_crop.title': 'Recadrage d\'images',
     'image_crop.description':
       'Glissez sur l\'image pour tracer la zone (clair ou assombri). Coins et bords pour redimensionner ; Alt + glisser à l\'intérieur pour déplacer. Valeurs ci-dessous. Une image.',

@@ -43,6 +43,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_webp.title": "Bulk WebP Converter Online",
     "seo.image_webp.description":
       "Convert many images to WebP. Download a ZIP or each file on its own.",
+    "seo.image_jpg.title": "Bulk JPG Converter Online — PNG, WebP & More to JPEG",
+    "seo.image_jpg.description":
+      "Convert many images to JPG in your browser. ZIP or individual downloads.",
     "seo.image_crop.title": "Crop Images Online — Visual Selector & Pixel Controls",
     "seo.image_crop.description":
       "Crop photos in your browser. Drag the frame or set width, height, and position. ZIP or single downloads.",
@@ -88,6 +91,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_webp.title": "Conversor masivo a WebP online",
     "seo.image_webp.description":
       "Muchas imágenes a WebP. Un ZIP o un archivo por imagen.",
+    "seo.image_jpg.title": "Conversor masivo a JPG online",
+    "seo.image_jpg.description":
+      "Muchas imágenes a JPEG en el navegador. ZIP o archivos sueltos.",
     "seo.image_crop.title": "Recorte de imágenes online",
     "seo.image_crop.description":
       "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
@@ -133,6 +139,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_webp.title": "Conversion WebP en masse en ligne",
     "seo.image_webp.description":
       "Passez de nombreuses images en WebP. Archive ZIP ou un fichier par image.",
+    "seo.image_jpg.title": "Conversion JPG en masse en ligne",
+    "seo.image_jpg.description":
+      "Passez de nombreuses images en JPEG dans le navigateur. ZIP ou fichiers séparés.",
     "seo.image_crop.title": "Recadrage d'images en ligne",
     "seo.image_crop.description":
       "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",

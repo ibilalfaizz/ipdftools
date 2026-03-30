@@ -273,6 +273,47 @@ export async function processWebpBatch(
   return { files: filesOut, zipSuggestedName: "converted-webp.zip" };
 }
 
+/** Encode all raster images as JPEG (browser canvas). */
+export async function processJpgBatch(
+  files: File[]
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) continue;
+      ctx.drawImage(bitmap, 0, 0);
+
+      const blob = await canvasToBlob(canvas, "image/jpeg", JPEG_QUALITY);
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}.jpg`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: "image/jpeg",
+        data,
+      });
+    } catch {
+      // skip
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "converted-jpg.zip" };
+}
+
 /** Crop rectangle relative to each image (0–1), from the preview image’s pixel crop. */
 export type NormalizedCrop = {
   nx: number;

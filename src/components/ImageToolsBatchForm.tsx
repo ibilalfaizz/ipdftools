@@ -15,7 +15,11 @@ import {
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
 
-type TranslationPrefix = "image_resize" | "image_compress" | "image_webp";
+type TranslationPrefix =
+  | "image_resize"
+  | "image_compress"
+  | "image_webp"
+  | "image_jpg";
 
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */

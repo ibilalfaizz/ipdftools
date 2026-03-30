@@ -57,6 +57,10 @@ const ImageWebpPage = dynamic(() => import("@/pages/ImageWebpPage"), {
   ssr: false,
   loading: loadFallback,
 });
+const ImageJpgPage = dynamic(() => import("@/pages/ImageJpgPage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 const ImageCropPage = dynamic(() => import("@/pages/ImageCropPage"), {
   ssr: false,
   loading: loadFallback,
@@ -75,6 +79,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/bulk-image-resize": ImageResizePage,
   "/bulk-image-compress": ImageCompressPage,
   "/bulk-image-webp": ImageWebpPage,
+  "/bulk-image-jpg": ImageJpgPage,
   "/image-crop": ImageCropPage,
 };
 
