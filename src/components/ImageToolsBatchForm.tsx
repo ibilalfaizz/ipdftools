@@ -187,6 +187,15 @@ export default function ImageToolsBatchForm({
             </li>
           ))}
         </ul>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="mt-2 w-full border-[#d6ffd2]/25"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          {t("image_tools.add_more")}
+        </Button>
       </div>
 
       {children}
@@ -234,7 +243,9 @@ export default function ImageToolsBatchForm({
   return (
     <div className="w-full relative">
       {/* Main: drop zone only — always in page flow */}
-      <div className="mx-auto w-full max-w-3xl p-2">
+      <div
+        className={`mx-auto w-full max-w-3xl p-2 ${hasFiles ? "hidden" : ""}`}
+      >
         <FileUploadZone
           acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
           title={t(`${translationPrefix}.drop_title`)}
@@ -243,11 +254,7 @@ export default function ImageToolsBatchForm({
           onDrop={onDrop}
           onDragOver={onDragOver}
           onFileSelect={onFileSelect}
-          className={
-            hasFiles
-              ? "min-h-[220px] py-8"
-              : "min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
-          }
+          className="min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
         />
       </div>
 

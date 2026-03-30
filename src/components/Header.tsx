@@ -1,10 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, Search } from "lucide-react";
 import LanguageSelector from "./LanguageSelector";
+import ToolSearch from "./ToolSearch";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,8 +26,8 @@ import {
 const Header = () => {
   const pathname = usePathname();
   const { t, getLocalizedPath, getOriginalPath } = useLanguage();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Get the original path for comparison
   const currentOriginalPath = getOriginalPath(pathname);
 
   const imageTools = [
@@ -36,12 +46,18 @@ const Header = () => {
       label: t("nav.image_webp"),
       description: t("landing.image_webp_desc"),
     },
+    {
+      href: "/bulk-image-crop",
+      label: t("nav.image_crop"),
+      description: t("landing.image_crop_desc"),
+    },
   ];
 
   const imageToolHrefs = [
     "/bulk-image-resize",
     "/bulk-image-compress",
     "/bulk-image-webp",
+    "/bulk-image-crop",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
@@ -96,83 +112,179 @@ const Header = () => {
   const pdfToolHrefs = allTools.map((tool) => tool.href);
   const onPdfToolRoute = pdfToolHrefs.includes(currentOriginalPath);
 
+  const closeMobile = () => setMobileOpen(false);
+
   return (
-    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link href={getLocalizedPath("/")} className="flex items-center space-x-3">
-            <img
-              src="/ipdf-logo.png"
-              alt="Logo"
-              className="h-20 w-auto object-cover"
-            />
-          </Link>
+    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50 overflow-visible">
+      <div className="container mx-auto px-3 sm:px-4 py-2 md:py-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4 md:min-h-[44px]">
+          <div className="flex items-center justify-between gap-2 shrink-0">
+            <Link
+              href={getLocalizedPath("/")}
+              className="flex items-center min-w-0 shrink"
+            >
+              <img
+                src="/ipdf-logo.png"
+                alt="Logo"
+                className="h-12 w-auto max-h-12 sm:h-14 sm:max-h-14 md:h-20 md:max-h-none object-contain object-left"
+              />
+            </Link>
 
-          <div className="flex items-center space-x-4">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className={
-                      onPdfToolRoute
-                        ? "text-primary"
-                        : "text-foreground/80 hover:text-primary"
-                    }
+            <div className="flex md:hidden items-center gap-0.5 shrink-0">
+              <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    aria-label={t("nav.menu")}
                   >
-                    {t("nav.pdf_tools")}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[600px] max-w-[90vw] grid-cols-2 md:grid-cols-3 max-h-[70vh] overflow-y-auto">
-                      {allTools.map((tool) => (
-                        <Link
-                          key={tool.href}
-                          href={getLocalizedPath(tool.href)}
-                          className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none group-hover:text-primary">
-                            {tool.label}
-                          </div>
-                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-                            {tool.description}
-                          </p>
-                        </Link>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className={
-                      onImageToolRoute
-                        ? "text-primary"
-                        : "text-foreground/80 hover:text-primary"
-                    }
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    aria-label={t("tool_search.search_tools")}
                   >
-                    {t("nav.image_tools")}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[420px] max-w-[90vw]">
-                      {imageTools.map((tool) => (
-                        <Link
-                          key={tool.href}
-                          href={getLocalizedPath(tool.href)}
-                          className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none group-hover:text-primary">
-                            {tool.label}
-                          </div>
-                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-                            {tool.description}
-                          </p>
-                        </Link>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+                    <Search className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-full max-w-sm border-l border-[#d6ffd2]/15 bg-[#00232d] text-[#d6ffd2] overflow-y-auto gap-0 p-0 pt-12 pb-8 flex flex-col tool-side-panel"
+                >
+                  <SheetHeader className="px-4 pb-2 text-left border-b border-[#d6ffd2]/15">
+                    <SheetTitle className="text-[#d6ffd2]">
+                      {t("nav.menu")}
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="px-4 py-4 border-b border-[#d6ffd2]/15">
+                    <ToolSearch
+                      variant="header"
+                      onNavigate={closeMobile}
+                    />
+                  </div>
+                  <nav className="flex flex-col gap-6 px-4 pt-4 pb-6">
+                    <section>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
+                        {t("nav.pdf_tools")}
+                      </h3>
+                      <ul className="space-y-0.5">
+                        {allTools.map((tool) => (
+                          <li key={tool.href}>
+                            <Link
+                              href={getLocalizedPath(tool.href)}
+                              onClick={closeMobile}
+                              className="block rounded-md px-3 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                            >
+                              {tool.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                    <section>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
+                        {t("nav.image_tools")}
+                      </h3>
+                      <ul className="space-y-0.5">
+                        {imageTools.map((tool) => (
+                          <li key={tool.href}>
+                            <Link
+                              href={getLocalizedPath(tool.href)}
+                              onClick={closeMobile}
+                              className="block rounded-md px-3 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                            >
+                              {tool.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  </nav>
+                </SheetContent>
+              </Sheet>
 
-            <LanguageSelector />
+              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
+            </div>
+          </div>
+
+          <div className="hidden md:flex w-auto flex-row items-center justify-end gap-4 lg:gap-6 shrink-0">
+            <div className="w-[min(18rem,28vw)] max-w-sm min-w-[11rem]">
+              <ToolSearch variant="header" />
+            </div>
+
+            <div className="flex items-center space-x-4 shrink-0">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={
+                        onPdfToolRoute
+                          ? "text-primary"
+                          : "text-foreground/80 hover:text-primary"
+                      }
+                    >
+                      {t("nav.pdf_tools")}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="grid gap-3 p-4 w-[600px] max-w-[90vw] grid-cols-2 md:grid-cols-3 max-h-[70vh] overflow-y-auto">
+                        {allTools.map((tool) => (
+                          <Link
+                            key={tool.href}
+                            href={getLocalizedPath(tool.href)}
+                            className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none group-hover:text-primary">
+                              {tool.label}
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {tool.description}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={
+                        onImageToolRoute
+                          ? "text-primary"
+                          : "text-foreground/80 hover:text-primary"
+                      }
+                    >
+                      {t("nav.image_tools")}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="grid gap-3 p-4 w-[420px] max-w-[90vw]">
+                        {imageTools.map((tool) => (
+                          <Link
+                            key={tool.href}
+                            href={getLocalizedPath(tool.href)}
+                            className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none group-hover:text-primary">
+                              {tool.label}
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {tool.description}
+                            </p>
+                          </Link>
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+
+              <LanguageSelector />
+            </div>
           </div>
         </div>
       </div>
