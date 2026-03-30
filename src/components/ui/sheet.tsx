@@ -39,6 +39,9 @@ const sheetVariants = cva(
         left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
           "inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+        /** Tool offcanvas: fills viewport below sticky site header (`--site-header-height`), lower z than header */
+        rightBelowHeader:
+          "!z-40 top-[var(--site-header-height)] bottom-0 right-0 h-auto max-h-[calc(100vh-var(--site-header-height))] w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
     defaultVariants: {

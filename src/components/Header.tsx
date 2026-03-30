@@ -47,9 +47,24 @@ const Header = () => {
       description: t("landing.image_webp_desc"),
     },
     {
+      href: "/bulk-image-jpg",
+      label: t("nav.image_jpg"),
+      description: t("landing.image_jpg_desc"),
+    },
+    {
+      href: "/bulk-image-gif",
+      label: t("nav.image_gif"),
+      description: t("landing.image_gif_desc"),
+    },
+    {
       href: "/image-crop",
       label: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
+    },
+    {
+      href: "/image-watermark",
+      label: t("nav.image_watermark"),
+      description: t("landing.image_watermark_desc"),
     },
   ];
 
@@ -57,7 +72,10 @@ const Header = () => {
     "/bulk-image-resize",
     "/bulk-image-compress",
     "/bulk-image-webp",
+    "/bulk-image-jpg",
+    "/bulk-image-gif",
     "/image-crop",
+    "/image-watermark",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
@@ -115,7 +133,7 @@ const Header = () => {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50 overflow-visible">
+    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-[60] overflow-visible">
       <div className="container mx-auto px-3 sm:px-4 py-2 md:py-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4 md:min-h-[44px]">
           <div className="flex items-center justify-between gap-2 shrink-0">
@@ -131,18 +149,9 @@ const Header = () => {
             </Link>
 
             <div className="flex md:hidden items-center gap-0.5 shrink-0">
+              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
+
               <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
-                    aria-label={t("nav.menu")}
-                  >
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
                 <SheetTrigger asChild>
                   <Button
                     type="button"
@@ -152,6 +161,17 @@ const Header = () => {
                     aria-label={t("tool_search.search_tools")}
                   >
                     <Search className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    aria-label={t("nav.menu")}
+                  >
+                    <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent
@@ -209,8 +229,6 @@ const Header = () => {
                   </nav>
                 </SheetContent>
               </Sheet>
-
-              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
             </div>
           </div>
 
@@ -220,6 +238,8 @@ const Header = () => {
             </div>
 
             <div className="flex items-center space-x-4 shrink-0">
+              <LanguageSelector />
+
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -282,8 +302,6 @@ const Header = () => {
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
-
-              <LanguageSelector />
             </div>
           </div>
         </div>

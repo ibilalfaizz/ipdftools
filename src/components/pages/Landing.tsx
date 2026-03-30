@@ -14,7 +14,10 @@ import {
   Maximize2,
   Minimize2,
   Sparkles,
+  FileImage,
+  Film,
   Crop,
+  Stamp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -120,10 +123,31 @@ const Landing = () => {
       available: true,
     },
     {
+      icon: <FileImage className="w-8 h-8" />,
+      title: t("nav.image_jpg"),
+      description: t("landing.image_jpg_desc"),
+      path: "/bulk-image-jpg",
+      available: true,
+    },
+    {
+      icon: <Film className="w-8 h-8" />,
+      title: t("nav.image_gif"),
+      description: t("landing.image_gif_desc"),
+      path: "/bulk-image-gif",
+      available: true,
+    },
+    {
       icon: <Crop className="w-8 h-8" />,
       title: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
       path: "/image-crop",
+      available: true,
+    },
+    {
+      icon: <Stamp className="w-8 h-8" />,
+      title: t("nav.image_watermark"),
+      description: t("landing.image_watermark_desc"),
+      path: "/image-watermark",
       available: true,
     },
   ];

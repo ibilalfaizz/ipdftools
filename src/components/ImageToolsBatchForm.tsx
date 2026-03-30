@@ -15,13 +15,20 @@ import {
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
 
-type TranslationPrefix = "image_resize" | "image_compress" | "image_webp";
+type TranslationPrefix =
+  | "image_resize"
+  | "image_compress"
+  | "image_webp"
+  | "image_jpg"
+  | "image_gif";
 
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */
   processFiles: (files: File[]) => Promise<ClientImageProcessResult>;
   translationPrefix: TranslationPrefix;
   children?: React.ReactNode;
+  /** Override first download button label (e.g. GIF tool uses “Download GIF”). */
+  downloadPrimaryLabelKey?: string;
 };
 
 type ResultFile = { name: string; contentType: string; data: string };
@@ -38,10 +45,15 @@ function base64ToBlob(base64: string, contentType: string): Blob {
   return new Blob([bytes], { type: contentType });
 }
 
+/** Same as crop page — keeps main card content out from under the fixed Sheet on lg+. */
+const SHEET_RESERVE_PR =
+  "lg:pr-[min(28rem,calc(100%-1.5rem))]" as const;
+
 export default function ImageToolsBatchForm({
   processFiles,
   translationPrefix,
   children,
+  downloadPrimaryLabelKey = "image_tools.download_images",
 }: Props) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -153,7 +165,7 @@ export default function ImageToolsBatchForm({
   };
 
   const hasFiles = files.length > 0;
-  const sheetControlledOpen = hasFiles;
+  const sheetOpen = hasFiles;
 
   const sidebarInner = (
     <div className="flex flex-col gap-5 px-6 pb-8 pt-14">
@@ -224,7 +236,7 @@ export default function ImageToolsBatchForm({
             className="w-full"
             onClick={() => void downloadImages()}
           >
-            {t("image_tools.download_images")}
+            {t(downloadPrimaryLabelKey)}
           </Button>
           <Button
             type="button"
@@ -241,8 +253,9 @@ export default function ImageToolsBatchForm({
   );
 
   return (
-    <div className="w-full relative">
-      {/* Main: drop zone only — always in page flow */}
+    <div
+      className={`w-full relative transition-[padding] ${hasFiles ? SHEET_RESERVE_PR : ""}`}
+    >
       <div
         className={`mx-auto w-full max-w-3xl p-2 ${hasFiles ? "hidden" : ""}`}
       >
@@ -258,15 +271,14 @@ export default function ImageToolsBatchForm({
         />
       </div>
 
-      {/* Offcanvas: fixed to viewport, outside the card column */}
       <Sheet
-        open={sheetControlledOpen}
+        open={sheetOpen}
         onOpenChange={() => {
           // Never close while files are present (uploads should never dismiss the panel).
         }}
       >
         <SheetContent
-          side="right"
+          side="rightBelowHeader"
           hideOverlay
           hideCloseButton
           className="w-full sm:max-w-md p-0 gap-0 flex flex-col overflow-y-auto tool-side-panel"
