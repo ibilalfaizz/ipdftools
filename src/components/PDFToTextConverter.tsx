@@ -1,19 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
+import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 const PDFToTextConverter = () => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
-  const [convertedFiles, setConvertedFiles] = useState<{filename: string, content: string}[]>([]);
+  const [convertedFiles, setConvertedFiles] = useState<{ filename: string; content: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
@@ -39,7 +39,10 @@ const PDFToTextConverter = () => {
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    setFiles((prev) => [...prev, ...acceptedFiles]);
+    const pdfs = acceptedFiles.filter((f) => f.type === 'application/pdf');
+    if (pdfs.length === 0) return;
+    setFiles((prev) => [...prev, ...pdfs]);
+    setConvertedFiles([]);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -47,12 +50,17 @@ const PDFToTextConverter = () => {
   };
 
   const handleFileSelect = () => {
-    // File selection is now handled by FileUploadZone
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   function handleRemoveFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
+
+  const clearAll = useCallback(() => {
+    setFiles([]);
+    setConvertedFiles([]);
+  }, []);
 
   async function handleConvert() {
     if (files.length === 0) return;
@@ -65,7 +73,7 @@ const PDFToTextConverter = () => {
           const textContent = await extractTextFromPDF(file);
           return {
             filename: file.name.replace('.pdf', '.txt'),
-            content: textContent
+            content: textContent,
           };
         })
       );
@@ -77,7 +85,7 @@ const PDFToTextConverter = () => {
     }
   }
 
-  function handleDownload(file: {filename: string, content: string}) {
+  function handleDownload(file: { filename: string; content: string }) {
     const blob = new Blob([file.content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -89,6 +97,8 @@ const PDFToTextConverter = () => {
     URL.revokeObjectURL(url);
   }
 
+  const hasFiles = files.length > 0;
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
@@ -99,55 +109,71 @@ const PDFToTextConverter = () => {
         <p className="text-xl text-gray-600">{t('pdf_to_text.description')}</p>
       </div>
 
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <FileUploadZone
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onFileSelect={handleFileSelect}
-            fileInputRef={fileInputRef}
-          />
-        </CardContent>
-      </Card>
+      <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
+        <>
+          <div>
+            <p className="text-xs font-medium text-muted-foreground mb-2">
+              {t('common.files_added')}
+            </p>
+            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+              {files.map((file, index) => (
+                <li key={`${file.name}-${index}`} className="flex justify-between items-center gap-2">
+                  <span className="truncate" title={file.name}>{file.name}</span>
+                  <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
+                    {t('common.remove')}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      {files.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
-          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {files.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
-                <span>{file.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(index)}>
-                  {t('common.remove')}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+          <Button
+            type="button"
+            className="w-full"
+            size="lg"
+            onClick={() => void handleConvert()}
+            disabled={files.length === 0 || isConverting}
+          >
+            {isConverting ? t('common.converting') : t('pdf_to_text.convert_button')}
+          </Button>
 
-      <div className="flex justify-center mb-6">
-        <Button onClick={handleConvert} disabled={files.length === 0 || isConverting}>
-          {isConverting ? t('common.converting') : t('pdf_to_text.convert_button')}
-        </Button>
-      </div>
-
-      {convertedFiles.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold mb-2">{t('common.conversion_complete')}:</h2>
-          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {convertedFiles.map((file, index) => (
-              <li key={index} className="flex justify-between items-center">
-                <span>{file.filename}</span>
-                <Button variant="ghost" size="sm" onClick={() => handleDownload(file)}>
-                  <Download className="h-4 w-4 mr-2" />
-                  {t('common.download')}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+          {convertedFiles.length > 0 && (
+            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+              <p className="text-sm font-medium text-gray-900">{t('common.conversion_complete')}</p>
+              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 rounded-lg border border-gray-100 bg-white p-3">
+                {convertedFiles.map((file, index) => (
+                  <li key={index} className="flex justify-between items-center gap-2">
+                    <span className="truncate">{file.filename}</span>
+                    <Button variant="ghost" size="sm" onClick={() => handleDownload(file)}>
+                      <Download className="h-4 w-4 mr-2" />
+                      {t('common.download')}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      }>
+        <Card className="border-0 shadow-none bg-transparent">
+          <CardContent className="p-0">
+            <FileUploadZone
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onFileSelect={handleFileSelect}
+              fileInputRef={fileInputRef}
+              acceptedFormats=".pdf,application/pdf"
+              title={t('pdf_to_text.title')}
+              description={t('pdf_to_text.description')}
+              className={
+                hasFiles
+                  ? 'min-h-[220px] py-8'
+                  : 'min-h-[min(420px,52vh)] py-12 flex flex-col justify-center'
+              }
+            />
+          </CardContent>
+        </Card>
+      </PdfToolOffcanvasShell>
     </div>
   );
 };

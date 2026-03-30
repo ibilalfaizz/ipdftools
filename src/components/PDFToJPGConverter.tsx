@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Image, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
+import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
 import * as pdfjsLib from 'pdfjs-dist';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -24,7 +25,7 @@ const PDFToJPGConverter = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (acceptedFiles: File[]) => {
-    const pdfFiles = acceptedFiles.filter(file => file.type === 'application/pdf');
+    const pdfFiles = acceptedFiles.filter((file) => file.type === 'application/pdf');
     if (pdfFiles.length !== acceptedFiles.length) {
       toast({
         variant: "destructive",
@@ -34,6 +35,7 @@ const PDFToJPGConverter = () => {
     }
     if (pdfFiles.length > 0) {
       setFiles((prev) => [...prev, ...pdfFiles]);
+      setConvertedFiles([]);
       toast({
         title: t('common.files_added'),
         description: `${pdfFiles.length} PDF file(s) added`,
@@ -46,32 +48,33 @@ const PDFToJPGConverter = () => {
   };
 
   const handleFileSelect = () => {
-    // File selection is now handled by FileUploadZone
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleRemoveFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const clearAll = useCallback(() => {
+    setFiles([]);
+    setConvertedFiles([]);
+  }, []);
+
   const convertPDFToJPG = async (file: File): Promise<ConvertedFile[]> => {
     try {
-      console.log('Starting PDF conversion for file:', file.name);
       const arrayBuffer = await file.arrayBuffer();
-      console.log('File loaded as array buffer, size:', arrayBuffer.byteLength);
-      
-      const pdf = await pdfjsLib.getDocument({ 
+
+      const pdf = await pdfjsLib.getDocument({
         data: arrayBuffer,
-        verbosity: 0 // Reduce console noise
+        verbosity: 0,
       }).promise;
-      console.log('PDF loaded successfully, pages:', pdf.numPages);
-      
+
       const convertedPages: ConvertedFile[] = [];
 
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        console.log(`Processing page ${pageNum}/${pdf.numPages}`);
         const page = await pdf.getPage(pageNum);
         const viewport = page.getViewport({ scale: 2.0 });
-        
+
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d')!;
         canvas.height = viewport.height;
@@ -84,25 +87,21 @@ const PDFToJPGConverter = () => {
             canvas,
           })
           .promise;
-        console.log(`Page ${pageNum} rendered to canvas`);
-        
-        // Convert canvas to blob
+
         const blob = await new Promise<Blob>((resolve) => {
           canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', 0.9);
         });
 
         const url = URL.createObjectURL(blob);
         const fileName = `${file.name.replace('.pdf', '')}_page_${pageNum}.jpg`;
-        
+
         convertedPages.push({
           name: fileName,
           url: url,
-          pageNumber: pageNum
+          pageNumber: pageNum,
         });
-        console.log(`Page ${pageNum} converted successfully`);
       }
 
-      console.log('All pages converted successfully');
       return convertedPages;
     } catch (error) {
       console.error('Error in convertPDFToJPG:', error);
@@ -124,11 +123,9 @@ const PDFToJPGConverter = () => {
     setConvertedFiles([]);
 
     try {
-      console.log('Starting conversion process for', files.length, 'files');
       const allConvertedFiles: ConvertedFile[] = [];
-      
+
       for (const file of files) {
-        console.log('Converting file:', file.name);
         const convertedPages = await convertPDFToJPG(file);
         allConvertedFiles.push(...convertedPages);
       }
@@ -138,7 +135,6 @@ const PDFToJPGConverter = () => {
         title: t('common.conversion_complete'),
         description: `${allConvertedFiles.length} JPG image(s) created`,
       });
-      console.log('Conversion completed successfully');
     } catch (error) {
       console.error('Conversion failed:', error);
       toast({
@@ -166,6 +162,8 @@ const PDFToJPGConverter = () => {
     });
   };
 
+  const hasFiles = files.length > 0;
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
@@ -176,75 +174,87 @@ const PDFToJPGConverter = () => {
         <p className="text-xl text-gray-600">{t('pdf_to_jpg.description')}</p>
       </div>
 
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <FileUploadZone
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onFileSelect={handleFileSelect}
-            fileInputRef={fileInputRef}
-            acceptedFormats=".pdf,application/pdf"
-            title="Drop PDF files here or click to browse"
-            description="Support for multiple PDF files • Each page will be converted to JPG"
-          />
-        </CardContent>
-      </Card>
-
-      {files.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">{t('common.files_added')}:</h2>
-          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {files.map((file, index) => (
-              <li key={index} className="flex justify-between items-center py-2">
-                <span className="text-gray-600">{file.name}</span>
-                <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
-                  {t('common.remove')}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <div className="flex justify-center mb-6">
-        <Button 
-          onClick={handleConvert} 
-          disabled={files.length === 0 || isConverting}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
-        >
-          {isConverting ? t('common.converting') : t('pdf_to_jpg.convert_button')}
-        </Button>
-      </div>
-
-      {convertedFiles.length > 0 && (
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{t('common.conversion_complete')}:</h2>
-            <Button 
-              onClick={handleDownloadAll}
-              className="bg-green-600 text-white hover:bg-green-700"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {t('common.download_all')}
-            </Button>
+      <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
+        <>
+          <div>
+            <p className="text-xs font-medium text-muted-foreground mb-2">
+              {t('common.files_added')}
+            </p>
+            <ul className="text-sm max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+              {files.map((file, index) => (
+                <li key={`${file.name}-${index}`} className="flex justify-between items-center gap-2">
+                  <span className="truncate text-gray-700" title={file.name}>{file.name}</span>
+                  <Button variant="outline" size="sm" onClick={() => handleRemoveFile(index)}>
+                    {t('common.remove')}
+                  </Button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="list-disc list-inside max-h-48 overflow-y-auto border border-gray-200 rounded p-2 bg-white">
-            {convertedFiles.map((file, index) => (
-              <li key={index} className="flex justify-between items-center py-2">
-                <span className="text-blue-600">{file.name}</span>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => handleDownload(file.url, file.name)}
+
+          <Button
+            type="button"
+            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+            size="lg"
+            onClick={() => void handleConvert()}
+            disabled={files.length === 0 || isConverting}
+          >
+            {isConverting ? t('common.converting') : t('pdf_to_jpg.convert_button')}
+          </Button>
+
+          {convertedFiles.length > 0 && (
+            <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+              <div className="flex justify-between items-center gap-2">
+                <p className="text-sm font-medium text-gray-900">{t('common.conversion_complete')}</p>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleDownloadAll}
+                  className="bg-green-600 text-white hover:bg-green-700 border-0"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  {t('common.download')}
+                  {t('common.download_all')}
                 </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+              </div>
+              <ul className="text-sm max-h-48 overflow-y-auto space-y-2 rounded-lg border border-gray-100 bg-white p-3">
+                {convertedFiles.map((file, index) => (
+                  <li key={index} className="flex justify-between items-center gap-2">
+                    <span className="text-blue-600 truncate">{file.name}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDownload(file.url, file.name)}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      {t('common.download')}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      }>
+        <Card className="border-0 shadow-none bg-transparent">
+          <CardContent className="p-0">
+            <FileUploadZone
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onFileSelect={handleFileSelect}
+              fileInputRef={fileInputRef}
+              acceptedFormats=".pdf,application/pdf"
+              title="Drop PDF files here or click to browse"
+              description="Support for multiple PDF files • Each page will be converted to JPG"
+              className={
+                hasFiles
+                  ? 'min-h-[220px] py-8'
+                  : 'min-h-[min(420px,52vh)] py-12 flex flex-col justify-center'
+              }
+            />
+          </CardContent>
+        </Card>
+      </PdfToolOffcanvasShell>
     </div>
   );
 };

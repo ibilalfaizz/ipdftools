@@ -59,10 +59,10 @@ const ImageWebpPage = dynamic(() => import("@/pages/ImageWebpPage"), {
 });
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
-  "/merge": MergePage,
-  "/split": SplitPage,
-  "/compress": CompressPage,
-  "/rotate": RotatePage,
+  "/merge-pdf": MergePage,
+  "/split-pdf": SplitPage,
+  "/compress-pdf": CompressPage,
+  "/rotate-pdf": RotatePage,
   "/pdf-to-word": PDFToWordPage,
   "/pdf-to-jpg": PDFToJPGPage,
   "/pdf-to-text": PDFToTextPage,

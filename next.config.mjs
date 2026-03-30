@@ -12,10 +12,10 @@ const radixReactPackages = Object.keys(dependencies).filter((name) =>
 
 /** Keep in sync with `src/lib/urlPaths.ts` `pathMapping`. */
 const pathMapping = {
-  merge: ["merge", "combinar", "fusionner"],
-  split: ["split", "dividir", "diviser"],
-  compress: ["compress", "comprimir", "compresser"],
-  rotate: ["rotate", "rotar", "rotation"],
+  merge: ["merge-pdf", "combinar-pdf", "fusionner-pdf"],
+  split: ["split-pdf", "dividir-pdf", "diviser-pdf"],
+  compress: ["compress-pdf", "comprimir-pdf", "compresser-pdf"],
+  rotate: ["rotate-pdf", "rotar-pdf", "rotation-pdf"],
   "pdf-to-word": ["pdf-to-word", "pdf-a-word", "pdf-vers-word"],
   "pdf-to-jpg": ["pdf-to-jpg", "pdf-a-jpg", "pdf-vers-jpg"],
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
@@ -24,6 +24,17 @@ const pathMapping = {
   "image-resize": ["image-resize", "redimensionar-imagen", "redimensionner-image"],
   "image-compress": ["image-compress", "comprimir-imagen", "compresser-image"],
   "image-webp": ["image-webp", "imagen-webp", "convertir-webp"],
+};
+
+/**
+ * Legacy slugs that were previously indexed. We keep permanent redirects so
+ * search engines consolidate signals onto the new keyword-rich slugs.
+ */
+const legacyPathMapping = {
+  merge: ["merge", "combinar", "fusionner"],
+  split: ["split", "dividir", "diviser"],
+  compress: ["compress", "comprimir", "compresser"],
+  rotate: ["rotate", "rotar", "rotation"],
 };
 
 /**
@@ -53,6 +64,37 @@ function legacyToolRedirects() {
   return out;
 }
 
+function legacySeoSlugRedirects() {
+  const out = [];
+  for (const [toolId, oldTranslations] of Object.entries(legacyPathMapping)) {
+    const newTranslations = pathMapping[toolId];
+    if (!newTranslations) continue;
+    const [oldEn, oldEs, oldFr] = oldTranslations;
+    const [newEn, newEs, newFr] = newTranslations;
+
+    const pairs = [
+      ["en", oldEn, newEn],
+      ["es", oldEs, newEs],
+      ["fr", oldFr, newFr],
+    ];
+    for (const [locale, oldSlug, newSlug] of pairs) {
+      // Old flat URL -> new locale URL (avoid extra hop).
+      out.push({
+        source: `/${oldSlug}`,
+        destination: `/${locale}/${newSlug}`,
+        permanent: true,
+      });
+      // Old locale-prefixed URL -> new locale-prefixed URL.
+      out.push({
+        source: `/${locale}/${oldSlug}`,
+        destination: `/${locale}/${newSlug}`,
+        permanent: true,
+      });
+    }
+  }
+  return out;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -65,6 +107,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/", destination: "/en", permanent: true },
+      ...legacySeoSlugRedirects(),
       ...legacyToolRedirects(),
     ];
   },

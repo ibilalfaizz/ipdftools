@@ -6,6 +6,12 @@ import JSZip from "jszip";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
 
@@ -51,6 +57,7 @@ export default function ImageToolsBatchForm({
 
   const onDrop = useCallback((incoming: File[]) => {
     const imgs = incoming.filter((f) => f.type.startsWith("image/"));
+    if (imgs.length === 0) return;
     setFiles((prev) => [...prev, ...imgs]);
     setResult(null);
   }, []);
@@ -145,40 +152,45 @@ export default function ImageToolsBatchForm({
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <FileUploadZone
-        acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
-        title={t(`${translationPrefix}.drop_title`)}
-        description={t(`${translationPrefix}.drop_desc`)}
-        fileInputRef={fileInputRef}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onFileSelect={onFileSelect}
-      />
-      {files.length > 0 && (
-        <div className="rounded-lg border bg-white p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium">
-              {t("image_tools.files_added")}: {files.length}
-            </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={clearFiles}
+  const hasFiles = files.length > 0;
+  const sheetControlledOpen = hasFiles;
+
+  const sidebarInner = (
+    <div className="flex flex-col gap-5 px-6 pb-8 pt-14">
+      <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
+        <h3 className="text-sm font-semibold tracking-tight text-gray-900">
+          {t("image_tools.sidebar_heading")}
+        </h3>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="shrink-0 text-muted-foreground"
+          onClick={clearFiles}
+        >
+          {t("image_tools.clear")}
+        </Button>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-muted-foreground mb-2">
+          {t("image_tools.files_added")}: {files.length}
+        </p>
+        <ul className="text-sm text-muted-foreground max-h-40 overflow-y-auto space-y-1.5 rounded-lg border border-gray-100 bg-white/90 p-3">
+          {files.map((f) => (
+            <li
+              key={`${f.name}-${f.size}-${f.lastModified}`}
+              className="truncate"
+              title={f.name}
             >
-              {t("image_tools.clear")}
-            </Button>
-          </div>
-          <ul className="text-sm text-muted-foreground max-h-32 overflow-y-auto space-y-1">
-            {files.map((f) => (
-              <li key={`${f.name}-${f.size}-${f.lastModified}`}>{f.name}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+              {f.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {children}
+
       <Button
         type="button"
         className="w-full"
@@ -189,14 +201,18 @@ export default function ImageToolsBatchForm({
         {busy ? (
           <Loader2 className="mr-2 h-5 w-5 animate-spin inline" />
         ) : null}
-        {busy ? t("image_tools.processing") : t(`${translationPrefix}.process`)}
+        {busy
+          ? t("image_tools.processing")
+          : t(`${translationPrefix}.process`)}
       </Button>
+
       {result && (
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+        <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
           <Button
             type="button"
             size="sm"
             variant="outline"
+            className="w-full"
             onClick={() => void downloadImages()}
           >
             {t("image_tools.download_images")}
@@ -205,12 +221,55 @@ export default function ImageToolsBatchForm({
             type="button"
             size="sm"
             variant="outline"
+            className="w-full"
             onClick={() => void downloadZip()}
           >
             {t("image_tools.download_zip")}
           </Button>
         </div>
       )}
+    </div>
+  );
+
+  return (
+    <div className="w-full relative">
+      {/* Main: drop zone only — always in page flow */}
+      <div className="mx-auto w-full max-w-3xl p-2">
+        <FileUploadZone
+          acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
+          title={t(`${translationPrefix}.drop_title`)}
+          description={t(`${translationPrefix}.drop_desc`)}
+          fileInputRef={fileInputRef}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onFileSelect={onFileSelect}
+          className={
+            hasFiles
+              ? "min-h-[220px] py-8"
+              : "min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
+          }
+        />
+      </div>
+
+      {/* Offcanvas: fixed to viewport, outside the card column */}
+      <Sheet
+        open={sheetControlledOpen}
+        onOpenChange={() => {
+          // Never close while files are present (uploads should never dismiss the panel).
+        }}
+      >
+        <SheetContent
+          side="right"
+          hideOverlay
+          hideCloseButton
+          className="w-full sm:max-w-md p-0 gap-0 flex flex-col border-l bg-gradient-to-b from-slate-50 to-white overflow-y-auto"
+        >
+          <SheetHeader className="sr-only">
+            <SheetTitle>{t("image_tools.sidebar_heading")}</SheetTitle>
+          </SheetHeader>
+          {sidebarInner}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

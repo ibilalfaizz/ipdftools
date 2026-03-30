@@ -11,6 +11,9 @@ interface FileUploadZoneProps {
   acceptedFormats?: string;
   title?: string;
   description?: string;
+  className?: string;
+  /** When false, the file input does not allow multi-select (parent still receives an array). */
+  multiple?: boolean;
 }
 
 const FileUploadZone: React.FC<FileUploadZoneProps> = ({
@@ -20,7 +23,9 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   fileInputRef,
   acceptedFormats = ".pdf,application/pdf",
   title = "Drop PDF files here or click to browse",
-  description = "Support for multiple files • Maximum 50MB per file"
+  description = "Support for multiple files • Maximum 50MB per file",
+  className = "",
+  multiple = true,
 }) => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -40,7 +45,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
     <div
       onDrop={handleDrop}
       onDragOver={onDragOver}
-      className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 cursor-pointer group"
+      className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 cursor-pointer group ${className}`}
       onClick={() => fileInputRef.current?.click()}
     >
       <div className="flex flex-col items-center space-y-4">
@@ -61,6 +66,10 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
           type="button"
           variant="outline"
           className="border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            fileInputRef.current?.click();
+          }}
         >
           Choose Files
         </Button>
@@ -69,7 +78,7 @@ const FileUploadZone: React.FC<FileUploadZoneProps> = ({
       <input
         ref={fileInputRef}
         type="file"
-        multiple
+        multiple={multiple}
         accept={acceptedFormats}
         onChange={handleFileInputChange}
         className="hidden"

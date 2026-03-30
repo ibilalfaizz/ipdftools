@@ -19,57 +19,59 @@ export default function ImageResizePage() {
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-            <CardHeader>
+        <div className="max-w-6xl mx-auto">
+          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm overflow-hidden pb-5">
+            <CardHeader className="pb-2">
               <CardTitle className="text-2xl font-bold text-gray-900">
                 {t("image_resize.title")}
               </CardTitle>
               <p className="text-gray-600">{t("image_resize.description")}</p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_resize"
                 processFiles={(files) =>
                   processResizeBatch(files, width, height)
                 }
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="img-w">{t("image_resize.width")}</Label>
-                    <Input
-                      id="img-w"
-                      type="number"
-                      min={1}
-                      max={8192}
-                      value={width}
-                      onChange={(e) =>
-                        setWidth(
-                          Math.min(
-                            8192,
-                            Math.max(1, parseInt(e.target.value, 10) || 1)
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="img-w">{t("image_resize.width")}</Label>
+                      <Input
+                        id="img-w"
+                        type="number"
+                        min={1}
+                        max={8192}
+                        value={width}
+                        onChange={(e) =>
+                          setWidth(
+                            Math.min(
+                              8192,
+                              Math.max(1, parseInt(e.target.value, 10) || 1)
+                            )
                           )
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="img-h">{t("image_resize.height")}</Label>
-                    <Input
-                      id="img-h"
-                      type="number"
-                      min={1}
-                      max={8192}
-                      value={height}
-                      onChange={(e) =>
-                        setHeight(
-                          Math.min(
-                            8192,
-                            Math.max(1, parseInt(e.target.value, 10) || 1)
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="img-h">{t("image_resize.height")}</Label>
+                      <Input
+                        id="img-h"
+                        type="number"
+                        min={1}
+                        max={8192}
+                        value={height}
+                        onChange={(e) =>
+                          setHeight(
+                            Math.min(
+                              8192,
+                              Math.max(1, parseInt(e.target.value, 10) || 1)
+                            )
                           )
-                        )
-                      }
-                    />
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               </ImageToolsBatchForm>
