@@ -29,7 +29,7 @@ const toolIconClass =
 const Landing = () => {
   const { t, getLocalizedPath } = useLanguage();
 
-  const features = [
+  const pdfToolFeatures = [
     {
       icon: <Merge className="w-8 h-8" />,
       title: t("nav.merge"),
@@ -93,25 +93,28 @@ const Landing = () => {
       path: "/jpg-to-pdf",
       available: true,
     },
+  ];
+
+  const imageToolFeatures = [
     {
       icon: <Maximize2 className="w-8 h-8" />,
       title: t("nav.image_resize"),
       description: t("landing.image_resize_desc"),
-      path: "/image-resize",
+      path: "/bulk-image-resize",
       available: true,
     },
     {
       icon: <Minimize2 className="w-8 h-8" />,
       title: t("nav.image_compress"),
       description: t("landing.image_compress_desc"),
-      path: "/image-compress",
+      path: "/bulk-image-compress",
       available: true,
     },
     {
       icon: <Sparkles className="w-8 h-8" />,
       title: t("nav.image_webp"),
       description: t("landing.image_webp_desc"),
-      path: "/image-webp",
+      path: "/bulk-image-webp",
       available: true,
     },
   ];
@@ -145,57 +148,111 @@ const Landing = () => {
               asChild
               className="min-w-[200px] bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 font-semibold"
             >
-              <a href="#tools">{t("landing.hero_cta_primary")}</a>
+              <a href="#pdf-tools">{t("landing.hero_cta_primary")}</a>
             </Button>
             <Button
               asChild
               variant="outline"
               className="min-w-[200px] border-2 border-[#d6ffd2]/35 bg-[#103c44]/50 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
             >
-              <Link href={getLocalizedPath("/merge-pdf")}>
-                {t("landing.hero_cta_secondary")}
-              </Link>
+              <a href="#image-tools">{t("landing.hero_cta_secondary")}</a>
             </Button>
           </div>
         </section>
 
-        <div
-          id="tools"
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto scroll-mt-24"
+        <section
+          id="pdf-tools"
+          className="max-w-6xl mx-auto scroll-mt-24 mb-20"
+          aria-labelledby="pdf-tools-heading"
         >
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
-            >
-              <CardHeader className="text-center pb-4">
-                <div className={toolIconClass}>{feature.icon}</div>
-                <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-[#d6ffd2]/75 mb-6 text-lg">
-                  {feature.description}
-                </p>
-                {feature.available ? (
-                  <Button
-                    asChild
-                    className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
-                  >
-                    <Link href={getLocalizedPath(feature.path)}>
-                      Use Tool <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                ) : (
-                  <Button disabled className="w-full">
-                    Coming Soon
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <h2
+            id="pdf-tools-heading"
+            className="text-2xl sm:text-3xl font-bold text-center text-[#d6ffd2] mb-10"
+          >
+            {t("nav.pdf_tools")}
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {pdfToolFeatures.map((feature, index) => (
+              <Card
+                key={index}
+                className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className={toolIconClass}>{feature.icon}</div>
+                  <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
+                    {feature.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-[#d6ffd2]/75 mb-6 text-lg">
+                    {feature.description}
+                  </p>
+                  {feature.available ? (
+                    <Button
+                      asChild
+                      className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
+                    >
+                      <Link href={getLocalizedPath(feature.path)}>
+                        Use Tool <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button disabled className="w-full">
+                      Coming Soon
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="image-tools"
+          className="max-w-6xl mx-auto scroll-mt-24"
+          aria-labelledby="image-tools-heading"
+        >
+          <h2
+            id="image-tools-heading"
+            className="text-2xl sm:text-3xl font-bold text-center text-[#d6ffd2] mb-10"
+          >
+            {t("nav.image_tools")}
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {imageToolFeatures.map((feature, index) => (
+              <Card
+                key={index}
+                className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className={toolIconClass}>{feature.icon}</div>
+                  <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
+                    {feature.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-[#d6ffd2]/75 mb-6 text-lg">
+                    {feature.description}
+                  </p>
+                  {feature.available ? (
+                    <Button
+                      asChild
+                      className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
+                    >
+                      <Link href={getLocalizedPath(feature.path)}>
+                        Use Tool <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button disabled className="w-full">
+                      Coming Soon
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
 
         <div className="mt-20 text-center">
           <h2 className="text-3xl font-bold text-[#d6ffd2] mb-8">

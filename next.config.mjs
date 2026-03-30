@@ -21,10 +21,69 @@ const pathMapping = {
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
   "word-to-pdf": ["word-to-pdf", "word-a-pdf", "word-vers-pdf"],
   "jpg-to-pdf": ["jpg-to-pdf", "jpg-a-pdf", "jpg-vers-pdf"],
-  "image-resize": ["image-resize", "redimensionar-imagen", "redimensionner-image"],
-  "image-compress": ["image-compress", "comprimir-imagen", "compresser-image"],
-  "image-webp": ["image-webp", "imagen-webp", "convertir-webp"],
+  "bulk-image-resize": [
+    "bulk-image-resize",
+    "redimensionar-imagen-masivo",
+    "redimensionnement-images-masse",
+  ],
+  "bulk-image-compress": [
+    "bulk-image-compress",
+    "comprimir-imagen-masivo",
+    "compression-images-masse",
+  ],
+  "bulk-image-webp": [
+    "bulk-image-webp",
+    "convertir-webp-masivo",
+    "conversion-webp-masse",
+  ],
 };
+
+/**
+ * Old image tool slugs → new `bulk-image-*` slugs (per locale). Keeps bookmarks
+ * and indexed URLs valid after the rename.
+ */
+function imageToolSlugMigrationRedirects() {
+  const migrations = [
+    {
+      old: ["image-resize", "redimensionar-imagen", "redimensionner-image"],
+      new: [
+        "bulk-image-resize",
+        "redimensionar-imagen-masivo",
+        "redimensionnement-images-masse",
+      ],
+    },
+    {
+      old: ["image-compress", "comprimir-imagen", "compresser-image"],
+      new: [
+        "bulk-image-compress",
+        "comprimir-imagen-masivo",
+        "compression-images-masse",
+      ],
+    },
+    {
+      old: ["image-webp", "imagen-webp", "convertir-webp"],
+      new: ["bulk-image-webp", "convertir-webp-masivo", "conversion-webp-masse"],
+    },
+  ];
+  const locales = ["en", "es", "fr"];
+  const out = [];
+  for (const { old, new: newSlugs } of migrations) {
+    for (let i = 0; i < 3; i++) {
+      const locale = locales[i];
+      out.push({
+        source: `/${locale}/${old[i]}`,
+        destination: `/${locale}/${newSlugs[i]}`,
+        permanent: true,
+      });
+      out.push({
+        source: `/${old[i]}`,
+        destination: `/${locale}/${newSlugs[i]}`,
+        permanent: true,
+      });
+    }
+  }
+  return out;
+}
 
 /**
  * Legacy slugs that were previously indexed. We keep permanent redirects so
@@ -107,6 +166,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/", destination: "/en", permanent: true },
+      ...imageToolSlugMigrationRedirects(),
       ...legacySeoSlugRedirects(),
       ...legacyToolRedirects(),
     ];

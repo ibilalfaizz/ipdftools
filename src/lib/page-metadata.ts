@@ -80,13 +80,22 @@ export function buildToolMetadata(
   return buildBaseMetadata(locale, pathname, pageTitle, description);
 }
 
+/** Stable SEO translation keys (paths use `bulk-image-*`). */
+const SEO_TOOL_KEY_ALIASES: Record<string, string> = {
+  bulk_image_resize: "image_resize",
+  bulk_image_compress: "image_compress",
+  bulk_image_webp: "image_webp",
+};
+
 /** `/merge-pdf` or `/pdf-to-word` → `merge`, `pdf_to_word` (seo keys) */
 export function originalPathToSeoToolKey(originalPath: string): string {
   const clean = originalPath.replace(/^\//, "");
   for (const [original, translations] of Object.entries(pathMapping)) {
     if (original === clean || translations[0] === clean) {
-      return original.replace(/-/g, "_");
+      const key = original.replace(/-/g, "_");
+      return SEO_TOOL_KEY_ALIASES[key] ?? key;
     }
   }
-  return clean.replace(/-/g, "_");
+  const fallback = clean.replace(/-/g, "_");
+  return SEO_TOOL_KEY_ALIASES[fallback] ?? fallback;
 }
