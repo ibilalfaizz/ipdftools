@@ -86,6 +86,7 @@ const SEO_TOOL_KEY_ALIASES: Record<string, string> = {
   bulk_image_compress: "image_compress",
   bulk_image_webp: "image_webp",
   bulk_image_jpg: "image_jpg",
+  bulk_image_gif: "image_gif",
 };
 
 /** `/merge-pdf` or `/pdf-to-word` → `merge`, `pdf_to_word` (seo keys) */

@@ -46,6 +46,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_jpg.title": "Bulk JPG Converter Online — PNG, WebP & More to JPEG",
     "seo.image_jpg.description":
       "Convert many images to JPG in your browser. ZIP or individual downloads.",
+    "seo.image_gif.title": "Images to GIF Maker Online — Animated GIF from Photos",
+    "seo.image_gif.description":
+      "Combine images into one animated GIF. Set timing and loop in your browser.",
     "seo.image_crop.title": "Crop Images Online — Visual Selector & Pixel Controls",
     "seo.image_crop.description":
       "Crop photos in your browser. Drag the frame or set width, height, and position. ZIP or single downloads.",
@@ -94,6 +97,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_jpg.title": "Conversor masivo a JPG online",
     "seo.image_jpg.description":
       "Muchas imágenes a JPEG en el navegador. ZIP o archivos sueltos.",
+    "seo.image_gif.title": "Imágenes a GIF animado online",
+    "seo.image_gif.description":
+      "Combina fotos en un GIF. Ajusta segundos por imagen y bucle en el navegador.",
     "seo.image_crop.title": "Recorte de imágenes online",
     "seo.image_crop.description":
       "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
@@ -142,6 +148,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_jpg.title": "Conversion JPG en masse en ligne",
     "seo.image_jpg.description":
       "Passez de nombreuses images en JPEG dans le navigateur. ZIP ou fichiers séparés.",
+    "seo.image_gif.title": "Images vers GIF animé en ligne",
+    "seo.image_gif.description":
+      "Assemblez des photos en un GIF. Réglage du délai et de la boucle dans le navigateur.",
     "seo.image_crop.title": "Recadrage d'images en ligne",
     "seo.image_crop.description":
       "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",

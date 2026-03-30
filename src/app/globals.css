@@ -49,6 +49,15 @@
     /* Brand colors - subtle integration */
     --brand-primary: 116 100% 91%; /* #d6ffd2 */
     --brand-dark: 193 100% 9%; /* #00232d */
+
+    /* Sticky site header — tool offcanvas docks below this (see Sheet `rightBelowHeader`) */
+    --site-header-height: 4.75rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --site-header-height: 7rem;
+    }
   }
 
   .dark {

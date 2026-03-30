@@ -52,6 +52,7 @@ const translations = {
     'nav.image_compress': 'Bulk image compressor',
     'nav.image_webp': 'Bulk WebP converter',
     'nav.image_jpg': 'Bulk JPG converter',
+    'nav.image_gif': 'Images to GIF',
     'nav.image_crop': 'Image crop',
     
     // URL paths
@@ -79,6 +80,8 @@ const translations = {
     'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
     'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
     'landing.image_jpg_desc': 'Bulk-convert PNG, WebP, GIF, and more to widely compatible JPEG files.',
+    'landing.image_gif_desc':
+      'Build an animated GIF from multiple photos. Set seconds per frame and loop in the sidebar.',
     'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
@@ -194,6 +197,15 @@ const translations = {
     'image_jpg.process': 'Convert',
     'image_jpg.drop_title': 'Drop images here or click to browse',
     'image_jpg.drop_desc': 'Most raster formats • Multiple files',
+    'image_gif.title': 'Images to GIF',
+    'image_gif.description':
+      'Order follows upload order. Frames are centered on a shared canvas (max 1280px). One GIF download.',
+    'image_gif.process': 'Create GIF',
+    'image_gif.drop_title': 'Drop images here or click to browse',
+    'image_gif.drop_desc': 'PNG, JPEG, WebP, and more • At least one image',
+    'image_gif.seconds_label': 'Seconds per image',
+    'image_gif.seconds_hint': 'How long each image is shown before the next (0.05–30).',
+    'image_gif.loop_label': 'Loop forever',
     'image_crop.title': 'Image crop',
     'image_crop.description':
       'Click and drag on the image to draw a crop (inside the bright area or on the dark edge). Drag corners and edges to resize; hold Alt and drag inside the box to move. Fine-tune with the numbers below. One image.',
@@ -209,6 +221,7 @@ const translations = {
       'The same crop area (relative to each image) is applied to every file.',
     'image_tools.result_ready': 'Ready — download as images or ZIP.',
     'image_tools.download_images': 'Download images',
+    'image_tools.download_gif': 'Download GIF',
     'image_tools.download_zip': 'Download ZIP',
     'image_tools.files_added': 'Images selected',
     'image_tools.sidebar_heading': 'Files & options',
@@ -243,6 +256,7 @@ const translations = {
     'nav.image_compress': 'Compresor masivo',
     'nav.image_webp': 'Conversor WebP masivo',
     'nav.image_jpg': 'Conversor JPG masivo',
+    'nav.image_gif': 'Imágenes a GIF',
     'nav.image_crop': 'Recorte de imágenes',
     
     // URL paths
@@ -271,6 +285,8 @@ const translations = {
     'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
     'landing.image_jpg_desc':
       'Convierte PNG, WebP, GIF y más a JPEG compatible con todo.',
+    'landing.image_gif_desc':
+      'Crea un GIF animado desde varias fotos. Segundos por imagen y bucle en el panel.',
     'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
     
     // Landing page content
@@ -377,6 +393,15 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_jpg.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_gif.title': 'Imágenes a GIF',
+    'image_gif.description':
+      'El orden es el de subida. Fotos centradas en un lienzo común (máx. 1280px). Un GIF para descargar.',
+    'image_gif.process': 'Crear GIF',
+    'image_gif.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_gif.drop_desc': 'PNG, JPEG, WebP y más • Al menos una imagen',
+    'image_gif.seconds_label': 'Segundos por imagen',
+    'image_gif.seconds_hint': 'Tiempo que se muestra cada imagen (0,05–30).',
+    'image_gif.loop_label': 'Repetir en bucle',
     'image_crop.title': 'Recorte de imágenes',
     'image_crop.description':
       'Arrastra sobre la imagen para dibujar el recorte (zona clara u oscura). Esquinas y bordes para redimensionar; mantén Alt y arrastra dentro para mover. Números abajo. Una imagen.',
@@ -392,6 +417,7 @@ const translations = {
       'Se aplica la misma zona de recorte (relativa a cada imagen) a todos los archivos.',
     'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
     'image_tools.download_images': 'Descargar imágenes',
+    'image_tools.download_gif': 'Descargar GIF',
     'image_tools.download_zip': 'Descargar ZIP',
     'image_tools.files_added': 'Imágenes seleccionadas',
     'image_tools.sidebar_heading': 'Archivos y opciones',
@@ -426,6 +452,7 @@ const translations = {
     'nav.image_compress': 'Compression masse',
     'nav.image_webp': 'Conversion WebP masse',
     'nav.image_jpg': 'Conversion JPG masse',
+    'nav.image_gif': 'Images vers GIF',
     'nav.image_crop': 'Recadrage d\'images',
     
     // URL paths
@@ -454,6 +481,8 @@ const translations = {
     'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
     'landing.image_jpg_desc':
       'PNG, WebP, GIF et plus en JPEG universellement compatible.',
+    'landing.image_gif_desc':
+      'Créez un GIF animé à partir de photos. Délai par image et boucle dans le panneau.',
     'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
     
     // Landing page content
@@ -560,6 +589,15 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Déposez des images ici ou cliquez',
     'image_jpg.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_gif.title': 'Images vers GIF',
+    'image_gif.description':
+      'L\'ordre suit l\'import. Images centrées sur un canevas commun (max 1280px). Un fichier GIF.',
+    'image_gif.process': 'Créer le GIF',
+    'image_gif.drop_title': 'Déposez des images ici ou cliquez',
+    'image_gif.drop_desc': 'PNG, JPEG, WebP et plus • Au moins une image',
+    'image_gif.seconds_label': 'Secondes par image',
+    'image_gif.seconds_hint': 'Durée d\'affichage de chaque image (0,05–30).',
+    'image_gif.loop_label': 'Boucle infinie',
     'image_crop.title': 'Recadrage d\'images',
     'image_crop.description':
       'Glissez sur l\'image pour tracer la zone (clair ou assombri). Coins et bords pour redimensionner ; Alt + glisser à l\'intérieur pour déplacer. Valeurs ci-dessous. Une image.',
@@ -575,6 +613,7 @@ const translations = {
       'La même zone de recadrage (relative à chaque image) est appliquée à chaque fichier.',
     'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',
     'image_tools.download_images': 'Télécharger les images',
+    'image_tools.download_gif': 'Télécharger le GIF',
     'image_tools.download_zip': 'Télécharger ZIP',
     'image_tools.files_added': 'Images sélectionnées',
     'image_tools.sidebar_heading': 'Fichiers et options',

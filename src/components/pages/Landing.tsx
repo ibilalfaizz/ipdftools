@@ -15,6 +15,7 @@ import {
   Minimize2,
   Sparkles,
   FileImage,
+  Film,
   Crop,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -125,6 +126,13 @@ const Landing = () => {
       title: t("nav.image_jpg"),
       description: t("landing.image_jpg_desc"),
       path: "/bulk-image-jpg",
+      available: true,
+    },
+    {
+      icon: <Film className="w-8 h-8" />,
+      title: t("nav.image_gif"),
+      description: t("landing.image_gif_desc"),
+      path: "/bulk-image-gif",
       available: true,
     },
     {

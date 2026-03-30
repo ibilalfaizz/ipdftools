@@ -52,6 +52,11 @@ const Header = () => {
       description: t("landing.image_jpg_desc"),
     },
     {
+      href: "/bulk-image-gif",
+      label: t("nav.image_gif"),
+      description: t("landing.image_gif_desc"),
+    },
+    {
       href: "/image-crop",
       label: t("nav.image_crop"),
       description: t("landing.image_crop_desc"),
@@ -63,6 +68,7 @@ const Header = () => {
     "/bulk-image-compress",
     "/bulk-image-webp",
     "/bulk-image-jpg",
+    "/bulk-image-gif",
     "/image-crop",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
@@ -121,7 +127,7 @@ const Header = () => {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-50 overflow-visible">
+    <header className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-0 z-[60] overflow-visible">
       <div className="container mx-auto px-3 sm:px-4 py-2 md:py-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4 md:min-h-[44px]">
           <div className="flex items-center justify-between gap-2 shrink-0">

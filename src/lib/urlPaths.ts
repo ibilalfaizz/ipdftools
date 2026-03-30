@@ -30,6 +30,11 @@ export const pathMapping: Record<string, string[]> = {
     "convertir-jpg-masivo",
     "conversion-jpg-masse",
   ],
+  "bulk-image-gif": [
+    "bulk-image-gif",
+    "imagenes-a-gif",
+    "images-vers-gif",
+  ],
   "image-crop": [
     "image-crop",
     "recortar-imagenes",

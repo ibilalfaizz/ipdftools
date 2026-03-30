@@ -86,6 +86,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "image",
   },
   {
+    href: "/bulk-image-gif",
+    labelKey: "nav.image_gif",
+    descriptionKey: "landing.image_gif_desc",
+    category: "image",
+  },
+  {
     href: "/image-crop",
     labelKey: "nav.image_crop",
     descriptionKey: "landing.image_crop_desc",

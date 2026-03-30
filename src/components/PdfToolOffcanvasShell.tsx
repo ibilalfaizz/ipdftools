@@ -16,6 +16,10 @@ type Props = {
   sidebar: React.ReactNode;
 };
 
+/** Reserves right space on large screens so the fixed Sheet does not cover the tool UI. */
+const SHEET_RESERVE_PR =
+  "lg:pr-[min(28rem,calc(100%-1.5rem))]" as const;
+
 /**
  * Right offcanvas for PDF tools: opens when files exist, no backdrop, no X — matches {@link ImageToolsBatchForm}.
  */
@@ -28,7 +32,9 @@ export default function PdfToolOffcanvasShell({
   const { t } = useLanguage();
 
   return (
-    <div className="w-full relative">
+    <div
+      className={`w-full relative transition-[padding] ${hasFiles ? SHEET_RESERVE_PR : ""}`}
+    >
       <div className="mx-auto w-full max-w-3xl p-2">{children}</div>
       <Sheet
         open={hasFiles}
@@ -37,7 +43,7 @@ export default function PdfToolOffcanvasShell({
         }}
       >
         <SheetContent
-          side="right"
+          side="rightBelowHeader"
           hideOverlay
           hideCloseButton
           className="w-full sm:max-w-md p-0 gap-0 flex flex-col overflow-y-auto tool-side-panel"

@@ -384,7 +384,7 @@ export default function ImageCropPage() {
 
                 <Sheet modal={false} open={sheetControlledOpen} onOpenChange={() => {}}>
                   <SheetContent
-                    side="right"
+                    side="rightBelowHeader"
                     hideOverlay
                     hideCloseButton
                     className="w-full sm:max-w-md p-0 gap-0 flex flex-col overflow-y-auto tool-side-panel"
