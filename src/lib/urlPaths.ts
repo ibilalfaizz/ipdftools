@@ -10,9 +10,21 @@ export const pathMapping: Record<string, string[]> = {
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
   "word-to-pdf": ["word-to-pdf", "word-a-pdf", "word-vers-pdf"],
   "jpg-to-pdf": ["jpg-to-pdf", "jpg-a-pdf", "jpg-vers-pdf"],
-  "image-resize": ["image-resize", "redimensionar-imagen", "redimensionner-image"],
-  "image-compress": ["image-compress", "comprimir-imagen", "compresser-image"],
-  "image-webp": ["image-webp", "imagen-webp", "convertir-webp"],
+  "bulk-image-resize": [
+    "bulk-image-resize",
+    "redimensionar-imagen-masivo",
+    "redimensionnement-images-masse",
+  ],
+  "bulk-image-compress": [
+    "bulk-image-compress",
+    "comprimir-imagen-masivo",
+    "compression-images-masse",
+  ],
+  "bulk-image-webp": [
+    "bulk-image-webp",
+    "convertir-webp-masivo",
+    "conversion-webp-masse",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

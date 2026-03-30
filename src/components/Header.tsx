@@ -22,23 +22,27 @@ const Header = () => {
 
   const imageTools = [
     {
-      href: "/image-resize",
+      href: "/bulk-image-resize",
       label: t("nav.image_resize"),
       description: t("landing.image_resize_desc"),
     },
     {
-      href: "/image-compress",
+      href: "/bulk-image-compress",
       label: t("nav.image_compress"),
       description: t("landing.image_compress_desc"),
     },
     {
-      href: "/image-webp",
+      href: "/bulk-image-webp",
       label: t("nav.image_webp"),
       description: t("landing.image_webp_desc"),
     },
   ];
 
-  const imageToolHrefs = ["/image-resize", "/image-compress", "/image-webp"];
+  const imageToolHrefs = [
+    "/bulk-image-resize",
+    "/bulk-image-compress",
+    "/bulk-image-webp",
+  ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
   const allTools = [

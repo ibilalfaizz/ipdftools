@@ -80,8 +80,8 @@ const translations = {
     'landing.hero_headline_after': '—private, fast, and completely free.',
     'landing.hero_subtitle':
       'We merge, split, compress, convert, and optimize PDFs and images on your device. No account required—your files stay on your machine, not our servers.',
-    'landing.hero_cta_primary': 'Browse tools',
-    'landing.hero_cta_secondary': 'Merge PDFs',
+    'landing.hero_cta_primary': 'Browse PDF tools',
+    'landing.hero_cta_secondary': 'Browse image tools',
     'landing.why_choose_title': 'Why choose us?',
     'landing.secure_title': '100% Secure',
     'landing.secure_desc': 'All processing happens in your browser. Your files never leave your device.',
@@ -243,8 +243,8 @@ const translations = {
     'landing.hero_headline_after': '—privado, rápido y gratis.',
     'landing.hero_subtitle':
       'Combinamos, dividimos, comprimimos y convertimos en tu dispositivo. Sin cuenta—tus archivos se quedan en tu equipo, no en nuestros servidores.',
-    'landing.hero_cta_primary': 'Ver herramientas',
-    'landing.hero_cta_secondary': 'Combinar PDF',
+    'landing.hero_cta_primary': 'Ver herramientas PDF',
+    'landing.hero_cta_secondary': 'Ver herramientas de imagen',
     'landing.why_choose_title': '¿Por qué elegirnos?',
     'landing.secure_title': '100% Seguro',
     'landing.secure_desc': 'Todo el procesamiento ocurre en tu navegador. Tus archivos nunca salen de tu dispositivo.',
@@ -397,8 +397,8 @@ const translations = {
     'landing.hero_headline_after': '—privé, rapide et gratuit.',
     'landing.hero_subtitle':
       'Fusion, découpage, compression et conversion sur votre appareil. Sans compte—vos fichiers restent sur votre machine, pas sur nos serveurs.',
-    'landing.hero_cta_primary': 'Voir les outils',
-    'landing.hero_cta_secondary': 'Fusionner des PDF',
+    'landing.hero_cta_primary': 'Parcourir les outils PDF',
+    'landing.hero_cta_secondary': 'Parcourir les outils image',
     'landing.why_choose_title': 'Pourquoi nous choisir ?',
     'landing.secure_title': '100% Sécurisé',
     'landing.secure_desc': 'Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',

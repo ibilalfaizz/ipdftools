@@ -68,9 +68,9 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/pdf-to-text": PDFToTextPage,
   "/word-to-pdf": WordToPDFPage,
   "/jpg-to-pdf": JPGToPDFPage,
-  "/image-resize": ImageResizePage,
-  "/image-compress": ImageCompressPage,
-  "/image-webp": ImageWebpPage,
+  "/bulk-image-resize": ImageResizePage,
+  "/bulk-image-compress": ImageCompressPage,
+  "/bulk-image-webp": ImageWebpPage,
 };
 
 export default function ToolRouteClient({
