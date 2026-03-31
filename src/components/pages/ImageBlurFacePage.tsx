@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import Header from "../Header";
@@ -33,14 +33,6 @@ export default function ImageBlurFacePage() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <Card className="tool-page-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-2xl font-bold text-foreground">
-                {t("image_blur_face.title")}
-              </CardTitle>
-              <p className="text-muted-foreground">
-                {t("image_blur_face.description")}
-              </p>
-            </CardHeader>
             <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_blur_face"

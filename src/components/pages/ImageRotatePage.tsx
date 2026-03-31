@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { RotateCw, RotateCcw } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Header from "../Header";
 import Footer from "../Footer";
@@ -44,14 +44,6 @@ export default function ImageRotatePage() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <Card className="tool-page-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-2xl font-bold text-foreground">
-                {t("image_rotate.title")}
-              </CardTitle>
-              <p className="text-muted-foreground">
-                {t("image_rotate.description")}
-              </p>
-            </CardHeader>
             <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_rotate"

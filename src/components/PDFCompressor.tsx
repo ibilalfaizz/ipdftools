@@ -1,13 +1,17 @@
+"use client";
+
 import React, { useState, useRef, useCallback } from 'react';
 import { Download, Loader2, Minimize } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
+import { useLanguage } from '@/contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
 
 const PDFCompressor = () => {
+  const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [compressedPdfBlob, setCompressedPdfBlob] = useState<Blob | null>(null);
@@ -118,7 +122,19 @@ const PDFCompressor = () => {
   const hasFiles = file !== null;
 
   return (
-    <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={removeFile} sidebar={
+    <PdfToolOffcanvasShell
+      intro={
+        <div className="text-center mb-8">
+          <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+            <Minimize className="h-8 w-8" />
+          </div>
+          <h1 className="text-4xl font-bold text-foreground mb-4">{t('nav.compress')}</h1>
+          <p className="text-xl text-muted-foreground">{t('landing.compress_desc')}</p>
+        </div>
+      }
+      hasFiles={hasFiles}
+      onClear={removeFile}
+      sidebar={
       <>
         {file && (
           <div className="rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/50 p-3">
