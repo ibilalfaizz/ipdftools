@@ -133,6 +133,9 @@ const translations = {
     'pdf_to_word.convert_button': 'Convert to Word',
     'pdf_to_word.pdf_only': 'Please select PDF files only.',
     'pdf_to_word.success': 'PDF file(s) converted to Word successfully.',
+    'pdf_to_word.format_note':
+      'Text is extracted in your browser and saved as a real .docx. Formatting, tables, and images are not preserved.',
+    'pdf_to_word.convert_failed': 'Could not convert this PDF to Word.',
     
     // PDF to JPG
     'pdf_to_jpg.title': 'PDF to JPG Converter',
@@ -379,6 +382,9 @@ const translations = {
     'pdf_to_word.convert_button': 'Convertir a Word',
     'pdf_to_word.pdf_only': 'Por favor selecciona solo archivos PDF.',
     'pdf_to_word.success': 'archivo(s) PDF convertido(s) a Word exitosamente.',
+    'pdf_to_word.format_note':
+      'El texto se extrae en tu navegador y se guarda como .docx real. No se conservan formato, tablas ni imágenes.',
+    'pdf_to_word.convert_failed': 'No se pudo convertir este PDF a Word.',
     
     // PDF to JPG
     'pdf_to_jpg.title': 'Convertidor PDF a JPG',
@@ -625,6 +631,9 @@ const translations = {
     'pdf_to_word.convert_button': 'Convertir en Word',
     'pdf_to_word.pdf_only': 'Veuillez sélectionner uniquement des fichiers PDF.',
     'pdf_to_word.success': 'fichier(s) PDF converti(s) en Word avec succès.',
+    'pdf_to_word.format_note':
+      'Le texte est extrait dans le navigateur et enregistré en .docx valide. Mise en forme, tableaux et images ne sont pas conservés.',
+    'pdf_to_word.convert_failed': 'Impossible de convertir ce PDF en Word.',
     
     // PDF to JPG
     'pdf_to_jpg.title': 'Convertisseur PDF vers JPG',

@@ -1,18 +1,3 @@
-
-export const convertPdfToWord = async (formData: FormData) => {
-  // Simulate API call for PDF to Word conversion
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          url: 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,mock-data',
-          filename: 'converted.docx'
-        }
-      ]);
-    }, 2000);
-  });
-};
-
 export const convertPdfToJpg = async (formData: FormData) => {
   // Simulate API call for PDF to JPG conversion
   return new Promise((resolve) => {
