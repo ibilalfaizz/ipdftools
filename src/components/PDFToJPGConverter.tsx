@@ -6,14 +6,51 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
-import * as pdfjsLib from 'pdfjs-dist';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import { getPdfJs } from '@/lib/pdfjs-client';
 
 interface ConvertedFile {
   name: string;
   url: string;
   pageNumber: number;
+}
+
+/** Avoid huge canvases (browser limits); cap longest edge in CSS pixels. */
+const MAX_RENDER_EDGE_PX = 2400;
+
+function canvasToJpegBlob(
+  canvas: HTMLCanvasElement,
+  quality: number
+): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          resolve(blob);
+          return;
+        }
+        try {
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          const i = dataUrl.indexOf(",");
+          const b64 = i >= 0 ? dataUrl.slice(i + 1) : "";
+          if (!b64) {
+            reject(new Error("JPEG_ENCODE_FAILED"));
+            return;
+          }
+          const binary = atob(b64);
+          const len = binary.length;
+          const bytes = new Uint8Array(len);
+          for (let j = 0; j < len; j++) {
+            bytes[j] = binary.charCodeAt(j);
+          }
+          resolve(new Blob([bytes], { type: "image/jpeg" }));
+        } catch (e) {
+          reject(e instanceof Error ? e : new Error("JPEG_ENCODE_FAILED"));
+        }
+      },
+      "image/jpeg",
+      quality
+    );
+  });
 }
 
 const PDFToJPGConverter = () => {
@@ -62,38 +99,48 @@ const PDFToJPGConverter = () => {
 
   const convertPDFToJPG = async (file: File): Promise<ConvertedFile[]> => {
     try {
-      const arrayBuffer = await file.arrayBuffer();
+      const pdfjsLib = await getPdfJs();
+      const raw = await file.arrayBuffer();
+      const data = new Uint8Array(raw);
 
       const pdf = await pdfjsLib.getDocument({
-        data: arrayBuffer,
+        data,
         verbosity: 0,
+        isOffscreenCanvasSupported: false,
+        isImageDecoderSupported: false,
       }).promise;
 
       const convertedPages: ConvertedFile[] = [];
 
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
-        const viewport = page.getViewport({ scale: 2.0 });
+        const base = page.getViewport({ scale: 1 });
+        const longest = Math.max(base.width, base.height);
+        const scale = Math.min(2, MAX_RENDER_EDGE_PX / Math.max(longest, 1));
+        const viewport = page.getViewport({ scale: Math.max(0.2, scale) });
 
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d')!;
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.floor(viewport.width));
+        canvas.height = Math.max(1, Math.floor(viewport.height));
+
+        const ctx = canvas.getContext("2d", { alpha: false });
+        if (!ctx) {
+          throw new Error("NO_CANVAS_CONTEXT");
+        }
 
         await page
           .render({
-            canvasContext: context,
+            canvasContext: ctx,
             viewport,
-            canvas,
+            canvas: null,
           })
           .promise;
 
-        const blob = await new Promise<Blob>((resolve) => {
-          canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', 0.9);
-        });
+        const blob = await canvasToJpegBlob(canvas, 0.92);
 
         const url = URL.createObjectURL(blob);
-        const fileName = `${file.name.replace('.pdf', '')}_page_${pageNum}.jpg`;
+        const baseName = file.name.replace(/\.pdf$/i, "");
+        const fileName = `${baseName}_page_${pageNum}.jpg`;
 
         convertedPages.push({
           name: fileName,

@@ -37,6 +37,7 @@ export default function PdfToolOffcanvasShell({
     >
       <div className="mx-auto w-full max-w-3xl p-2">{children}</div>
       <Sheet
+        modal={false}
         open={hasFiles}
         onOpenChange={() => {
           /* Do not dismiss while files remain */

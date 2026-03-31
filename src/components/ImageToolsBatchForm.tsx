@@ -272,6 +272,7 @@ export default function ImageToolsBatchForm({
       </div>
 
       <Sheet
+        modal={false}
         open={sheetOpen}
         onOpenChange={() => {
           // Never close while files are present (uploads should never dismiss the panel).

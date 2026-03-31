@@ -6,6 +6,8 @@
     "dev": "next dev -p 8080",
     "dev:turbo": "next dev -p 8080 --turbo",
     "dev:clean": "rm -rf .next node_modules/.cache && next dev -p 8080",
+    "postinstall": "node scripts/copy-pdf-worker.mjs",
+    "prebuild": "node scripts/copy-pdf-worker.mjs",
     "build": "next build",
     "start": "next start -p 8080",
     "lint": "eslint ."

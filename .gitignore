@@ -25,3 +25,7 @@ out
 *.sln
 *.sw?
 .env
+
+# Copied from pdfjs-dist by scripts/copy-pdf-worker.mjs (postinstall / prebuild)
+public/pdf.worker.min.mjs
+public/pdf.min.mjs

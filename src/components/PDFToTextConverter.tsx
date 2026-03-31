@@ -5,9 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
-import * as pdfjsLib from 'pdfjs-dist';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import { getPdfJs } from '@/lib/pdfjs-client';
 
 const PDFToTextConverter = () => {
   const { t } = useLanguage();
@@ -17,6 +15,7 @@ const PDFToTextConverter = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
+    const pdfjsLib = await getPdfJs();
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     let fullText = '';

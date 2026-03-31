@@ -5,10 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
 import { useToast } from '@/hooks/use-toast';
-import * as pdfjsLib from 'pdfjs-dist';
-
-// Set up the worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import { getPdfJs } from '@/lib/pdfjs-client';
 
 const FromPDFConverter = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -24,6 +21,7 @@ const FromPDFConverter = () => {
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
     try {
+      const pdfjsLib = await getPdfJs();
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       let extractedText = '';
@@ -63,6 +61,7 @@ const FromPDFConverter = () => {
       return { blob, extension: 'txt' };
     } else if (formatLower === 'jpg' || formatLower === 'png') {
       try {
+        const pdfjsLib = await getPdfJs();
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         
@@ -71,17 +70,13 @@ const FromPDFConverter = () => {
         const viewport = page.getViewport({ scale: 2.0 });
         
         const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
         
-        if (context) {
-          await page.render({
-            canvasContext: context,
-            viewport,
-            canvas,
-          }).promise;
-        }
+        await page.render({
+          canvas,
+          viewport,
+        }).promise;
         
         return new Promise<{ blob: Blob; extension: string }>((resolve) => {
           canvas.toBlob((blob) => {
