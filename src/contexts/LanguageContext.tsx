@@ -153,6 +153,15 @@ const translations = {
     'word_to_pdf.convert_button': 'Convert to PDF',
     'word_to_pdf.word_only': 'Please select Word files only (.doc, .docx).',
     'word_to_pdf.success': 'Word file(s) converted to PDF successfully.',
+    'word_to_pdf.format_note':
+      '.docx is converted in your browser (text layout). Legacy .doc is not supported—save as .docx first.',
+    'word_to_pdf.drop_title': 'Drop Word files here or click to browse',
+    'word_to_pdf.drop_desc': '.docx recommended • Legacy .doc not supported in-browser',
+    'word_to_pdf.doc_legacy_title': 'Legacy .doc not supported',
+    'word_to_pdf.doc_legacy_body':
+      'Open the file in Word or LibreOffice and save as .docx, then upload again.',
+    'word_to_pdf.invalid_file': 'Please use a .docx file.',
+    'word_to_pdf.convert_failed': 'Could not convert this file to PDF.',
     
     // JPG to PDF
     'jpg_to_pdf.title': 'JPG to PDF Converter',
@@ -390,6 +399,15 @@ const translations = {
     'word_to_pdf.convert_button': 'Convertir a PDF',
     'word_to_pdf.word_only': 'Por favor selecciona solo archivos Word (.doc, .docx).',
     'word_to_pdf.success': 'archivo(s) Word convertido(s) a PDF exitosamente.',
+    'word_to_pdf.format_note':
+      'El .docx se convierte en tu navegador (texto). El .doc antiguo no está soportado: guarda como .docx antes.',
+    'word_to_pdf.drop_title': 'Suelta archivos Word aquí o haz clic',
+    'word_to_pdf.drop_desc': 'Se recomienda .docx • .doc antiguo no soportado en el navegador',
+    'word_to_pdf.doc_legacy_title': '.doc antiguo no soportado',
+    'word_to_pdf.doc_legacy_body':
+      'Abre el archivo en Word o LibreOffice, guarda como .docx y vuelve a subirlo.',
+    'word_to_pdf.invalid_file': 'Usa un archivo .docx.',
+    'word_to_pdf.convert_failed': 'No se pudo convertir este archivo a PDF.',
     
     // JPG to PDF
     'jpg_to_pdf.title': 'Convertidor JPG a PDF',
@@ -627,6 +645,15 @@ const translations = {
     'word_to_pdf.convert_button': 'Convertir en PDF',
     'word_to_pdf.word_only': 'Veuillez sélectionner uniquement des fichiers Word (.doc, .docx).',
     'word_to_pdf.success': 'fichier(s) Word converti(s) en PDF avec succès.',
+    'word_to_pdf.format_note':
+      'Le .docx est converti dans le navigateur (texte). L’ancien .doc n’est pas pris en charge : enregistrez en .docx d’abord.',
+    'word_to_pdf.drop_title': 'Déposez des fichiers Word ici ou cliquez',
+    'word_to_pdf.drop_desc': '.docx recommandé • ancien .doc non pris en charge dans le navigateur',
+    'word_to_pdf.doc_legacy_title': 'Ancien .doc non pris en charge',
+    'word_to_pdf.doc_legacy_body':
+      'Ouvrez le fichier dans Word ou LibreOffice, enregistrez au format .docx, puis importez-le à nouveau.',
+    'word_to_pdf.invalid_file': 'Veuillez utiliser un fichier .docx.',
+    'word_to_pdf.convert_failed': 'Impossible de convertir ce fichier en PDF.',
     
     // JPG to PDF
     'jpg_to_pdf.title': 'Convertisseur JPG vers PDF',
