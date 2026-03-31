@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/sheet";
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 /** Passed to `renderWhenHasFiles` so previews can reflect processing state. */
 export type ImageBatchPreviewContext = {
@@ -66,10 +68,6 @@ function base64ToBlob(base64: string, contentType: string): Blob {
   }
   return new Blob([bytes], { type: contentType });
 }
-
-/** Same as crop page — keeps main card content out from under the fixed Sheet on lg+. */
-const SHEET_RESERVE_PR =
-  "lg:pr-[min(28rem,calc(100%-1.5rem))]" as const;
 
 export default function ImageToolsBatchForm({
   processFiles,
@@ -292,10 +290,25 @@ export default function ImageToolsBatchForm({
 
   return (
     <div
-      className={`w-full relative transition-[padding] ${hasFiles ? SHEET_RESERVE_PR : ""}`}
+      className={cn(
+        "w-full min-w-0 relative transition-[padding]",
+        hasFiles && IMAGE_TOOL_SHEET_RESERVE
+      )}
     >
+      <div className="px-4 sm:px-6 pt-6 pb-2 md:px-8">
+        <h2 className="text-2xl font-bold text-foreground">
+          {t(`${translationPrefix}.title`)}
+        </h2>
+        <p className="text-muted-foreground mt-1">
+          {t(`${translationPrefix}.description`)}
+        </p>
+      </div>
+
       <div
-        className={`mx-auto w-full max-w-3xl p-2 ${hasFiles ? "hidden" : ""}`}
+        className={cn(
+          "mx-auto w-full max-w-3xl p-2",
+          hasFiles && "border-b border-[#d6ffd2]/10 pb-4 mb-2"
+        )}
       >
         <FileUploadZone
           acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
@@ -305,12 +318,17 @@ export default function ImageToolsBatchForm({
           onDrop={onDrop}
           onDragOver={onDragOver}
           onFileSelect={onFileSelect}
-          className="min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
+          className={cn(
+            "flex flex-col justify-center",
+            hasFiles
+              ? "min-h-[min(200px,28vh)] py-6"
+              : "min-h-[min(420px,52vh)] py-12"
+          )}
         />
       </div>
 
       {hasFiles && renderWhenHasFiles ? (
-        <div className="mx-auto w-full max-w-5xl px-3 py-2 sm:px-4 sm:py-4">
+        <div className="mx-auto w-full max-w-5xl min-w-0 px-3 py-2 sm:px-4 sm:py-4">
           {renderWhenHasFiles(files, { result, busy })}
         </div>
       ) : null}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,17 +9,17 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 type Props = {
   hasFiles: boolean;
   onClear: () => void;
+  /** Title / description (and icon) — shifts with main content when the sheet is open. */
+  intro?: ReactNode;
   children: React.ReactNode;
   sidebar: React.ReactNode;
 };
-
-/** Reserves right space on large screens so the fixed Sheet does not cover the tool UI. */
-const SHEET_RESERVE_PR =
-  "lg:pr-[min(28rem,calc(100%-1.5rem))]" as const;
 
 /**
  * Right offcanvas for PDF tools: opens when files exist, no backdrop, no X — matches {@link ImageToolsBatchForm}.
@@ -26,6 +27,7 @@ const SHEET_RESERVE_PR =
 export default function PdfToolOffcanvasShell({
   hasFiles,
   onClear,
+  intro,
   children,
   sidebar,
 }: Props) {
@@ -33,8 +35,12 @@ export default function PdfToolOffcanvasShell({
 
   return (
     <div
-      className={`w-full relative transition-[padding] ${hasFiles ? SHEET_RESERVE_PR : ""}`}
+      className={cn(
+        "w-full min-w-0 max-w-4xl mx-auto p-6 transition-[padding]",
+        hasFiles && IMAGE_TOOL_SHEET_RESERVE
+      )}
     >
+      {intro}
       <div className="mx-auto w-full max-w-3xl p-2">{children}</div>
       <Sheet
         modal={false}

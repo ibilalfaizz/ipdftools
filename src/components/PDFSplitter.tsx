@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useCallback } from 'react';
 import { Download, Loader2, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
+import { useLanguage } from '@/contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
 
@@ -20,6 +23,7 @@ interface SplitResult {
 }
 
 const PDFSplitter = () => {
+  const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [splitOption, setSplitOption] = useState<SplitOption>({ type: 'individual' });
@@ -212,7 +216,19 @@ const PDFSplitter = () => {
   const hasFiles = file !== null;
 
   return (
-    <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearFile} sidebar={
+    <PdfToolOffcanvasShell
+      intro={
+        <div className="text-center mb-8">
+          <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+            <Scissors className="h-8 w-8" />
+          </div>
+          <h1 className="text-4xl font-bold text-foreground mb-4">{t('nav.split')}</h1>
+          <p className="text-xl text-muted-foreground">{t('landing.split_desc')}</p>
+        </div>
+      }
+      hasFiles={hasFiles}
+      onClear={clearFile}
+      sidebar={
       <>
         {file && (
           <div className="rounded-lg border border-[#d6ffd2]/15 bg-[#103c44]/50 p-3">

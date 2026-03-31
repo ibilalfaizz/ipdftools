@@ -71,16 +71,19 @@ const PDFRotator = () => {
   const hasFiles = files.length > 0;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
-          <RotateCw className="h-8 w-8" />
+    <PdfToolOffcanvasShell
+      intro={
+        <div className="text-center mb-8">
+          <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">
+            <RotateCw className="h-8 w-8" />
+          </div>
+          <h1 className="text-4xl font-bold text-foreground mb-4">{t('rotate.title')}</h1>
+          <p className="text-xl text-muted-foreground">{t('rotate.description')}</p>
         </div>
-        <h1 className="text-4xl font-bold text-foreground mb-4">{t('rotate.title')}</h1>
-        <p className="text-xl text-muted-foreground">{t('rotate.description')}</p>
-      </div>
-
-      <PdfToolOffcanvasShell hasFiles={hasFiles} onClear={clearAll} sidebar={
+      }
+      hasFiles={hasFiles}
+      onClear={clearAll}
+      sidebar={
         <>
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-2">
@@ -161,7 +164,6 @@ const PDFRotator = () => {
           </CardContent>
         </Card>
       </PdfToolOffcanvasShell>
-    </div>
   );
 };
 

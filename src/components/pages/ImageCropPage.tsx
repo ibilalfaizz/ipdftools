@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import JSZip from "jszip";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
 import { processCropBatch } from "@/lib/client-image-jobs";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 function clampCrop(c: PixelCrop, iw: number, ih: number): PixelCrop {
   let { x, y, w, h } = c;
@@ -337,18 +339,27 @@ export default function ImageCropPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <Card className="tool-page-card">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-2xl font-bold text-foreground">
-                {t("image_crop.title")}
-              </CardTitle>
-              <p className="text-muted-foreground">{t("image_crop.description")}</p>
-            </CardHeader>
             <CardContent className="p-0">
               <div
-                className={`w-full relative transition-[padding] ${hasFiles ? "lg:pr-[min(28rem,calc(100%-1.5rem))]" : ""}`}
+                className={cn(
+                  "w-full min-w-0 relative transition-[padding]",
+                  hasFiles && IMAGE_TOOL_SHEET_RESERVE
+                )}
               >
+                <div className="px-4 sm:px-6 pt-6 pb-2 md:px-8">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    {t("image_crop.title")}
+                  </h2>
+                  <p className="text-muted-foreground mt-1">
+                    {t("image_crop.description")}
+                  </p>
+                </div>
+
                 <div
-                  className={`mx-auto w-full max-w-3xl p-2 ${hasFiles ? "hidden" : ""}`}
+                  className={cn(
+                    "mx-auto w-full max-w-3xl p-2",
+                    hasFiles && "border-b border-[#d6ffd2]/10 pb-4 mb-2"
+                  )}
                 >
                   <FileUploadZone
                     acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
@@ -359,12 +370,17 @@ export default function ImageCropPage() {
                     onDragOver={onDragOver}
                     onFileSelect={onFileSelect}
                     multiple={false}
-                    className="min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
+                    className={cn(
+                      "flex flex-col justify-center",
+                      hasFiles
+                        ? "min-h-[min(200px,28vh)] py-6"
+                        : "min-h-[min(420px,52vh)] py-12"
+                    )}
                   />
                 </div>
 
                 {hasFiles && previewUrl ? (
-                  <div className="px-4 pb-6 flex justify-center">
+                  <div className="px-4 pb-6 flex justify-center min-w-0">
                     <ImageCropCanvas
                       key={previewUrl}
                       imageUrl={previewUrl}
