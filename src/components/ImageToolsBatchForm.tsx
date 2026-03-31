@@ -27,7 +27,8 @@ type TranslationPrefix =
   | "image_webp"
   | "image_jpg"
   | "image_gif"
-  | "image_rotate";
+  | "image_rotate"
+  | "image_blur_face";
 
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */
@@ -166,6 +167,11 @@ export default function ImageToolsBatchForm({
       if (msg === "WEBP_ENCODE_UNSUPPORTED") {
         toast({
           title: t("image_tools.webp_unsupported"),
+          variant: "destructive",
+        });
+      } else if (msg === "FACE_BLUR_MODEL_FAILED") {
+        toast({
+          title: t("image_tools.face_blur_model_failed"),
           variant: "destructive",
         });
       } else if (msg === "NO_VALID_IMAGES") {

@@ -55,6 +55,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_rotate.title": "Rotate Images Online — 90°, 180°, 270° in Your Browser",
     "seo.image_rotate.description":
       "Rotate many photos at once. Choose clockwise angle, then download each file or a ZIP — all on your device.",
+    "seo.image_blur_face.title": "Blur Faces in Photos Online — Privacy in Your Browser",
+    "seo.image_blur_face.description":
+      "Auto-detect regions and blur them for privacy in your browser. Adjust regions before export; download PNG/WebP/JPEG or a ZIP.",
     "seo.image_watermark.title": "Add Image or Text Watermark Online — Free in Your Browser",
     "seo.image_watermark.description":
       "Overlay text or a logo on your photo. Adjust size, opacity, and position, then download PNG or ZIP.",
@@ -112,6 +115,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_rotate.title": "Rotar imágenes online — 90°, 180°, 270°",
     "seo.image_rotate.description":
       "Gira muchas fotos a la vez. Elige el ángulo y descarga cada archivo o un ZIP, todo en tu dispositivo.",
+    "seo.image_blur_face.title": "Desenfocar caras en fotos online — privacidad",
+    "seo.image_blur_face.description":
+      "Detecta zonas y desenfócalas en tu navegador. Ajusta las regiones antes de exportar; descarga imágenes o ZIP.",
     "seo.image_watermark.title": "Marca de agua en imágenes online",
     "seo.image_watermark.description":
       "Añade texto o un logo. Ajusta tamaño, opacidad y posición. Descarga PNG o ZIP.",
@@ -169,6 +175,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_rotate.title": "Rotation d'images en ligne — 90°, 180°, 270°",
     "seo.image_rotate.description":
       "Faites pivoter plusieurs photos à la fois. Choisissez l'angle, puis téléchargez chaque fichier ou une archive ZIP.",
+    "seo.image_blur_face.title": "Flouter les visages en ligne — confidentialité",
+    "seo.image_blur_face.description":
+      "Détection de zones et floutage dans le navigateur. Ajustez les régions avant export ; images ou ZIP.",
     "seo.image_watermark.title": "Filigrane sur image en ligne",
     "seo.image_watermark.description":
       "Superposez du texte ou un logo. Réglez taille, opacité et position. Téléchargez PNG ou ZIP.",

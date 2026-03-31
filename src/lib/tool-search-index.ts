@@ -104,6 +104,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "image",
   },
   {
+    href: "/image-blur-face",
+    labelKey: "nav.image_blur_face",
+    descriptionKey: "landing.image_blur_face_desc",
+    category: "image",
+  },
+  {
     href: "/image-watermark",
     labelKey: "nav.image_watermark",
     descriptionKey: "landing.image_watermark_desc",

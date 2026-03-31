@@ -18,6 +18,7 @@ import {
   Film,
   Crop,
   Stamp,
+  ScanFace,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -148,6 +149,13 @@ const Landing = () => {
       title: t("nav.image_rotate"),
       description: t("landing.image_rotate_desc"),
       path: "/image-rotate",
+      available: true,
+    },
+    {
+      icon: <ScanFace className="w-8 h-8" />,
+      title: t("nav.image_blur_face"),
+      description: t("landing.image_blur_face_desc"),
+      path: "/image-blur-face",
       available: true,
     },
     {

@@ -55,6 +55,7 @@ const translations = {
     'nav.image_gif': 'Images to GIF',
     'nav.image_crop': 'Image crop',
     'nav.image_rotate': 'Rotate images',
+    'nav.image_blur_face': 'Blur faces',
     'nav.image_watermark': 'Image watermark',
     
     // URL paths
@@ -87,6 +88,8 @@ const translations = {
     'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
     'landing.image_rotate_desc':
       'Rotate many photos 90°, 180°, or 270° clockwise in your browser. Download separately or as a ZIP.',
+    'landing.image_blur_face_desc':
+      'Auto-detect faces and blur them for privacy. Runs in your browser; download images or a ZIP.',
     'landing.image_watermark_desc':
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     
@@ -250,6 +253,20 @@ const translations = {
     'image_rotate.process': 'Rotate',
     'image_rotate.drop_title': 'Drop images here or click to browse',
     'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_blur_face.title': 'Blur faces in photos',
+    'image_blur_face.description':
+      'Finds regions to blur on your device. Drag a region to move it, or use the edges and corners to resize. The slider changes blur strength. For files you never open in the preview, regions are chosen automatically when you export.',
+    'image_blur_face.blur_strength': 'Blur strength',
+    'image_blur_face.blur_hint': 'Higher values hide more detail.',
+    'image_blur_face.process': 'Blur faces',
+    'image_blur_face.drop_title': 'Drop images here or click to browse',
+    'image_blur_face.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_blur_face.preview_hint':
+      'Blurred areas show right on the photo. Drag inside a region to move it, or use the edge and corner handles to resize. The strength slider updates the blur.',
+    'image_blur_face.preview_detecting': 'Preparing preview…',
+    'image_blur_face.preview_no_faces':
+      'Nothing was found automatically — use the region in the center: drag or resize it to cover what you want blurred.',
+    'image_blur_face.preview_thumbnails_hint': 'Preview another file:',
     'image_watermark.title': 'Image watermark',
     'image_watermark.description':
       'Upload a photo and stack multiple text and image watermarks. Drag a layer on the preview to move it; use the corner handle on images to resize. List order: top = in front.',
@@ -303,6 +320,8 @@ const translations = {
     'image_tools.no_files': 'Please add at least one image.',
     'image_tools.webp_unsupported':
       'This browser cannot encode WebP. Try Chrome, Edge, or Firefox.',
+    'image_tools.face_blur_model_failed':
+      'Could not load privacy tools in your browser. Check your connection and try again.',
   },
   es: {
     // Navigation
@@ -328,6 +347,7 @@ const translations = {
     'nav.image_gif': 'Imágenes a GIF',
     'nav.image_crop': 'Recorte de imágenes',
     'nav.image_rotate': 'Rotar imágenes',
+    'nav.image_blur_face': 'Desenfocar caras',
     'nav.image_watermark': 'Marca de agua',
     
     // URL paths
@@ -361,6 +381,8 @@ const translations = {
     'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
     'landing.image_rotate_desc':
       'Gira muchas fotos 90°, 180° o 270° en el navegador. Descarga sueltas o en ZIP.',
+    'landing.image_blur_face_desc':
+      'Detecta caras y las desenfoca para privacidad. En tu navegador; imágenes o ZIP.',
     'landing.image_watermark_desc':
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     
@@ -515,6 +537,20 @@ const translations = {
     'image_rotate.process': 'Rotar',
     'image_rotate.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_blur_face.title': 'Desenfocar caras en fotos',
+    'image_blur_face.description':
+      'Detecta zonas para desenfocar en tu dispositivo. Arrastra una zona para moverla o usa bordes y esquinas para redimensionar. El deslizador cambia la intensidad. En archivos que no abras en la vista previa, las zonas se eligen al exportar.',
+    'image_blur_face.blur_strength': 'Intensidad del desenfoque',
+    'image_blur_face.blur_hint': 'Valores altos ocultan más detalle.',
+    'image_blur_face.process': 'Desenfocar caras',
+    'image_blur_face.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_blur_face.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_blur_face.preview_hint':
+      'El desenfoque se ve sobre la propia foto. Arrastra dentro de una zona para moverla o usa los controles en bordes y esquinas para redimensionar. El deslizador cambia la intensidad.',
+    'image_blur_face.preview_detecting': 'Preparando vista previa…',
+    'image_blur_face.preview_no_faces':
+      'No se encontró nada automáticamente — usa la zona central: arrástrala o redimensiónala para cubrir lo que quieras desenfocar.',
+    'image_blur_face.preview_thumbnails_hint': 'Vista previa de otro archivo:',
     'image_watermark.title': 'Marca de agua en imagen',
     'image_watermark.description':
       'Sube una foto y apila varias marcas de texto e imagen. Arrastra para mover; en imágenes usa la esquina para redimensionar. En la lista, arriba = delante.',
@@ -568,6 +604,8 @@ const translations = {
     'image_tools.no_files': 'Añade al menos una imagen.',
     'image_tools.webp_unsupported':
       'Este navegador no puede codificar WebP. Prueba Chrome, Edge o Firefox.',
+    'image_tools.face_blur_model_failed':
+      'No se pudieron cargar las herramientas de privacidad en el navegador. Revisa la conexión e inténtalo de nuevo.',
   },
   fr: {
     // Navigation
@@ -593,6 +631,7 @@ const translations = {
     'nav.image_gif': 'Images vers GIF',
     'nav.image_crop': 'Recadrage d\'images',
     'nav.image_rotate': 'Rotation d\'images',
+    'nav.image_blur_face': 'Flouter les visages',
     'nav.image_watermark': 'Filigrane image',
     
     // URL paths
@@ -626,6 +665,8 @@ const translations = {
     'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
     'landing.image_rotate_desc':
       'Faites pivoter plusieurs photos à 90°, 180° ou 270° dans le navigateur. Fichiers séparés ou ZIP.',
+    'landing.image_blur_face_desc':
+      'Détecte les visages et les floute pour la confidentialité. Dans le navigateur ; images ou ZIP.',
     'landing.image_watermark_desc':
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     
@@ -780,6 +821,20 @@ const translations = {
     'image_rotate.process': 'Pivoter',
     'image_rotate.drop_title': 'Déposez des images ici ou cliquez',
     'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_blur_face.title': 'Flouter les visages sur les photos',
+    'image_blur_face.description':
+      'Repère des zones à flouter sur votre appareil. Glissez une zone pour la déplacer, ou utilisez les bords et les coins pour la redimensionner. Le curseur règle l’intensité. Pour les fichiers non ouverts dans l’aperçu, les zones sont choisies à l’export.',
+    'image_blur_face.blur_strength': 'Intensité du flou',
+    'image_blur_face.blur_hint': 'Des valeurs plus élevées masquent davantage de détails.',
+    'image_blur_face.process': 'Flouter les visages',
+    'image_blur_face.drop_title': 'Déposez des images ici ou cliquez',
+    'image_blur_face.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_blur_face.preview_hint':
+      'Le flou apparaît directement sur la photo. Glissez à l’intérieur d’une zone pour la déplacer, ou utilisez les poignées sur les bords et les coins. Le curseur règle l’intensité.',
+    'image_blur_face.preview_detecting': 'Préparation de l’aperçu…',
+    'image_blur_face.preview_no_faces':
+      'Rien n’a été détecté automatiquement — utilisez la zone au centre : déplacez-la ou redimensionnez-la pour couvrir ce que vous voulez flouter.',
+    'image_blur_face.preview_thumbnails_hint': 'Aperçu d’un autre fichier :',
     'image_watermark.title': 'Filigrane sur image',
     'image_watermark.description':
       'Importez une photo et superposez plusieurs textes et images. Glissez pour déplacer ; pour les images, utilisez le coin pour redimensionner. Dans la liste, le bas = devant.',
@@ -833,6 +888,8 @@ const translations = {
     'image_tools.no_files': 'Ajoutez au moins une image.',
     'image_tools.webp_unsupported':
       'Ce navigateur ne peut pas encoder WebP. Essayez Chrome, Edge ou Firefox.',
+    'image_tools.face_blur_model_failed':
+      'Impossible de charger les outils de confidentialité dans le navigateur. Vérifiez la connexion et réessayez.',
   }
 };
 

@@ -1,4 +1,6 @@
 import { sanitizeStem, uniqueZipName } from "@/lib/image-zip-helpers";
+import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
+import { imageFileKey } from "@/lib/image-file-key";
 
 export type ClientImageResultFile = {
   name: string;
@@ -500,4 +502,61 @@ export async function processRotateBatch(
     throw new Error("NO_VALID_IMAGES");
   }
   return { files: filesOut, zipSuggestedName: `rotated-${tag}.zip` };
+}
+
+/** Blur face regions in the browser. Optional per-file box overrides from the preview editor. */
+export async function processFaceBlurBatch(
+  files: File[],
+  blurPx: number,
+  boxOverrides?: Readonly<Record<string, FaceBlurBox[]>>
+): Promise<ClientImageProcessResult> {
+  const { blurBitmapWithBoxes, getFaceBoxesFromBitmap } = await import(
+    "@/lib/face-blur-blazeface"
+  );
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const key = imageFileKey(file);
+      const override = boxOverrides?.[key];
+      const boxes: FaceBlurBox[] =
+        override !== undefined
+          ? override
+          : await getFaceBoxesFromBitmap(bitmap);
+      const canvas = blurBitmapWithBoxes(bitmap, boxes, blurPx);
+      const kind = outputKindForMime(file.type);
+      const blob = await encodeResizeOutput(canvas, kind);
+      const ext =
+        blob.type === "image/png"
+          ? "png"
+          : blob.type === "image/webp"
+            ? "webp"
+            : "jpg";
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_faces_blurred.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "FACE_BLUR_MODEL_FAILED") {
+        throw e;
+      }
+      // skip unreadable / detection failure for this file
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "faces-blurred.zip" };
 }

@@ -1,0 +1,92 @@
+"use client";
+
+import { useCallback, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import Header from "../Header";
+import Footer from "../Footer";
+import ImageToolsBatchForm from "../ImageToolsBatchForm";
+import ImageBlurFaceLivePreview from "../ImageBlurFaceLivePreview";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { processFaceBlurBatch } from "@/lib/client-image-jobs";
+import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
+
+export default function ImageBlurFacePage() {
+  const { t } = useLanguage();
+  const [blurPx, setBlurPx] = useState(20);
+  const [boxesByFileKey, setBoxesByFileKey] = useState<
+    Record<string, FaceBlurBox[]>
+  >({});
+
+  const setBoxesForFile = useCallback((key: string, boxes: FaceBlurBox[]) => {
+    setBoxesByFileKey((prev) => ({ ...prev, [key]: boxes }));
+  }, []);
+
+  const onFilesChange = useCallback((files: File[]) => {
+    if (files.length === 0) setBoxesByFileKey({});
+  }, []);
+
+  return (
+    <div className="min-h-screen app-bg">
+      <Header />
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <Card className="tool-page-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-2xl font-bold text-foreground">
+                {t("image_blur_face.title")}
+              </CardTitle>
+              <p className="text-muted-foreground">
+                {t("image_blur_face.description")}
+              </p>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ImageToolsBatchForm
+                translationPrefix="image_blur_face"
+                onFilesChange={onFilesChange}
+                processFiles={(files) =>
+                  processFaceBlurBatch(files, blurPx, boxesByFileKey)
+                }
+                renderWhenHasFiles={(files) => (
+                  <ImageBlurFaceLivePreview
+                    files={files}
+                    blurPx={blurPx}
+                    boxesByFileKey={boxesByFileKey}
+                    onBoxesForFileChange={setBoxesForFile}
+                  />
+                )}
+              >
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <Label htmlFor="face-blur-slider">
+                        {t("image_blur_face.blur_strength")}
+                      </Label>
+                      <span className="text-xs tabular-nums text-muted-foreground">
+                        {blurPx}px
+                      </span>
+                    </div>
+                    <Slider
+                      id="face-blur-slider"
+                      min={6}
+                      max={48}
+                      step={2}
+                      value={[blurPx]}
+                      onValueChange={(v) => setBlurPx(v[0] ?? 20)}
+                      className="py-1"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {t("image_blur_face.blur_hint")}
+                    </p>
+                  </div>
+                </div>
+              </ImageToolsBatchForm>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}

@@ -44,6 +44,11 @@ const pathMapping = {
     "rotar-imagenes",
     "rotation-images",
   ],
+  "image-blur-face": [
+    "image-blur-face",
+    "desenfoque-caras",
+    "flouter-visages",
+  ],
   "image-watermark": [
     "image-watermark",
     "marca-de-agua-imagen",
@@ -195,14 +200,30 @@ function legacySeoSlugRedirects() {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: [
+    "@tensorflow/tfjs",
+    "@tensorflow/tfjs-core",
+    "@tensorflow/tfjs-backend-webgl",
+    "@tensorflow/tfjs-backend-cpu",
+    "@tensorflow/tfjs-converter",
+    "@tensorflow-models/blazeface",
+  ],
   experimental: {
     // Only lucide: enabling optimizePackageImports for all @radix-ui/* packages
     // can produce a vendor-chunks/@radix-ui.js chunk that intermittently goes missing
     // on dev refresh (stale manifest vs disk). Production builds were fine.
     optimizePackageImports: ["lucide-react"],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+    }
     return config;
   },
   async redirects() {

@@ -97,6 +97,10 @@ const ImageRotatePage = dynamic(() => import("@/pages/ImageRotatePage"), {
   ssr: false,
   loading: loadFallback,
 });
+const ImageBlurFacePage = dynamic(() => import("@/pages/ImageBlurFacePage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -115,6 +119,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/bulk-image-gif": ImageGifPage,
   "/image-crop": ImageCropPage,
   "/image-rotate": ImageRotatePage,
+  "/image-blur-face": ImageBlurFacePage,
   "/image-watermark": ImageWatermarkPage,
 };
 
