@@ -429,46 +429,51 @@ const Landing = () => {
           )}
         </section>
 
-        <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-[#d6ffd2] mb-8">
-            {t("landing.why_choose_title")}
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
-                <FileText className="h-8 w-8 text-[#d6ffd2]" />
+        <section
+          className="mt-24 py-20 md:py-28 max-w-5xl mx-auto"
+          aria-labelledby="why-choose-heading"
+        >
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#3bd62b] mb-5 md:mb-6">
+              {t("landing.why_choose_eyebrow")}
+            </p>
+            <h2
+              id="why-choose-heading"
+              className="text-3xl sm:text-4xl md:text-5xl font-normal text-white leading-tight tracking-tight mb-14 md:mb-16 max-w-3xl mx-auto"
+            >
+              <span className="font-normal">
+                {t("landing.why_choose_headline_regular")}
+              </span>
+              <span className="font-bold">{t("landing.why_choose_headline_emphasis")}</span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 text-left md:text-center">
+              <div>
+                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                  {t("landing.secure_title")}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+                  {t("landing.secure_desc")}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
-                {t("landing.secure_title")}
-              </h3>
-              <p className="text-[#d6ffd2]/75">
-                {t("landing.secure_desc")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
-                <Minimize className="h-8 w-8 text-[#d6ffd2]" />
+              <div>
+                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                  {t("landing.fast_title")}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+                  {t("landing.fast_desc")}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
-                {t("landing.fast_title")}
-              </h3>
-              <p className="text-[#d6ffd2]/75">
-                {t("landing.fast_desc")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#103c44]/80 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-[#d6ffd2]/20">
-                <Merge className="h-8 w-8 text-[#d6ffd2]" />
+              <div>
+                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                  {t("landing.easy_title")}
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+                  {t("landing.easy_desc")}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-[#d6ffd2] mb-2">
-                {t("landing.easy_title")}
-              </h3>
-              <p className="text-[#d6ffd2]/75">
-                {t("landing.easy_desc")}
-              </p>
             </div>
           </div>
-        </div>
+        </section>
       </main>
       <Footer />
     </div>
