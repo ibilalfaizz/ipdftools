@@ -117,6 +117,10 @@ const translations = {
     'landing.filter_empty_image':
       'No image tools in this category — try All or pick another filter.',
     'landing.why_choose_title': 'Why choose us?',
+    'landing.why_choose_eyebrow': 'FULL TRANSPARENCY',
+    'landing.why_choose_headline_regular':
+      'We never store your files on our servers. ',
+    'landing.why_choose_headline_emphasis': 'Everything runs in your browser.',
     'landing.secure_title': '100% Secure',
     'landing.secure_desc': 'All processing happens in your browser. Your files never leave your device.',
     'landing.fast_title': 'Fast & Efficient',
@@ -437,6 +441,10 @@ const translations = {
     'landing.filter_empty_image':
       'No hay herramientas de imagen en esta categoría — prueba Todas u otro filtro.',
     'landing.why_choose_title': '¿Por qué elegirnos?',
+    'landing.why_choose_eyebrow': 'TRANSPARENCIA TOTAL',
+    'landing.why_choose_headline_regular':
+      'No guardamos tus archivos en nuestros servidores. ',
+    'landing.why_choose_headline_emphasis': 'Todo ocurre en tu navegador.',
     'landing.secure_title': '100% Seguro',
     'landing.secure_desc': 'Todo el procesamiento ocurre en tu navegador. Tus archivos nunca salen de tu dispositivo.',
     'landing.fast_title': 'Rápido y Eficiente',
@@ -748,6 +756,11 @@ const translations = {
     'landing.filter_empty_image':
       'Aucun outil image dans cette catégorie — essayez Tout ou un autre filtre.',
     'landing.why_choose_title': 'Pourquoi nous choisir ?',
+    'landing.why_choose_eyebrow': 'TRANSPARENCE TOTALE',
+    'landing.why_choose_headline_regular':
+      'Nous ne stockons pas vos fichiers sur nos serveurs. ',
+    'landing.why_choose_headline_emphasis':
+      'Tout s\'exécute dans votre navigateur.',
     'landing.secure_title': '100% Sécurisé',
     'landing.secure_desc': 'Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',
     'landing.fast_title': 'Rapide et Efficace',
