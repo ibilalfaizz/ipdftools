@@ -40,10 +40,25 @@ export const pathMapping: Record<string, string[]> = {
     "recortar-imagenes",
     "recadrer-images",
   ],
+  "image-rotate": [
+    "image-rotate",
+    "rotar-imagenes",
+    "rotation-images",
+  ],
+  "image-blur-face": [
+    "image-blur-face",
+    "desenfoque-caras",
+    "flouter-visages",
+  ],
   "image-watermark": [
     "image-watermark",
     "marca-de-agua-imagen",
     "filigrane-image",
+  ],
+  "image-remove-background": [
+    "image-remove-background",
+    "quitar-fondo-imagen",
+    "supprimer-fond-image",
   ],
 };
 

@@ -1,0 +1,112 @@
+"use client";
+
+import { useCallback, useState } from "react";
+import { RotateCw, RotateCcw } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Header from "../Header";
+import Footer from "../Footer";
+import ImageToolsBatchForm from "../ImageToolsBatchForm";
+import ImageRotateLivePreview from "../ImageRotateLivePreview";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  processRotateBatch,
+  type ImageRotateDegrees,
+} from "@/lib/client-image-jobs";
+
+function normalizeRotation90(n: number): ImageRotateDegrees {
+  const x = ((Math.round(n) % 360) + 360) % 360;
+  if (x === 0 || x === 90 || x === 180 || x === 270) return x;
+  return 0;
+}
+
+export default function ImageRotatePage() {
+  const { t } = useLanguage();
+  const [rotationDeg, setRotationDeg] = useState(0);
+
+  const handleFilesChange = useCallback((files: File[]) => {
+    if (files.length === 0) setRotationDeg(0);
+  }, []);
+
+  const rotateRight = useCallback(() => {
+    setRotationDeg((d) => (d + 90) % 360);
+  }, []);
+
+  const rotateLeft = useCallback(() => {
+    setRotationDeg((d) => (((d - 90) % 360) + 360) % 360);
+  }, []);
+
+  const effective = normalizeRotation90(rotationDeg);
+
+  return (
+    <div className="min-h-screen app-bg">
+      <Header />
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <Card className="tool-page-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-2xl font-bold text-foreground">
+                {t("image_rotate.title")}
+              </CardTitle>
+              <p className="text-muted-foreground">
+                {t("image_rotate.description")}
+              </p>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ImageToolsBatchForm
+                translationPrefix="image_rotate"
+                onFilesChange={handleFilesChange}
+                processFiles={(files) =>
+                  processRotateBatch(files, effective)
+                }
+                renderWhenHasFiles={(files) => (
+                  <ImageRotateLivePreview
+                    files={files}
+                    rotationDegrees={rotationDeg}
+                  />
+                )}
+              >
+                <div className="space-y-3">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t("image_rotate.sidebar_rotation_heading")}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-11 flex-1 gap-2 border-[#d6ffd2]/25 px-3"
+                      onClick={rotateLeft}
+                    >
+                      <RotateCcw className="h-5 w-5 shrink-0" />
+                      <span className="truncate text-sm">
+                        {t("image_rotate.rotate_left")}
+                      </span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-11 flex-1 gap-2 border-[#d6ffd2]/25 px-3"
+                      onClick={rotateRight}
+                    >
+                      <RotateCw className="h-5 w-5 shrink-0" />
+                      <span className="truncate text-sm">
+                        {t("image_rotate.rotate_right")}
+                      </span>
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {t("image_rotate.net_rotation_label")}{" "}
+                    <span className="font-medium text-foreground tabular-nums">
+                      {effective}°
+                    </span>
+                  </p>
+                </div>
+              </ImageToolsBatchForm>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}

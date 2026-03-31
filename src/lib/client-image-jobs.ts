@@ -1,4 +1,8 @@
 import { sanitizeStem, uniqueZipName } from "@/lib/image-zip-helpers";
+import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
+import { imageFileKey } from "@/lib/image-file-key";
+import { removeBackgroundWithImgly } from "@/lib/imgly-remove-background";
+import { removeSimpleBackgroundToCanvas } from "@/lib/simple-remove-background";
 
 export type ClientImageResultFile = {
   name: string;
@@ -387,4 +391,229 @@ export async function processCropBatch(
     throw new Error("NO_VALID_IMAGES");
   }
   return { files: filesOut, zipSuggestedName: "cropped-images.zip" };
+}
+
+/** Clockwise rotation applied in one shot (0 = unchanged pixels, still re-encoded). */
+export type ImageRotateDegrees = 0 | 90 | 180 | 270;
+
+function rotateToCanvas(
+  bitmap: ImageBitmap,
+  degrees: ImageRotateDegrees
+): HTMLCanvasElement | null {
+  const w = bitmap.width;
+  const h = bitmap.height;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  if (degrees === 0) {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.drawImage(bitmap, 0, 0);
+    return canvas;
+  }
+
+  if (degrees === 90) {
+    canvas.width = h;
+    canvas.height = w;
+    ctx.translate(h, 0);
+    ctx.rotate(Math.PI / 2);
+    ctx.drawImage(bitmap, 0, 0);
+  } else if (degrees === 180) {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.translate(w, h);
+    ctx.rotate(Math.PI);
+    ctx.drawImage(bitmap, 0, 0);
+  } else {
+    canvas.width = h;
+    canvas.height = w;
+    ctx.translate(0, w);
+    ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(bitmap, 0, 0);
+  }
+  return canvas;
+}
+
+/** Rotate each image by a multiple of 90° clockwise (0–270) in the browser. */
+export async function processRotateBatch(
+  files: File[],
+  degrees: ImageRotateDegrees
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+  const tag =
+    degrees === 0 ? "0" : degrees === 90 ? "90" : degrees === 180 ? "180" : "270";
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const canvas = rotateToCanvas(bitmap, degrees);
+      if (!canvas) continue;
+
+      const mime = file.type;
+      let blob: Blob;
+      let ext: string;
+
+      if (
+        mime === "image/png" ||
+        mime === "image/gif" ||
+        mime === "image/tiff"
+      ) {
+        blob = await canvasToBlob(canvas, "image/png");
+        ext = "png";
+      } else if (mime === "image/webp") {
+        if (supportsWebpEncode()) {
+          blob = await canvasToBlob(canvas, "image/webp", 1);
+          ext = "webp";
+        } else {
+          blob = await canvasToBlob(canvas, "image/png");
+          ext = "png";
+        }
+      } else if (mime === "image/jpeg" || mime === "image/jpg") {
+        if (supportsWebpEncode()) {
+          blob = await canvasToBlob(canvas, "image/webp", 1);
+          ext = "webp";
+        } else {
+          blob = await canvasToBlob(canvas, "image/jpeg", JPEG_QUALITY);
+          ext = "jpg";
+        }
+      } else {
+        blob = await canvasToBlob(canvas, "image/png");
+        ext = "png";
+      }
+
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_r${tag}.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch {
+      // skip
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: `rotated-${tag}.zip` };
+}
+
+/** Blur face regions in the browser. Optional per-file box overrides from the preview editor. */
+export async function processFaceBlurBatch(
+  files: File[],
+  blurPx: number,
+  boxOverrides?: Readonly<Record<string, FaceBlurBox[]>>
+): Promise<ClientImageProcessResult> {
+  const { blurBitmapWithBoxes, getFaceBoxesFromBitmap } = await import(
+    "@/lib/face-blur-blazeface"
+  );
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const key = imageFileKey(file);
+      const override = boxOverrides?.[key];
+      const boxes: FaceBlurBox[] =
+        override !== undefined
+          ? override
+          : await getFaceBoxesFromBitmap(bitmap);
+      const canvas = blurBitmapWithBoxes(bitmap, boxes, blurPx);
+      const kind = outputKindForMime(file.type);
+      const blob = await encodeResizeOutput(canvas, kind);
+      const ext =
+        blob.type === "image/png"
+          ? "png"
+          : blob.type === "image/webp"
+            ? "webp"
+            : "jpg";
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_faces_blurred.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "FACE_BLUR_MODEL_FAILED") {
+        throw e;
+      }
+      // skip unreadable / detection failure for this file
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "faces-blurred.zip" };
+}
+
+/**
+ * Remove backgrounds (transparent PNG) via @imgly/background-removal (ML).
+ * Falls back to edge-based `simple-remove-background` if imgly fails (e.g. WASM/network).
+ */
+export async function processRemoveBackgroundBatch(
+  files: File[]
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+  let attemptedImage = false;
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    attemptedImage = true;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      let blob: Blob | null = null;
+      try {
+        blob = await removeBackgroundWithImgly(file);
+      } catch {
+        blob = null;
+      }
+      if (!blob || blob.size === 0) {
+        bitmap = await createImageBitmap(file);
+        const canvas = removeSimpleBackgroundToCanvas(
+          bitmap,
+          bitmap.width,
+          bitmap.height
+        );
+        blob = await canvasToBlob(canvas, "image/png");
+      }
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_nobg.png`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: "image/png",
+        data,
+      });
+    } catch {
+      /* skip unreadable */
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    if (attemptedImage) {
+      throw new Error("REMOVE_BG_FAILED");
+    }
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "background-removed.zip" };
 }

@@ -1,15 +1,3 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const { dependencies = {} } = JSON.parse(
-  readFileSync(join(__dirname, "package.json"), "utf8")
-);
-const radixReactPackages = Object.keys(dependencies).filter((name) =>
-  name.startsWith("@radix-ui/react-")
-);
-
 /** Keep in sync with `src/lib/urlPaths.ts` `pathMapping`. */
 const pathMapping = {
   merge: ["merge-pdf", "combinar-pdf", "fusionner-pdf"],
@@ -51,10 +39,25 @@ const pathMapping = {
     "recortar-imagenes",
     "recadrer-images",
   ],
+  "image-rotate": [
+    "image-rotate",
+    "rotar-imagenes",
+    "rotation-images",
+  ],
+  "image-blur-face": [
+    "image-blur-face",
+    "desenfoque-caras",
+    "flouter-visages",
+  ],
   "image-watermark": [
     "image-watermark",
     "marca-de-agua-imagen",
     "filigrane-image",
+  ],
+  "image-remove-background": [
+    "image-remove-background",
+    "quitar-fondo-imagen",
+    "supprimer-fond-image",
   ],
 };
 
@@ -202,11 +205,62 @@ function legacySeoSlugRedirects() {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: [
+    "@tensorflow/tfjs",
+    "@tensorflow/tfjs-core",
+    "@tensorflow/tfjs-backend-webgl",
+    "@tensorflow/tfjs-backend-cpu",
+    "@tensorflow/tfjs-converter",
+    "@tensorflow-models/blazeface",
+    "@imgly/background-removal",
+    "onnxruntime-web",
+  ],
   experimental: {
-    optimizePackageImports: ["lucide-react", ...radixReactPackages],
+    // Only lucide: enabling optimizePackageImports for all @radix-ui/* packages
+    // can produce a vendor-chunks/@radix-ui.js chunk that intermittently goes missing
+    // on dev refresh (stale manifest vs disk). Production builds were fine.
+    optimizePackageImports: ["lucide-react"],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer, webpack: webpackApi }) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+      // onnxruntime-web ships pre-minified .mjs with import.meta; SWC/Terser still
+      // tries to minify them as non-modules and fails the production build.
+      config.plugins.push({
+        apply(compiler) {
+          compiler.hooks.thisCompilation.tap("SkipOnnxRuntimeMinify", (compilation) => {
+            compilation.hooks.processAssets.tap(
+              {
+                name: "SkipOnnxRuntimeMinify",
+                stage:
+                  webpackApi.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE - 1,
+              },
+              () => {
+                for (const { name } of compilation.getAssets()) {
+                  if (
+                    /onnxruntime|ort\.webgpu|ort\.bundle|ort-wasm/i.test(name)
+                  ) {
+                    const asset = compilation.getAsset(name);
+                    if (asset) {
+                      compilation.updateAsset(name, asset.source, {
+                        ...asset.info,
+                        minimized: true,
+                      });
+                    }
+                  }
+                }
+              }
+            );
+          });
+        },
+      });
+    }
     return config;
   },
   async redirects() {

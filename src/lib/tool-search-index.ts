@@ -98,6 +98,24 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "image",
   },
   {
+    href: "/image-rotate",
+    labelKey: "nav.image_rotate",
+    descriptionKey: "landing.image_rotate_desc",
+    category: "image",
+  },
+  {
+    href: "/image-blur-face",
+    labelKey: "nav.image_blur_face",
+    descriptionKey: "landing.image_blur_face_desc",
+    category: "image",
+  },
+  {
+    href: "/image-remove-background",
+    labelKey: "nav.image_remove_bg",
+    descriptionKey: "landing.image_remove_bg_desc",
+    category: "image",
+  },
+  {
     href: "/image-watermark",
     labelKey: "nav.image_watermark",
     descriptionKey: "landing.image_watermark_desc",

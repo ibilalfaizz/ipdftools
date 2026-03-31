@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   FileText,
   Merge,
@@ -18,6 +18,8 @@ import {
   Film,
   Crop,
   Stamp,
+  ScanFace,
+  Eraser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,122 +28,204 @@ import Header from "../Header";
 import Footer from "../Footer";
 import ToolSearch from "../ToolSearch";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
+
+/** Landing tool filter chips (matches PDF + image tools below). */
+type ToolFilter =
+  | "all"
+  | "optimize"
+  | "create"
+  | "edit"
+  | "convert"
+  | "security";
+
+type ToolFilterTag = Exclude<ToolFilter, "all">;
+
+type LandingTool = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  path: string;
+  available: boolean;
+  categories: ToolFilterTag[];
+};
+
+function toolMatchesFilter(
+  categories: ToolFilterTag[],
+  active: ToolFilter
+): boolean {
+  if (active === "all") return true;
+  return categories.includes(active);
+}
 
 /** One uniform treatment for all tool icons and CTAs (mint on dark teal). */
 const toolIconClass =
   "inline-flex p-4 rounded-full mb-4 mx-auto bg-[#103c44] text-[#d6ffd2] ring-1 ring-[#d6ffd2]/20 group-hover:scale-110 transition-transform duration-300";
 
+const FILTER_CHIPS: { id: ToolFilter; labelKey: string }[] = [
+  { id: "all", labelKey: "landing.filter_all" },
+  { id: "optimize", labelKey: "landing.filter_optimize" },
+  { id: "create", labelKey: "landing.filter_create" },
+  { id: "edit", labelKey: "landing.filter_edit" },
+  { id: "convert", labelKey: "landing.filter_convert" },
+  { id: "security", labelKey: "landing.filter_security" },
+];
+
 const Landing = () => {
   const { t, getLocalizedPath } = useLanguage();
+  const [toolFilter, setToolFilter] = useState<ToolFilter>("all");
 
-  const pdfToolFeatures = [
-    {
-      icon: <Merge className="w-8 h-8" />,
-      title: t("nav.merge"),
-      description: t("landing.merge_desc"),
-      path: "/merge-pdf",
-      available: true,
-    },
-    {
-      icon: <Split className="w-8 h-8" />,
-      title: t("nav.split"),
-      description: t("landing.split_desc"),
-      path: "/split-pdf",
-      available: true,
-    },
-    {
-      icon: <Minimize className="w-8 h-8" />,
-      title: t("nav.compress"),
-      description: t("landing.compress_desc"),
-      path: "/compress-pdf",
-      available: true,
-    },
-    {
-      icon: <RotateCw className="w-8 h-8" />,
-      title: t("nav.rotate"),
-      description: t("landing.rotate_desc"),
-      path: "/rotate-pdf",
-      available: true,
-    },
-    {
-      icon: <FileText className="w-8 h-8" />,
-      title: t("nav.pdf_to_word"),
-      description: t("landing.pdf_to_word_desc"),
-      path: "/pdf-to-word",
-      available: true,
-    },
-    {
-      icon: <Image className="w-8 h-8" />,
-      title: t("nav.pdf_to_jpg"),
-      description: t("landing.pdf_to_jpg_desc"),
-      path: "/pdf-to-jpg",
-      available: true,
-    },
-    {
-      icon: <FileText className="w-8 h-8" />,
-      title: t("nav.pdf_to_text"),
-      description: t("landing.pdf_to_text_desc"),
-      path: "/pdf-to-text",
-      available: true,
-    },
-    {
-      icon: <Upload className="w-8 h-8" />,
-      title: t("nav.word_to_pdf"),
-      description: t("landing.word_to_pdf_desc"),
-      path: "/word-to-pdf",
-      available: true,
-    },
-    {
-      icon: <Download className="w-8 h-8" />,
-      title: t("nav.jpg_to_pdf"),
-      description: t("landing.jpg_to_pdf_desc"),
-      path: "/jpg-to-pdf",
-      available: true,
-    },
-  ];
+  const pdfToolFeatures: LandingTool[] = useMemo(
+    () => [
+      {
+        icon: <Merge className="w-8 h-8" />,
+        title: t("nav.merge"),
+        description: t("landing.merge_desc"),
+        path: "/merge-pdf",
+        available: true,
+        categories: ["create"],
+      },
+      {
+        icon: <Split className="w-8 h-8" />,
+        title: t("nav.split"),
+        description: t("landing.split_desc"),
+        path: "/split-pdf",
+        available: true,
+        categories: ["edit"],
+      },
+      {
+        icon: <Minimize className="w-8 h-8" />,
+        title: t("nav.compress"),
+        description: t("landing.compress_desc"),
+        path: "/compress-pdf",
+        available: true,
+        categories: ["optimize"],
+      },
+      {
+        icon: <RotateCw className="w-8 h-8" />,
+        title: t("nav.rotate"),
+        description: t("landing.rotate_desc"),
+        path: "/rotate-pdf",
+        available: true,
+        categories: ["edit"],
+      },
+      {
+        icon: <FileText className="w-8 h-8" />,
+        title: t("nav.pdf_to_word"),
+        description: t("landing.pdf_to_word_desc"),
+        path: "/pdf-to-word",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <Image className="w-8 h-8" />,
+        title: t("nav.pdf_to_jpg"),
+        description: t("landing.pdf_to_jpg_desc"),
+        path: "/pdf-to-jpg",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <FileText className="w-8 h-8" />,
+        title: t("nav.pdf_to_text"),
+        description: t("landing.pdf_to_text_desc"),
+        path: "/pdf-to-text",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <Upload className="w-8 h-8" />,
+        title: t("nav.word_to_pdf"),
+        description: t("landing.word_to_pdf_desc"),
+        path: "/word-to-pdf",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <Download className="w-8 h-8" />,
+        title: t("nav.jpg_to_pdf"),
+        description: t("landing.jpg_to_pdf_desc"),
+        path: "/jpg-to-pdf",
+        available: true,
+        categories: ["convert"],
+      },
+    ],
+    [t]
+  );
 
-  const imageToolFeatures = [
+  const imageToolFeatures: LandingTool[] = useMemo(
+    () => [
+      {
+        icon: <Maximize2 className="w-8 h-8" />,
+        title: t("nav.image_resize"),
+        description: t("landing.image_resize_desc"),
+        path: "/bulk-image-resize",
+        available: true,
+        categories: ["optimize"],
+      },
+      {
+        icon: <Minimize2 className="w-8 h-8" />,
+        title: t("nav.image_compress"),
+        description: t("landing.image_compress_desc"),
+        path: "/bulk-image-compress",
+        available: true,
+        categories: ["optimize"],
+      },
+      {
+        icon: <Sparkles className="w-8 h-8" />,
+        title: t("nav.image_webp"),
+        description: t("landing.image_webp_desc"),
+        path: "/bulk-image-webp",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <FileImage className="w-8 h-8" />,
+        title: t("nav.image_jpg"),
+        description: t("landing.image_jpg_desc"),
+        path: "/bulk-image-jpg",
+        available: true,
+        categories: ["convert"],
+      },
+      {
+        icon: <Film className="w-8 h-8" />,
+        title: t("nav.image_gif"),
+        description: t("landing.image_gif_desc"),
+        path: "/bulk-image-gif",
+        available: true,
+        categories: ["create"],
+      },
+      {
+        icon: <Crop className="w-8 h-8" />,
+        title: t("nav.image_crop"),
+        description: t("landing.image_crop_desc"),
+        path: "/image-crop",
+        available: true,
+        categories: ["edit"],
+      },
+      {
+        icon: <RotateCw className="w-8 h-8" />,
+        title: t("nav.image_rotate"),
+        description: t("landing.image_rotate_desc"),
+        path: "/image-rotate",
+        available: true,
+        categories: ["edit"],
+      },
     {
-      icon: <Maximize2 className="w-8 h-8" />,
-      title: t("nav.image_resize"),
-      description: t("landing.image_resize_desc"),
-      path: "/bulk-image-resize",
+      icon: <ScanFace className="w-8 h-8" />,
+      title: t("nav.image_blur_face"),
+      description: t("landing.image_blur_face_desc"),
+      path: "/image-blur-face",
       available: true,
+      categories: ["security"],
     },
     {
-      icon: <Minimize2 className="w-8 h-8" />,
-      title: t("nav.image_compress"),
-      description: t("landing.image_compress_desc"),
-      path: "/bulk-image-compress",
+      icon: <Eraser className="w-8 h-8" />,
+      title: t("nav.image_remove_bg"),
+      description: t("landing.image_remove_bg_desc"),
+      path: "/image-remove-background",
       available: true,
-    },
-    {
-      icon: <Sparkles className="w-8 h-8" />,
-      title: t("nav.image_webp"),
-      description: t("landing.image_webp_desc"),
-      path: "/bulk-image-webp",
-      available: true,
-    },
-    {
-      icon: <FileImage className="w-8 h-8" />,
-      title: t("nav.image_jpg"),
-      description: t("landing.image_jpg_desc"),
-      path: "/bulk-image-jpg",
-      available: true,
-    },
-    {
-      icon: <Film className="w-8 h-8" />,
-      title: t("nav.image_gif"),
-      description: t("landing.image_gif_desc"),
-      path: "/bulk-image-gif",
-      available: true,
-    },
-    {
-      icon: <Crop className="w-8 h-8" />,
-      title: t("nav.image_crop"),
-      description: t("landing.image_crop_desc"),
-      path: "/image-crop",
-      available: true,
+      categories: ["edit"],
     },
     {
       icon: <Stamp className="w-8 h-8" />,
@@ -149,8 +233,27 @@ const Landing = () => {
       description: t("landing.image_watermark_desc"),
       path: "/image-watermark",
       available: true,
+      categories: ["edit"],
     },
-  ];
+    ],
+    [t]
+  );
+
+  const pdfFiltered = useMemo(
+    () =>
+      pdfToolFeatures.filter((f) =>
+        toolMatchesFilter(f.categories, toolFilter)
+      ),
+    [pdfToolFeatures, toolFilter]
+  );
+
+  const imageFiltered = useMemo(
+    () =>
+      imageToolFeatures.filter((f) =>
+        toolMatchesFilter(f.categories, toolFilter)
+      ),
+    [imageToolFeatures, toolFilter]
+  );
 
   return (
     <div className="min-h-screen app-bg">
@@ -197,6 +300,30 @@ const Landing = () => {
         </section>
 
         <section
+          className="max-w-6xl mx-auto mb-12 scroll-mt-24"
+          aria-label={t("landing.filter_toolbar_aria")}
+        >
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-1">
+            {FILTER_CHIPS.map(({ id, labelKey }) => (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={toolFilter === id}
+                onClick={() => setToolFilter(id)}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                  toolFilter === id
+                    ? "border-[#3bd62b] bg-[#3bd62b] text-[#00232d] shadow-md font-semibold"
+                    : "border-[#d6ffd2]/30 bg-[#103c44]/40 text-[#d6ffd2]/90 hover:border-[#d6ffd2]/50 hover:bg-[#103c44]/65"
+                )}
+              >
+                {t(labelKey)}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section
           id="pdf-tools"
           className="max-w-6xl mx-auto scroll-mt-24 mb-20"
           aria-labelledby="pdf-tools-heading"
@@ -207,10 +334,15 @@ const Landing = () => {
           >
             {t("nav.pdf_tools")}
           </h2>
+          {pdfFiltered.length === 0 ? (
+            <p className="text-center text-[#d6ffd2]/60 text-base max-w-lg mx-auto py-6">
+              {t("landing.filter_empty_pdf")}
+            </p>
+          ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {pdfToolFeatures.map((feature, index) => (
+            {pdfFiltered.map((feature) => (
               <Card
-                key={index}
+                key={feature.path}
                 className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
               >
                 <CardHeader className="text-center pb-4">
@@ -241,6 +373,7 @@ const Landing = () => {
               </Card>
             ))}
           </div>
+          )}
         </section>
 
         <section
@@ -254,10 +387,15 @@ const Landing = () => {
           >
             {t("nav.image_tools")}
           </h2>
+          {imageFiltered.length === 0 ? (
+            <p className="text-center text-[#d6ffd2]/60 text-base max-w-lg mx-auto py-6">
+              {t("landing.filter_empty_image")}
+            </p>
+          ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {imageToolFeatures.map((feature, index) => (
+            {imageFiltered.map((feature) => (
               <Card
-                key={index}
+                key={feature.path}
                 className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
               >
                 <CardHeader className="text-center pb-4">
@@ -288,6 +426,7 @@ const Landing = () => {
               </Card>
             ))}
           </div>
+          )}
         </section>
 
         <div className="mt-20 text-center">
