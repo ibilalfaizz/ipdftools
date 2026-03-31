@@ -72,6 +72,11 @@ const Header = () => {
       description: t("landing.image_blur_face_desc"),
     },
     {
+      href: "/image-remove-background",
+      label: t("nav.image_remove_bg"),
+      description: t("landing.image_remove_bg_desc"),
+    },
+    {
       href: "/image-watermark",
       label: t("nav.image_watermark"),
       description: t("landing.image_watermark_desc"),
@@ -87,6 +92,7 @@ const Header = () => {
     "/image-crop",
     "/image-rotate",
     "/image-blur-face",
+    "/image-remove-background",
     "/image-watermark",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);

@@ -54,6 +54,11 @@ const pathMapping = {
     "marca-de-agua-imagen",
     "filigrane-image",
   ],
+  "image-remove-background": [
+    "image-remove-background",
+    "quitar-fondo-imagen",
+    "supprimer-fond-image",
+  ],
 };
 
 /**
@@ -207,6 +212,8 @@ const nextConfig = {
     "@tensorflow/tfjs-backend-cpu",
     "@tensorflow/tfjs-converter",
     "@tensorflow-models/blazeface",
+    "@imgly/background-removal",
+    "onnxruntime-web",
   ],
   experimental: {
     // Only lucide: enabling optimizePackageImports for all @radix-ui/* packages
@@ -214,7 +221,7 @@ const nextConfig = {
     // on dev refresh (stale manifest vs disk). Production builds were fine.
     optimizePackageImports: ["lucide-react"],
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack: webpackApi }) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };
     if (!isServer) {
       config.resolve.fallback = {
@@ -223,6 +230,36 @@ const nextConfig = {
         path: false,
         crypto: false,
       };
+      // onnxruntime-web ships pre-minified .mjs with import.meta; SWC/Terser still
+      // tries to minify them as non-modules and fails the production build.
+      config.plugins.push({
+        apply(compiler) {
+          compiler.hooks.thisCompilation.tap("SkipOnnxRuntimeMinify", (compilation) => {
+            compilation.hooks.processAssets.tap(
+              {
+                name: "SkipOnnxRuntimeMinify",
+                stage:
+                  webpackApi.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE - 1,
+              },
+              () => {
+                for (const { name } of compilation.getAssets()) {
+                  if (
+                    /onnxruntime|ort\.webgpu|ort\.bundle|ort-wasm/i.test(name)
+                  ) {
+                    const asset = compilation.getAsset(name);
+                    if (asset) {
+                      compilation.updateAsset(name, asset.source, {
+                        ...asset.info,
+                        minimized: true,
+                      });
+                    }
+                  }
+                }
+              }
+            );
+          });
+        },
+      });
     }
     return config;
   },

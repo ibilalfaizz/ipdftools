@@ -1,6 +1,8 @@
 import { sanitizeStem, uniqueZipName } from "@/lib/image-zip-helpers";
 import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
 import { imageFileKey } from "@/lib/image-file-key";
+import { removeBackgroundWithImgly } from "@/lib/imgly-remove-background";
+import { removeSimpleBackgroundToCanvas } from "@/lib/simple-remove-background";
 
 export type ClientImageResultFile = {
   name: string;
@@ -559,4 +561,59 @@ export async function processFaceBlurBatch(
     throw new Error("NO_VALID_IMAGES");
   }
   return { files: filesOut, zipSuggestedName: "faces-blurred.zip" };
+}
+
+/**
+ * Remove backgrounds (transparent PNG) via @imgly/background-removal (ML).
+ * Falls back to edge-based `simple-remove-background` if imgly fails (e.g. WASM/network).
+ */
+export async function processRemoveBackgroundBatch(
+  files: File[]
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+  let attemptedImage = false;
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    attemptedImage = true;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      let blob: Blob | null = null;
+      try {
+        blob = await removeBackgroundWithImgly(file);
+      } catch {
+        blob = null;
+      }
+      if (!blob || blob.size === 0) {
+        bitmap = await createImageBitmap(file);
+        const canvas = removeSimpleBackgroundToCanvas(
+          bitmap,
+          bitmap.width,
+          bitmap.height
+        );
+        blob = await canvasToBlob(canvas, "image/png");
+      }
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_nobg.png`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: "image/png",
+        data,
+      });
+    } catch {
+      /* skip unreadable */
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    if (attemptedImage) {
+      throw new Error("REMOVE_BG_FAILED");
+    }
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "background-removed.zip" };
 }

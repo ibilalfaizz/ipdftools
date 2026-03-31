@@ -61,6 +61,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_watermark.title": "Add Image or Text Watermark Online — Free in Your Browser",
     "seo.image_watermark.description":
       "Overlay text or a logo on your photo. Adjust size, opacity, and position, then download PNG or ZIP.",
+    "seo.image_remove_background.title": "Remove Image Background Online — Transparent PNG in Your Browser",
+    "seo.image_remove_background.description":
+      "Remove solid or even backdrops from photos in your browser. Download transparent PNGs or a ZIP — files stay on your device.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
@@ -121,6 +124,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_watermark.title": "Marca de agua en imágenes online",
     "seo.image_watermark.description":
       "Añade texto o un logo. Ajusta tamaño, opacidad y posición. Descarga PNG o ZIP.",
+    "seo.image_remove_background.title": "Quitar fondo de imagen online — PNG transparente",
+    "seo.image_remove_background.description":
+      "Quita fondos lisos o uniformes en el navegador. PNG transparentes o ZIP; los archivos no salen de tu dispositivo.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
@@ -181,5 +187,8 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_watermark.title": "Filigrane sur image en ligne",
     "seo.image_watermark.description":
       "Superposez du texte ou un logo. Réglez taille, opacité et position. Téléchargez PNG ou ZIP.",
+    "seo.image_remove_background.title": "Supprimer le fond d’une image en ligne — PNG transparent",
+    "seo.image_remove_background.description":
+      "Retirez les fonds unis ou réguliers dans le navigateur. PNG transparents ou ZIP ; vos fichiers restent sur votre appareil.",
   },
 };

@@ -21,6 +21,12 @@ import {
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
 
+/** Passed to `renderWhenHasFiles` so previews can reflect processing state. */
+export type ImageBatchPreviewContext = {
+  result: ClientImageProcessResult | null;
+  busy: boolean;
+};
+
 type TranslationPrefix =
   | "image_resize"
   | "image_compress"
@@ -28,7 +34,8 @@ type TranslationPrefix =
   | "image_jpg"
   | "image_gif"
   | "image_rotate"
-  | "image_blur_face";
+  | "image_blur_face"
+  | "image_remove_bg";
 
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */
@@ -38,7 +45,10 @@ type Props = {
   /** Override first download button label (e.g. GIF tool uses “Download GIF”). */
   downloadPrimaryLabelKey?: string;
   /** Main column content when files are present (e.g. live preview beside the sheet). */
-  renderWhenHasFiles?: (files: File[]) => ReactNode;
+  renderWhenHasFiles?: (
+    files: File[],
+    ctx?: ImageBatchPreviewContext
+  ) => ReactNode;
   /** Called whenever the file list changes (e.g. clear all → reset rotation in parent). */
   onFilesChange?: (files: File[]) => void;
 };
@@ -174,6 +184,11 @@ export default function ImageToolsBatchForm({
           title: t("image_tools.face_blur_model_failed"),
           variant: "destructive",
         });
+      } else if (msg === "REMOVE_BG_FAILED") {
+        toast({
+          title: t("image_tools.remove_bg_failed"),
+          variant: "destructive",
+        });
       } else if (msg === "NO_VALID_IMAGES") {
         toast({
           title: t("image_tools.error"),
@@ -296,7 +311,7 @@ export default function ImageToolsBatchForm({
 
       {hasFiles && renderWhenHasFiles ? (
         <div className="mx-auto w-full max-w-5xl px-3 py-2 sm:px-4 sm:py-4">
-          {renderWhenHasFiles(files)}
+          {renderWhenHasFiles(files, { result, busy })}
         </div>
       ) : null}
 

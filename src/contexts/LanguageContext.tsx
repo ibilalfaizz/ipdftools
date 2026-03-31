@@ -56,6 +56,7 @@ const translations = {
     'nav.image_crop': 'Image crop',
     'nav.image_rotate': 'Rotate images',
     'nav.image_blur_face': 'Blur faces',
+    'nav.image_remove_bg': 'Remove background',
     'nav.image_watermark': 'Image watermark',
     
     // URL paths
@@ -90,6 +91,8 @@ const translations = {
       'Rotate many photos 90°, 180°, or 270° clockwise in your browser. Download separately or as a ZIP.',
     'landing.image_blur_face_desc':
       'Auto-detect faces and blur them for privacy. Runs in your browser; download images or a ZIP.',
+    'landing.image_remove_bg_desc':
+      'Erase solid or even backgrounds (for example studio white or walls) and download transparent PNGs — all in your browser.',
     'landing.image_watermark_desc':
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     
@@ -102,6 +105,17 @@ const translations = {
       'We merge, split, compress, convert, and optimize PDFs and images on your device. No account required—your files stay on your machine, not our servers.',
     'landing.hero_cta_primary': 'Browse PDF tools',
     'landing.hero_cta_secondary': 'Browse image tools',
+    'landing.filter_toolbar_aria': 'Filter tools by category',
+    'landing.filter_all': 'All',
+    'landing.filter_optimize': 'Optimize',
+    'landing.filter_create': 'Create',
+    'landing.filter_edit': 'Edit',
+    'landing.filter_convert': 'Convert',
+    'landing.filter_security': 'Security',
+    'landing.filter_empty_pdf':
+      'No PDF tools in this category — try All or pick another filter.',
+    'landing.filter_empty_image':
+      'No image tools in this category — try All or pick another filter.',
     'landing.why_choose_title': 'Why choose us?',
     'landing.secure_title': '100% Secure',
     'landing.secure_desc': 'All processing happens in your browser. Your files never leave your device.',
@@ -267,6 +281,17 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'Nothing was found automatically — use the region in the center: drag or resize it to cover what you want blurred.',
     'image_blur_face.preview_thumbnails_hint': 'Preview another file:',
+    'image_remove_bg.title': 'Remove image background',
+    'image_remove_bg.description':
+      'Best when the backdrop is fairly uniform and shows along the edges of the photo. You get transparent PNGs; everything runs on your device.',
+    'image_remove_bg.process': 'Remove background',
+    'image_remove_bg.drop_title': 'Drop images here or click to browse',
+    'image_remove_bg.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_remove_bg.preview_before':
+      'Your original photo shows here. Use Remove background in the sidebar — the preview will switch to the transparent cutout.',
+    'image_remove_bg.preview_after':
+      'Transparent cutout (checkerboard = see-through). Download from the sidebar or run again after changing files.',
+    'image_remove_bg.preview_thumbnails_hint': 'Preview another file:',
     'image_watermark.title': 'Image watermark',
     'image_watermark.description':
       'Upload a photo and stack multiple text and image watermarks. Drag a layer on the preview to move it; use the corner handle on images to resize. List order: top = in front.',
@@ -322,6 +347,8 @@ const translations = {
       'This browser cannot encode WebP. Try Chrome, Edge, or Firefox.',
     'image_tools.face_blur_model_failed':
       'Could not load privacy tools in your browser. Check your connection and try again.',
+    'image_tools.remove_bg_failed':
+      'Could not remove backgrounds. Check your connection, try other images, or try again.',
   },
   es: {
     // Navigation
@@ -348,6 +375,7 @@ const translations = {
     'nav.image_crop': 'Recorte de imágenes',
     'nav.image_rotate': 'Rotar imágenes',
     'nav.image_blur_face': 'Desenfocar caras',
+    'nav.image_remove_bg': 'Quitar fondo',
     'nav.image_watermark': 'Marca de agua',
     
     // URL paths
@@ -383,6 +411,8 @@ const translations = {
       'Gira muchas fotos 90°, 180° o 270° en el navegador. Descarga sueltas o en ZIP.',
     'landing.image_blur_face_desc':
       'Detecta caras y las desenfoca para privacidad. En tu navegador; imágenes o ZIP.',
+    'landing.image_remove_bg_desc':
+      'Elimina fondos lisos o uniformes (estudio, paredes) y descarga PNG transparentes — todo en tu navegador.',
     'landing.image_watermark_desc':
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     
@@ -395,6 +425,17 @@ const translations = {
       'Combinamos, dividimos, comprimimos y convertimos en tu dispositivo. Sin cuenta—tus archivos se quedan en tu equipo, no en nuestros servidores.',
     'landing.hero_cta_primary': 'Ver herramientas PDF',
     'landing.hero_cta_secondary': 'Ver herramientas de imagen',
+    'landing.filter_toolbar_aria': 'Filtrar herramientas por categoría',
+    'landing.filter_all': 'Todas',
+    'landing.filter_optimize': 'Optimizar',
+    'landing.filter_create': 'Crear',
+    'landing.filter_edit': 'Editar',
+    'landing.filter_convert': 'Convertir',
+    'landing.filter_security': 'Seguridad',
+    'landing.filter_empty_pdf':
+      'No hay herramientas PDF en esta categoría — prueba Todas u otro filtro.',
+    'landing.filter_empty_image':
+      'No hay herramientas de imagen en esta categoría — prueba Todas u otro filtro.',
     'landing.why_choose_title': '¿Por qué elegirnos?',
     'landing.secure_title': '100% Seguro',
     'landing.secure_desc': 'Todo el procesamiento ocurre en tu navegador. Tus archivos nunca salen de tu dispositivo.',
@@ -551,6 +592,17 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'No se encontró nada automáticamente — usa la zona central: arrástrala o redimensiónala para cubrir lo que quieras desenfocar.',
     'image_blur_face.preview_thumbnails_hint': 'Vista previa de otro archivo:',
+    'image_remove_bg.title': 'Quitar fondo de imagen',
+    'image_remove_bg.description':
+      'Funciona mejor si el fondo es bastante uniforme y se ve en los bordes de la imagen. PNG transparentes; todo en tu dispositivo.',
+    'image_remove_bg.process': 'Quitar fondo',
+    'image_remove_bg.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_remove_bg.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_remove_bg.preview_before':
+      'Aquí ves la foto original. Usa Quitar fondo en el panel — la vista previa pasará al recorte transparente.',
+    'image_remove_bg.preview_after':
+      'Recorte transparente (el patrón indica transparencia). Descarga desde el panel o vuelve a procesar si cambias archivos.',
+    'image_remove_bg.preview_thumbnails_hint': 'Vista previa de otro archivo:',
     'image_watermark.title': 'Marca de agua en imagen',
     'image_watermark.description':
       'Sube una foto y apila varias marcas de texto e imagen. Arrastra para mover; en imágenes usa la esquina para redimensionar. En la lista, arriba = delante.',
@@ -606,6 +658,8 @@ const translations = {
       'Este navegador no puede codificar WebP. Prueba Chrome, Edge o Firefox.',
     'image_tools.face_blur_model_failed':
       'No se pudieron cargar las herramientas de privacidad en el navegador. Revisa la conexión e inténtalo de nuevo.',
+    'image_tools.remove_bg_failed':
+      'No se pudo quitar el fondo. Revisa la conexión, prueba otras imágenes o inténtalo de nuevo.',
   },
   fr: {
     // Navigation
@@ -632,6 +686,7 @@ const translations = {
     'nav.image_crop': 'Recadrage d\'images',
     'nav.image_rotate': 'Rotation d\'images',
     'nav.image_blur_face': 'Flouter les visages',
+    'nav.image_remove_bg': 'Supprimer le fond',
     'nav.image_watermark': 'Filigrane image',
     
     // URL paths
@@ -667,6 +722,8 @@ const translations = {
       'Faites pivoter plusieurs photos à 90°, 180° ou 270° dans le navigateur. Fichiers séparés ou ZIP.',
     'landing.image_blur_face_desc':
       'Détecte les visages et les floute pour la confidentialité. Dans le navigateur ; images ou ZIP.',
+    'landing.image_remove_bg_desc':
+      'Effacez les fonds unis ou réguliers (studio, murs) et téléchargez des PNG transparents — tout dans le navigateur.',
     'landing.image_watermark_desc':
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     
@@ -679,6 +736,17 @@ const translations = {
       'Fusion, découpage, compression et conversion sur votre appareil. Sans compte—vos fichiers restent sur votre machine, pas sur nos serveurs.',
     'landing.hero_cta_primary': 'Parcourir les outils PDF',
     'landing.hero_cta_secondary': 'Parcourir les outils image',
+    'landing.filter_toolbar_aria': 'Filtrer les outils par catégorie',
+    'landing.filter_all': 'Tout',
+    'landing.filter_optimize': 'Optimiser',
+    'landing.filter_create': 'Créer',
+    'landing.filter_edit': 'Modifier',
+    'landing.filter_convert': 'Convertir',
+    'landing.filter_security': 'Sécurité',
+    'landing.filter_empty_pdf':
+      'Aucun outil PDF dans cette catégorie — essayez Tout ou un autre filtre.',
+    'landing.filter_empty_image':
+      'Aucun outil image dans cette catégorie — essayez Tout ou un autre filtre.',
     'landing.why_choose_title': 'Pourquoi nous choisir ?',
     'landing.secure_title': '100% Sécurisé',
     'landing.secure_desc': 'Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',
@@ -835,6 +903,17 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'Rien n’a été détecté automatiquement — utilisez la zone au centre : déplacez-la ou redimensionnez-la pour couvrir ce que vous voulez flouter.',
     'image_blur_face.preview_thumbnails_hint': 'Aperçu d’un autre fichier :',
+    'image_remove_bg.title': 'Supprimer le fond d’image',
+    'image_remove_bg.description':
+      'Idéal si l’arrière-plan est assez uniforme et visible sur les bords. PNG transparents ; tout est traité sur votre appareil.',
+    'image_remove_bg.process': 'Supprimer le fond',
+    'image_remove_bg.drop_title': 'Déposez des images ici ou cliquez',
+    'image_remove_bg.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_remove_bg.preview_before':
+      'Vous voyez ici la photo d’origine. Utilisez Supprimer le fond dans le panneau — l’aperçu passera au détourage transparent.',
+    'image_remove_bg.preview_after':
+      'Détourage transparent (le motif indique la transparence). Téléchargez depuis le panneau ou relancez après avoir changé de fichiers.',
+    'image_remove_bg.preview_thumbnails_hint': 'Aperçu d’un autre fichier :',
     'image_watermark.title': 'Filigrane sur image',
     'image_watermark.description':
       'Importez une photo et superposez plusieurs textes et images. Glissez pour déplacer ; pour les images, utilisez le coin pour redimensionner. Dans la liste, le bas = devant.',
@@ -890,6 +969,8 @@ const translations = {
       'Ce navigateur ne peut pas encoder WebP. Essayez Chrome, Edge ou Firefox.',
     'image_tools.face_blur_model_failed':
       'Impossible de charger les outils de confidentialité dans le navigateur. Vérifiez la connexion et réessayez.',
+    'image_tools.remove_bg_failed':
+      'Impossible de supprimer les arrière-plans. Vérifiez la connexion, essayez d’autres images ou réessayez.',
   }
 };
 

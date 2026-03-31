@@ -55,6 +55,11 @@ export const pathMapping: Record<string, string[]> = {
     "marca-de-agua-imagen",
     "filigrane-image",
   ],
+  "image-remove-background": [
+    "image-remove-background",
+    "quitar-fondo-imagen",
+    "supprimer-fond-image",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };
