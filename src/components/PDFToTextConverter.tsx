@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
-import { getPdfJs } from '@/lib/pdfjs-client';
+import { extractTextFromPdf } from '@/lib/pdf-extract-text';
 
 const PDFToTextConverter = () => {
   const { t } = useLanguage();
@@ -13,29 +13,6 @@ const PDFToTextConverter = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [convertedFiles, setConvertedFiles] = useState<{ filename: string; content: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const extractTextFromPDF = async (file: File): Promise<string> => {
-    const pdfjsLib = await getPdfJs();
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let fullText = '';
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item: any) => {
-          if (item && typeof item === 'object' && 'str' in item) {
-            return item.str;
-          }
-          return '';
-        })
-        .join(' ');
-      fullText += pageText + '\n';
-    }
-
-    return fullText;
-  };
 
   const handleDrop = (acceptedFiles: File[]) => {
     const pdfs = acceptedFiles.filter((f) => f.type === 'application/pdf');
@@ -69,7 +46,7 @@ const PDFToTextConverter = () => {
     try {
       const results = await Promise.all(
         files.map(async (file) => {
-          const textContent = await extractTextFromPDF(file);
+          const textContent = await extractTextFromPdf(file);
           return {
             filename: file.name.replace('.pdf', '.txt'),
             content: textContent,
