@@ -1,15 +1,3 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const { dependencies = {} } = JSON.parse(
-  readFileSync(join(__dirname, "package.json"), "utf8")
-);
-const radixReactPackages = Object.keys(dependencies).filter((name) =>
-  name.startsWith("@radix-ui/react-")
-);
-
 /** Keep in sync with `src/lib/urlPaths.ts` `pathMapping`. */
 const pathMapping = {
   merge: ["merge-pdf", "combinar-pdf", "fusionner-pdf"],
@@ -50,6 +38,11 @@ const pathMapping = {
     "image-crop",
     "recortar-imagenes",
     "recadrer-images",
+  ],
+  "image-rotate": [
+    "image-rotate",
+    "rotar-imagenes",
+    "rotation-images",
   ],
   "image-watermark": [
     "image-watermark",
@@ -203,7 +196,10 @@ function legacySeoSlugRedirects() {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ["lucide-react", ...radixReactPackages],
+    // Only lucide: enabling optimizePackageImports for all @radix-ui/* packages
+    // can produce a vendor-chunks/@radix-ui.js chunk that intermittently goes missing
+    // on dev refresh (stale manifest vs disk). Production builds were fine.
+    optimizePackageImports: ["lucide-react"],
   },
   webpack: (config) => {
     config.resolve.alias = { ...config.resolve.alias, canvas: false };

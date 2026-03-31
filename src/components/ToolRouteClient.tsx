@@ -93,6 +93,10 @@ const ImageWatermarkPage = dynamic(() => import("@/pages/ImageWatermarkPage"), {
   ssr: false,
   loading: loadFallback,
 });
+const ImageRotatePage = dynamic(() => import("@/pages/ImageRotatePage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -110,6 +114,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/bulk-image-jpg": ImageJpgPage,
   "/bulk-image-gif": ImageGifPage,
   "/image-crop": ImageCropPage,
+  "/image-rotate": ImageRotatePage,
   "/image-watermark": ImageWatermarkPage,
 };
 

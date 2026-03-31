@@ -388,3 +388,116 @@ export async function processCropBatch(
   }
   return { files: filesOut, zipSuggestedName: "cropped-images.zip" };
 }
+
+/** Clockwise rotation applied in one shot (0 = unchanged pixels, still re-encoded). */
+export type ImageRotateDegrees = 0 | 90 | 180 | 270;
+
+function rotateToCanvas(
+  bitmap: ImageBitmap,
+  degrees: ImageRotateDegrees
+): HTMLCanvasElement | null {
+  const w = bitmap.width;
+  const h = bitmap.height;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  if (degrees === 0) {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.drawImage(bitmap, 0, 0);
+    return canvas;
+  }
+
+  if (degrees === 90) {
+    canvas.width = h;
+    canvas.height = w;
+    ctx.translate(h, 0);
+    ctx.rotate(Math.PI / 2);
+    ctx.drawImage(bitmap, 0, 0);
+  } else if (degrees === 180) {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.translate(w, h);
+    ctx.rotate(Math.PI);
+    ctx.drawImage(bitmap, 0, 0);
+  } else {
+    canvas.width = h;
+    canvas.height = w;
+    ctx.translate(0, w);
+    ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(bitmap, 0, 0);
+  }
+  return canvas;
+}
+
+/** Rotate each image by a multiple of 90° clockwise (0–270) in the browser. */
+export async function processRotateBatch(
+  files: File[],
+  degrees: ImageRotateDegrees
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+  const tag =
+    degrees === 0 ? "0" : degrees === 90 ? "90" : degrees === 180 ? "180" : "270";
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const canvas = rotateToCanvas(bitmap, degrees);
+      if (!canvas) continue;
+
+      const mime = file.type;
+      let blob: Blob;
+      let ext: string;
+
+      if (
+        mime === "image/png" ||
+        mime === "image/gif" ||
+        mime === "image/tiff"
+      ) {
+        blob = await canvasToBlob(canvas, "image/png");
+        ext = "png";
+      } else if (mime === "image/webp") {
+        if (supportsWebpEncode()) {
+          blob = await canvasToBlob(canvas, "image/webp", 1);
+          ext = "webp";
+        } else {
+          blob = await canvasToBlob(canvas, "image/png");
+          ext = "png";
+        }
+      } else if (mime === "image/jpeg" || mime === "image/jpg") {
+        if (supportsWebpEncode()) {
+          blob = await canvasToBlob(canvas, "image/webp", 1);
+          ext = "webp";
+        } else {
+          blob = await canvasToBlob(canvas, "image/jpeg", JPEG_QUALITY);
+          ext = "jpg";
+        }
+      } else {
+        blob = await canvasToBlob(canvas, "image/png");
+        ext = "png";
+      }
+
+      const stem = sanitizeStem(file.name);
+      const fileName = uniqueZipName(used, `${stem}_r${tag}.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch {
+      // skip
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: `rotated-${tag}.zip` };
+}

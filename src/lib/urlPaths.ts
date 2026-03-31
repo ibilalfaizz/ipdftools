@@ -40,6 +40,11 @@ export const pathMapping: Record<string, string[]> = {
     "recortar-imagenes",
     "recadrer-images",
   ],
+  "image-rotate": [
+    "image-rotate",
+    "rotar-imagenes",
+    "rotation-images",
+  ],
   "image-watermark": [
     "image-watermark",
     "marca-de-agua-imagen",

@@ -54,6 +54,7 @@ const translations = {
     'nav.image_jpg': 'Bulk JPG converter',
     'nav.image_gif': 'Images to GIF',
     'nav.image_crop': 'Image crop',
+    'nav.image_rotate': 'Rotate images',
     'nav.image_watermark': 'Image watermark',
     
     // URL paths
@@ -84,6 +85,8 @@ const translations = {
     'landing.image_gif_desc':
       'Build an animated GIF from multiple photos. Set seconds per frame and loop in the sidebar.',
     'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
+    'landing.image_rotate_desc':
+      'Rotate many photos 90°, 180°, or 270° clockwise in your browser. Download separately or as a ZIP.',
     'landing.image_watermark_desc':
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     
@@ -234,6 +237,19 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • One image',
     'image_crop.batch_hint':
       'The same crop area (relative to each image) is applied to every file.',
+    'image_rotate.title': 'Rotate images',
+    'image_rotate.description':
+      'Use Rotate left / Rotate right in the sidebar (90° per click). Preview updates live; Process applies the total rotation to every image. Output format follows the bulk compressor rules (PNG/WebP/JPEG).',
+    'image_rotate.preview_hint':
+      'Preview shows the total rotation so far. Use the sidebar buttons — you can tap left or right as many times as you like.',
+    'image_rotate.thumbnails_hint': 'Preview another file:',
+    'image_rotate.sidebar_rotation_heading': 'Rotate (90° per click)',
+    'image_rotate.rotate_left': 'Rotate left',
+    'image_rotate.rotate_right': 'Rotate right',
+    'image_rotate.net_rotation_label': 'Total rotation (clockwise):',
+    'image_rotate.process': 'Rotate',
+    'image_rotate.drop_title': 'Drop images here or click to browse',
+    'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
     'image_watermark.title': 'Image watermark',
     'image_watermark.description':
       'Upload a photo and stack multiple text and image watermarks. Drag a layer on the preview to move it; use the corner handle on images to resize. List order: top = in front.',
@@ -311,6 +327,7 @@ const translations = {
     'nav.image_jpg': 'Conversor JPG masivo',
     'nav.image_gif': 'Imágenes a GIF',
     'nav.image_crop': 'Recorte de imágenes',
+    'nav.image_rotate': 'Rotar imágenes',
     'nav.image_watermark': 'Marca de agua',
     
     // URL paths
@@ -342,6 +359,8 @@ const translations = {
     'landing.image_gif_desc':
       'Crea un GIF animado desde varias fotos. Segundos por imagen y bucle en el panel.',
     'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
+    'landing.image_rotate_desc':
+      'Gira muchas fotos 90°, 180° o 270° en el navegador. Descarga sueltas o en ZIP.',
     'landing.image_watermark_desc':
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     
@@ -483,6 +502,19 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Una imagen',
     'image_crop.batch_hint':
       'Se aplica la misma zona de recorte (relativa a cada imagen) a todos los archivos.',
+    'image_rotate.title': 'Rotar imágenes',
+    'image_rotate.description':
+      'Usa Girar a la izquierda / derecha en el panel (90° por pulsación). Vista previa en vivo; Procesar aplica la rotación total a todas. Formato como el compresor masivo.',
+    'image_rotate.preview_hint':
+      'La vista previa muestra la rotación acumulada. Botones en el panel: puedes pulsar izquierda o derecha las veces que quieras.',
+    'image_rotate.thumbnails_hint': 'Vista previa de otro archivo:',
+    'image_rotate.sidebar_rotation_heading': 'Girar (90° por pulsación)',
+    'image_rotate.rotate_left': 'Girar a la izquierda',
+    'image_rotate.rotate_right': 'Girar a la derecha',
+    'image_rotate.net_rotation_label': 'Rotación total (horario):',
+    'image_rotate.process': 'Rotar',
+    'image_rotate.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
     'image_watermark.title': 'Marca de agua en imagen',
     'image_watermark.description':
       'Sube una foto y apila varias marcas de texto e imagen. Arrastra para mover; en imágenes usa la esquina para redimensionar. En la lista, arriba = delante.',
@@ -560,6 +592,7 @@ const translations = {
     'nav.image_jpg': 'Conversion JPG masse',
     'nav.image_gif': 'Images vers GIF',
     'nav.image_crop': 'Recadrage d\'images',
+    'nav.image_rotate': 'Rotation d\'images',
     'nav.image_watermark': 'Filigrane image',
     
     // URL paths
@@ -591,6 +624,8 @@ const translations = {
     'landing.image_gif_desc':
       'Créez un GIF animé à partir de photos. Délai par image et boucle dans le panneau.',
     'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
+    'landing.image_rotate_desc':
+      'Faites pivoter plusieurs photos à 90°, 180° ou 270° dans le navigateur. Fichiers séparés ou ZIP.',
     'landing.image_watermark_desc':
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     
@@ -732,6 +767,19 @@ const translations = {
     'image_crop.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Une image',
     'image_crop.batch_hint':
       'La même zone de recadrage (relative à chaque image) est appliquée à chaque fichier.',
+    'image_rotate.title': 'Rotation d\'images',
+    'image_rotate.description':
+      'Utilisez Pivoter à gauche / à droite dans le panneau (90° par clic). Aperçu en direct ; Traiter applique la rotation totale à toutes. Format comme le compresseur en masse.',
+    'image_rotate.preview_hint':
+      'L’aperçu reflète la rotation cumulée. Boutons dans le panneau : vous pouvez cliquer autant de fois que nécessaire.',
+    'image_rotate.thumbnails_hint': 'Aperçu d’un autre fichier :',
+    'image_rotate.sidebar_rotation_heading': 'Pivoter (90° par clic)',
+    'image_rotate.rotate_left': 'Pivoter à gauche',
+    'image_rotate.rotate_right': 'Pivoter à droite',
+    'image_rotate.net_rotation_label': 'Rotation totale (horaire) :',
+    'image_rotate.process': 'Pivoter',
+    'image_rotate.drop_title': 'Déposez des images ici ou cliquez',
+    'image_rotate.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
     'image_watermark.title': 'Filigrane sur image',
     'image_watermark.description':
       'Importez une photo et superposez plusieurs textes et images. Glissez pour déplacer ; pour les images, utilisez le coin pour redimensionner. Dans la liste, le bas = devant.',

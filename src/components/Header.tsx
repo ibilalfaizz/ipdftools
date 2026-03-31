@@ -62,6 +62,11 @@ const Header = () => {
       description: t("landing.image_crop_desc"),
     },
     {
+      href: "/image-rotate",
+      label: t("nav.image_rotate"),
+      description: t("landing.image_rotate_desc"),
+    },
+    {
       href: "/image-watermark",
       label: t("nav.image_watermark"),
       description: t("landing.image_watermark_desc"),
@@ -75,6 +80,7 @@ const Header = () => {
     "/bulk-image-jpg",
     "/bulk-image-gif",
     "/image-crop",
+    "/image-rotate",
     "/image-watermark",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
@@ -194,13 +200,14 @@ const Header = () => {
                       <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
                         {t("nav.pdf_tools")}
                       </h3>
-                      <ul className="space-y-0.5">
+                      <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
                         {allTools.map((tool) => (
-                          <li key={tool.href}>
+                          <li key={tool.href} className="min-w-0">
                             <Link
                               href={getLocalizedPath(tool.href)}
                               onClick={closeMobile}
-                              className="block rounded-md px-3 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                              className="block rounded-md px-2 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2] truncate"
+                              title={tool.label}
                             >
                               {tool.label}
                             </Link>
@@ -212,13 +219,14 @@ const Header = () => {
                       <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
                         {t("nav.image_tools")}
                       </h3>
-                      <ul className="space-y-0.5">
+                      <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
                         {imageTools.map((tool) => (
-                          <li key={tool.href}>
+                          <li key={tool.href} className="min-w-0">
                             <Link
                               href={getLocalizedPath(tool.href)}
                               onClick={closeMobile}
-                              className="block rounded-md px-3 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                              className="block rounded-md px-2 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2] truncate"
+                              title={tool.label}
                             >
                               {tool.label}
                             </Link>
@@ -253,7 +261,7 @@ const Header = () => {
                       {t("nav.pdf_tools")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[600px] max-w-[90vw] grid-cols-2 md:grid-cols-3 max-h-[70vh] overflow-y-auto">
+                      <div className="grid gap-3 p-4 w-[min(520px,90vw)] grid-cols-2 max-h-[70vh] overflow-y-auto">
                         {allTools.map((tool) => (
                           <Link
                             key={tool.href}
@@ -282,7 +290,7 @@ const Header = () => {
                       {t("nav.image_tools")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[420px] max-w-[90vw]">
+                      <div className="grid gap-3 p-4 w-[min(480px,90vw)] grid-cols-2">
                         {imageTools.map((tool) => (
                           <Link
                             key={tool.href}

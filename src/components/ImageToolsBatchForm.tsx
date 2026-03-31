@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { Loader2 } from "lucide-react";
 import JSZip from "jszip";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,15 +26,20 @@ type TranslationPrefix =
   | "image_compress"
   | "image_webp"
   | "image_jpg"
-  | "image_gif";
+  | "image_gif"
+  | "image_rotate";
 
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */
   processFiles: (files: File[]) => Promise<ClientImageProcessResult>;
   translationPrefix: TranslationPrefix;
-  children?: React.ReactNode;
+  children?: ReactNode;
   /** Override first download button label (e.g. GIF tool uses “Download GIF”). */
   downloadPrimaryLabelKey?: string;
+  /** Main column content when files are present (e.g. live preview beside the sheet). */
+  renderWhenHasFiles?: (files: File[]) => ReactNode;
+  /** Called whenever the file list changes (e.g. clear all → reset rotation in parent). */
+  onFilesChange?: (files: File[]) => void;
 };
 
 type ResultFile = { name: string; contentType: string; data: string };
@@ -54,6 +65,8 @@ export default function ImageToolsBatchForm({
   translationPrefix,
   children,
   downloadPrimaryLabelKey = "image_tools.download_images",
+  renderWhenHasFiles,
+  onFilesChange,
 }: Props) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -61,6 +74,10 @@ export default function ImageToolsBatchForm({
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ProcessResult | null>(null);
+
+  useEffect(() => {
+    onFilesChange?.(files);
+  }, [files, onFilesChange]);
 
   const clearFiles = useCallback(() => {
     setFiles([]);
@@ -270,6 +287,12 @@ export default function ImageToolsBatchForm({
           className="min-h-[min(420px,52vh)] py-12 flex flex-col justify-center"
         />
       </div>
+
+      {hasFiles && renderWhenHasFiles ? (
+        <div className="mx-auto w-full max-w-5xl px-3 py-2 sm:px-4 sm:py-4">
+          {renderWhenHasFiles(files)}
+        </div>
+      ) : null}
 
       <Sheet
         modal={false}

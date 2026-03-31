@@ -52,6 +52,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Crop Images Online — Visual Selector & Pixel Controls",
     "seo.image_crop.description":
       "Crop photos in your browser. Drag the frame or set width, height, and position. ZIP or single downloads.",
+    "seo.image_rotate.title": "Rotate Images Online — 90°, 180°, 270° in Your Browser",
+    "seo.image_rotate.description":
+      "Rotate many photos at once. Choose clockwise angle, then download each file or a ZIP — all on your device.",
     "seo.image_watermark.title": "Add Image or Text Watermark Online — Free in Your Browser",
     "seo.image_watermark.description":
       "Overlay text or a logo on your photo. Adjust size, opacity, and position, then download PNG or ZIP.",
@@ -106,6 +109,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Recorte de imágenes online",
     "seo.image_crop.description":
       "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
+    "seo.image_rotate.title": "Rotar imágenes online — 90°, 180°, 270°",
+    "seo.image_rotate.description":
+      "Gira muchas fotos a la vez. Elige el ángulo y descarga cada archivo o un ZIP, todo en tu dispositivo.",
     "seo.image_watermark.title": "Marca de agua en imágenes online",
     "seo.image_watermark.description":
       "Añade texto o un logo. Ajusta tamaño, opacidad y posición. Descarga PNG o ZIP.",
@@ -160,6 +166,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_crop.title": "Recadrage d'images en ligne",
     "seo.image_crop.description":
       "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",
+    "seo.image_rotate.title": "Rotation d'images en ligne — 90°, 180°, 270°",
+    "seo.image_rotate.description":
+      "Faites pivoter plusieurs photos à la fois. Choisissez l'angle, puis téléchargez chaque fichier ou une archive ZIP.",
     "seo.image_watermark.title": "Filigrane sur image en ligne",
     "seo.image_watermark.description":
       "Superposez du texte ou un logo. Réglez taille, opacité et position. Téléchargez PNG ou ZIP.",

@@ -144,6 +144,13 @@ const Landing = () => {
       available: true,
     },
     {
+      icon: <RotateCw className="w-8 h-8" />,
+      title: t("nav.image_rotate"),
+      description: t("landing.image_rotate_desc"),
+      path: "/image-rotate",
+      available: true,
+    },
+    {
       icon: <Stamp className="w-8 h-8" />,
       title: t("nav.image_watermark"),
       description: t("landing.image_watermark_desc"),
