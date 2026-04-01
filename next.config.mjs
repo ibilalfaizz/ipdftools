@@ -69,6 +69,11 @@ const pathMapping = {
     "heic-a-jpg",
     "heic-vers-jpg",
   ],
+  "image-motion-blur": [
+    "image-motion-blur",
+    "desenfoque-movimiento",
+    "flou-mouvement",
+  ],
 };
 
 /**

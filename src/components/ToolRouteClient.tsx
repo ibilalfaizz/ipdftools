@@ -98,6 +98,10 @@ const ImageHeicToJpgPage = dynamic(
   () => import("@/pages/ImageHeicToJpgPage"),
   { ssr: false, loading: loadFallback }
 );
+const ImageMotionBlurPage = dynamic(
+  () => import("@/pages/ImageMotionBlurPage"),
+  { ssr: false, loading: loadFallback }
+);
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -121,6 +125,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/image-remove-background": ImageRemoveBackgroundPage,
   "/image-ocr": ImageOcrPage,
   "/image-heic-to-jpg": ImageHeicToJpgPage,
+  "/image-motion-blur": ImageMotionBlurPage,
 };
 
 export default function ToolRouteClient({

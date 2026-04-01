@@ -72,6 +72,11 @@ const Header = () => {
       description: t("landing.image_blur_face_desc"),
     },
     {
+      href: "/image-motion-blur",
+      label: t("nav.image_motion_blur"),
+      description: t("landing.image_motion_blur_desc"),
+    },
+    {
       href: "/image-remove-background",
       label: t("nav.image_remove_bg"),
       description: t("landing.image_remove_bg_desc"),
@@ -102,6 +107,7 @@ const Header = () => {
     "/image-crop",
     "/image-rotate",
     "/image-blur-face",
+    "/image-motion-blur",
     "/image-remove-background",
     "/image-watermark",
     "/image-ocr",

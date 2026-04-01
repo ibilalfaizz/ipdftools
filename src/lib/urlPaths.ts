@@ -70,6 +70,11 @@ export const pathMapping: Record<string, string[]> = {
     "heic-a-jpg",
     "heic-vers-jpg",
   ],
+  "image-motion-blur": [
+    "image-motion-blur",
+    "desenfoque-movimiento",
+    "flou-mouvement",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

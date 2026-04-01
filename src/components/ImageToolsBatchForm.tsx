@@ -38,6 +38,7 @@ type TranslationPrefix =
   | "image_gif"
   | "image_rotate"
   | "image_blur_face"
+  | "image_motion_blur"
   | "image_remove_bg";
 
 const DEFAULT_UPLOAD_ACCEPT =

@@ -22,6 +22,7 @@ import {
   Eraser,
   ScanText,
   Smartphone,
+  Aperture,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -228,6 +229,14 @@ const Landing = () => {
       path: "/image-blur-face",
       available: true,
       categories: ["security"],
+    },
+    {
+      icon: <Aperture className="w-8 h-8" />,
+      title: t("nav.image_motion_blur"),
+      description: t("landing.image_motion_blur_desc"),
+      path: "/image-motion-blur",
+      available: true,
+      categories: ["edit"],
     },
     {
       icon: <Eraser className="w-8 h-8" />,

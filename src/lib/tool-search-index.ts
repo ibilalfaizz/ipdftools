@@ -116,6 +116,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "image",
   },
   {
+    href: "/image-motion-blur",
+    labelKey: "nav.image_motion_blur",
+    descriptionKey: "landing.image_motion_blur_desc",
+    category: "image",
+  },
+  {
     href: "/image-remove-background",
     labelKey: "nav.image_remove_bg",
     descriptionKey: "landing.image_remove_bg_desc",

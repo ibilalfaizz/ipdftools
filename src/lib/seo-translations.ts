@@ -70,6 +70,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_heic_to_jpg.title": "HEIC to JPG Converter Online — iPhone Photos in Your Browser",
     "seo.image_heic_to_jpg.description":
       "Convert .heic / .heif files to widely compatible JPEG. Batch convert in your browser; download each JPG or a ZIP — files stay on your device.",
+    "seo.image_motion_blur.title": "Motion & Gaussian Blur for Photos — Online in Your Browser",
+    "seo.image_motion_blur.description":
+      "Apply directional motion blur or soft Gaussian blur to images. Optional background-only blur using on-device segmentation. Batch process; download PNG, WebP, or JPEG or a ZIP.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
@@ -139,6 +142,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_heic_to_jpg.title": "HEIC a JPG online — fotos de iPhone en el navegador",
     "seo.image_heic_to_jpg.description":
       "Convierte .heic / .heif a JPEG compatible. Por lotes en tu navegador; descarga cada JPG o un ZIP — los archivos no salen de tu dispositivo.",
+    "seo.image_motion_blur.title": "Desenfoque de movimiento y gaussiano online",
+    "seo.image_motion_blur.description":
+      "Aplica desenfoque direccional o gaussiano. Opción de desenfocar solo el fondo con segmentación en el dispositivo. Por lotes; descarga imágenes o ZIP.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
@@ -208,5 +214,8 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_heic_to_jpg.title": "HEIC vers JPG en ligne — photos iPhone dans le navigateur",
     "seo.image_heic_to_jpg.description":
       "Convertissez les fichiers .heic / .heif en JPEG universel. Conversion par lot dans le navigateur ; téléchargez chaque JPG ou une archive ZIP — fichiers sur votre appareil.",
+    "seo.image_motion_blur.title": "Flou de mouvement et gaussien pour photos en ligne",
+    "seo.image_motion_blur.description":
+      "Appliquez un flou directionnel ou un flou gaussien. Option pour flouter uniquement l’arrière-plan via segmentation sur l’appareil. Traitement par lot ; images ou ZIP.",
   },
 };
