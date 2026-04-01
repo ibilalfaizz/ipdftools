@@ -32,6 +32,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "pdf",
   },
   {
+    href: "/sign-pdf",
+    labelKey: "nav.sign_pdf",
+    descriptionKey: "landing.sign_pdf_desc",
+    category: "pdf",
+  },
+  {
     href: "/pdf-to-word",
     labelKey: "nav.pdf_to_word",
     descriptionKey: "landing.pdf_to_word_desc",

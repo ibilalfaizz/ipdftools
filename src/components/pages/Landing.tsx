@@ -23,6 +23,7 @@ import {
   ScanText,
   Smartphone,
   Aperture,
+  PenLine,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,6 +110,14 @@ const Landing = () => {
         title: t("nav.rotate"),
         description: t("landing.rotate_desc"),
         path: "/rotate-pdf",
+        available: true,
+        categories: ["edit"],
+      },
+      {
+        icon: <PenLine className="w-8 h-8" />,
+        title: t("nav.sign_pdf"),
+        description: t("landing.sign_pdf_desc"),
+        path: "/sign-pdf",
         available: true,
         categories: ["edit"],
       },

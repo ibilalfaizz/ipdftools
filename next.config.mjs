@@ -4,6 +4,7 @@ const pathMapping = {
   split: ["split-pdf", "dividir-pdf", "diviser-pdf"],
   compress: ["compress-pdf", "comprimir-pdf", "compresser-pdf"],
   rotate: ["rotate-pdf", "rotar-pdf", "rotation-pdf"],
+  "sign-pdf": ["sign-pdf", "firmar-pdf", "signer-pdf"],
   "pdf-to-word": ["pdf-to-word", "pdf-a-word", "pdf-vers-word"],
   "pdf-to-jpg": ["pdf-to-jpg", "pdf-a-jpg", "pdf-vers-jpg"],
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
