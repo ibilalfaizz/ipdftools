@@ -65,6 +65,16 @@ export const pathMapping: Record<string, string[]> = {
     "extraer-texto-imagen",
     "extraire-texte-image",
   ],
+  "image-heic-to-jpg": [
+    "image-heic-to-jpg",
+    "heic-a-jpg",
+    "heic-vers-jpg",
+  ],
+  "image-motion-blur": [
+    "image-motion-blur",
+    "desenfoque-movimiento",
+    "flou-mouvement",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

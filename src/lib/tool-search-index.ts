@@ -86,6 +86,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "image",
   },
   {
+    href: "/image-heic-to-jpg",
+    labelKey: "nav.image_heic_jpg",
+    descriptionKey: "landing.image_heic_jpg_desc",
+    category: "image",
+  },
+  {
     href: "/bulk-image-gif",
     labelKey: "nav.image_gif",
     descriptionKey: "landing.image_gif_desc",
@@ -107,6 +113,12 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     href: "/image-blur-face",
     labelKey: "nav.image_blur_face",
     descriptionKey: "landing.image_blur_face_desc",
+    category: "image",
+  },
+  {
+    href: "/image-motion-blur",
+    labelKey: "nav.image_motion_blur",
+    descriptionKey: "landing.image_motion_blur_desc",
     category: "image",
   },
   {

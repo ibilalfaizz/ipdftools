@@ -3,6 +3,12 @@ import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
 import { imageFileKey } from "@/lib/image-file-key";
 import { removeBackgroundWithImgly } from "@/lib/imgly-remove-background";
 import { removeSimpleBackgroundToCanvas } from "@/lib/simple-remove-background";
+import type { FullImageBlurParams } from "@/lib/image-blur-effects";
+import {
+  applyFullImageBlur,
+  compositeBackgroundBlur,
+  getSubjectAlphaMask,
+} from "@/lib/image-blur-effects";
 
 export type ClientImageResultFile = {
   name: string;
@@ -318,6 +324,63 @@ export async function processJpgBatch(
   return { files: filesOut, zipSuggestedName: "converted-jpg.zip" };
 }
 
+const HEIC_MIMES = new Set([
+  "image/heic",
+  "image/heif",
+  "image/heic-sequence",
+  "image/heif-sequence",
+]);
+
+/** True for iPhone / macOS HEIC/HEIF uploads (MIME or extension). */
+export function isHeicLike(file: File): boolean {
+  const t = (file.type || "").toLowerCase().trim();
+  if (HEIC_MIMES.has(t)) return true;
+  const n = file.name.toLowerCase();
+  return n.endsWith(".heic") || n.endsWith(".heif");
+}
+
+/** Decode HEIC/HEIF to JPEG in the browser (heic2any). */
+export async function processHeicToJpgBatch(
+  files: File[]
+): Promise<ClientImageProcessResult> {
+  const { default: heic2any } = await import("heic2any");
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  for (const file of files) {
+    if (!isHeicLike(file)) continue;
+    try {
+      const converted = await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: JPEG_QUALITY,
+      });
+      const blobs = Array.isArray(converted) ? converted : [converted];
+      let part = 0;
+      for (const blob of blobs) {
+        if (!(blob instanceof Blob) || blob.size === 0) continue;
+        const data = await blobToBase64(blob);
+        const stem = sanitizeStem(file.name);
+        const suffix = blobs.length > 1 ? `-${part + 1}` : "";
+        const fileName = uniqueZipName(used, `${stem}${suffix}.jpg`);
+        filesOut.push({
+          name: fileName,
+          contentType: "image/jpeg",
+          data,
+        });
+        part += 1;
+      }
+    } catch {
+      /* skip file */
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "heic-to-jpg.zip" };
+}
+
 /** Crop rectangle relative to each image (0–1), from the preview image’s pixel crop. */
 export type NormalizedCrop = {
   nx: number;
@@ -616,4 +679,70 @@ export async function processRemoveBackgroundBatch(
     throw new Error("NO_VALID_IMAGES");
   }
   return { files: filesOut, zipSuggestedName: "background-removed.zip" };
+}
+
+export type ImageBlurBatchOptions = FullImageBlurParams & {
+  blurBackground: boolean;
+};
+
+/** Gaussian or motion blur; optional background-only blur via segmentation mask. */
+export async function processImageBlurBatch(
+  files: File[],
+  options: ImageBlurBatchOptions
+): Promise<ClientImageProcessResult> {
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+  const params: FullImageBlurParams = {
+    mode: options.mode,
+    angleDeg: options.angleDeg,
+    distancePx: options.distancePx,
+    samples: options.samples,
+  };
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+    let bitmap: ImageBitmap | null = null;
+    try {
+      bitmap = await createImageBitmap(file);
+      const w = bitmap.width;
+      const h = bitmap.height;
+      let canvas = applyFullImageBlur(bitmap, params);
+
+      if (options.blurBackground) {
+        try {
+          const mask = await getSubjectAlphaMask(file, w, h);
+          canvas = compositeBackgroundBlur(bitmap, canvas, mask);
+        } catch {
+          /* keep full-image blur if mask fails */
+        }
+      }
+
+      const kind = outputKindForMime(file.type);
+      const blob = await encodeResizeOutput(canvas, kind);
+      const ext =
+        blob.type === "image/png"
+          ? "png"
+          : blob.type === "image/webp"
+            ? "webp"
+            : "jpg";
+      const stem = sanitizeStem(file.name);
+      const tag = options.mode === "gaussian" ? "gauss_blur" : "motion_blur";
+      const fileName = uniqueZipName(used, `${stem}_${tag}.${ext}`);
+      const data = await blobToBase64(blob);
+      filesOut.push({
+        name: fileName,
+        contentType: blob.type || "application/octet-stream",
+        data,
+      });
+    } catch {
+      // skip unreadable
+    } finally {
+      bitmap?.close();
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "blurred-images.zip" };
 }

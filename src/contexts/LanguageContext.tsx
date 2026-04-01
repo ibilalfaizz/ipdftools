@@ -56,9 +56,20 @@ const translations = {
     'nav.image_crop': 'Image crop',
     'nav.image_rotate': 'Rotate images',
     'nav.image_blur_face': 'Blur faces',
+    'nav.image_motion_blur': 'Motion blur',
     'nav.image_remove_bg': 'Remove background',
     'nav.image_watermark': 'Image watermark',
     'nav.image_ocr': 'Image to text',
+    'nav.image_heic_jpg': 'HEIC to JPG',
+    'nav.login': 'Log in',
+    'login.title': 'Log in',
+    'login.subtitle': 'Access your iPDFTOOLS account.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.submit': 'Continue',
+    'login.back_home': 'Back to home',
+    'login.demo_note':
+      'Account sign-in is not enabled yet. This page matches the site theme.',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -92,12 +103,16 @@ const translations = {
       'Rotate many photos 90°, 180°, or 270° clockwise in your browser. Download separately or as a ZIP.',
     'landing.image_blur_face_desc':
       'Auto-detect faces and blur them for privacy. Runs in your browser; download images or a ZIP.',
+    'landing.image_motion_blur_desc':
+      'Gaussian or directional motion blur, angle, distance, and quality samples. Optionally blur only the background; all in your browser.',
     'landing.image_remove_bg_desc':
       'Erase solid or even backgrounds (for example studio white or walls) and download transparent PNGs — all in your browser.',
     'landing.image_watermark_desc':
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     'landing.image_ocr_desc':
       'Pull text from images in your browser. Choose a language, then copy or save as a file.',
+    'landing.image_heic_jpg_desc':
+      'Turn iPhone HEIC/HEIF photos into standard JPEG files in your browser. Batch convert; download separately or as a ZIP.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -239,6 +254,12 @@ const translations = {
     'image_jpg.process': 'Convert',
     'image_jpg.drop_title': 'Drop images here or click to browse',
     'image_jpg.drop_desc': 'Most raster formats • Multiple files',
+    'image_heic_to_jpg.title': 'HEIC to JPG',
+    'image_heic_to_jpg.description':
+      'Convert Apple HEIC/HEIF photos to JPEG (quality 92) for sharing and editing anywhere. All processing happens in your browser.',
+    'image_heic_to_jpg.process': 'Convert to JPG',
+    'image_heic_to_jpg.drop_title': 'Drop HEIC files here or click to browse',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Multiple files',
     'image_gif.title': 'Images to GIF',
     'image_gif.description':
       'Order follows upload order. Frames are centered on a shared canvas (max 1280px). One GIF download.',
@@ -288,6 +309,29 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'Nothing was found automatically — use the region in the center: drag or resize it to cover what you want blurred.',
     'image_blur_face.preview_thumbnails_hint': 'Preview another file:',
+    'image_motion_blur.title': 'Motion & Gaussian blur',
+    'image_motion_blur.description':
+      'Choose Gaussian blur or motion blur. Adjust angle, distance, and sample count for motion. Turn on Blur background to keep the subject sharp while blurring the backdrop (uses the same on-device segmentation as remove background).',
+    'image_motion_blur.process': 'Apply blur',
+    'image_motion_blur.drop_title': 'Drop images here or click to browse',
+    'image_motion_blur.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Multiple files',
+    'image_motion_blur.blur_type': 'Blur type',
+    'image_motion_blur.gaussian': 'Gaussian blur',
+    'image_motion_blur.motion': 'Motion blur',
+    'image_motion_blur.angle': 'Angle',
+    'image_motion_blur.distance': 'Distance',
+    'image_motion_blur.radius': 'Radius',
+    'image_motion_blur.samples': 'Samples',
+    'image_motion_blur.blur_background': 'Blur background',
+    'image_motion_blur.blur_background_hint':
+      'Detects the main subject and blurs only the backdrop. Works best on clear subjects; may take longer on export.',
+    'image_motion_blur.gaussian_sliders_note':
+      'Angle and samples apply to motion blur only. The radius slider controls Gaussian strength.',
+    'image_motion_blur.preview_hint':
+      'Live preview of the first selected image (or the thumbnail you pick).',
+    'image_motion_blur.preview_loading': 'Updating preview…',
+    'image_motion_blur.preview_error': 'Preview could not be built for this file.',
+    'image_motion_blur.preview_thumbnails_hint': 'Preview another file:',
     'image_remove_bg.title': 'Remove image background',
     'image_remove_bg.description':
       'Best when the backdrop is fairly uniform and shows along the edges of the photo. You get transparent PNGs; everything runs on your device.',
@@ -410,9 +454,20 @@ const translations = {
     'nav.image_crop': 'Recorte de imágenes',
     'nav.image_rotate': 'Rotar imágenes',
     'nav.image_blur_face': 'Desenfocar caras',
+    'nav.image_motion_blur': 'Desenfoque de movimiento',
     'nav.image_remove_bg': 'Quitar fondo',
     'nav.image_watermark': 'Marca de agua',
     'nav.image_ocr': 'Imagen a texto',
+    'nav.image_heic_jpg': 'HEIC a JPG',
+    'nav.login': 'Iniciar sesión',
+    'login.title': 'Iniciar sesión',
+    'login.subtitle': 'Accede a tu cuenta de iPDFTOOLS.',
+    'login.email': 'Correo',
+    'login.password': 'Contraseña',
+    'login.submit': 'Continuar',
+    'login.back_home': 'Volver al inicio',
+    'login.demo_note':
+      'El inicio de sesión aún no está activado. Esta página usa el tema del sitio.',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -447,12 +502,16 @@ const translations = {
       'Gira muchas fotos 90°, 180° o 270° en el navegador. Descarga sueltas o en ZIP.',
     'landing.image_blur_face_desc':
       'Detecta caras y las desenfoca para privacidad. En tu navegador; imágenes o ZIP.',
+    'landing.image_motion_blur_desc':
+      'Desenfoque gaussiano o de movimiento: ángulo, distancia y muestras. Opción de desenfocar solo el fondo; todo en tu navegador.',
     'landing.image_remove_bg_desc':
       'Elimina fondos lisos o uniformes (estudio, paredes) y descarga PNG transparentes — todo en tu navegador.',
     'landing.image_watermark_desc':
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     'landing.image_ocr_desc':
       'Extrae texto de imágenes en el navegador. Elige idioma, luego copia o guarda el archivo.',
+    'landing.image_heic_jpg_desc':
+      'Convierte fotos HEIC/HEIF del iPhone a JPEG estándar en el navegador. Por lotes; descarga sueltas o en ZIP.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -585,6 +644,12 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_jpg.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_heic_to_jpg.title': 'HEIC a JPG',
+    'image_heic_to_jpg.description':
+      'Convierte fotos HEIC/HEIF de Apple a JPEG (calidad 92) para compartir y editar en cualquier sitio. Todo en tu navegador.',
+    'image_heic_to_jpg.process': 'Convertir a JPG',
+    'image_heic_to_jpg.drop_title': 'Suelta archivos HEIC aquí o haz clic',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Varios archivos',
     'image_gif.title': 'Imágenes a GIF',
     'image_gif.description':
       'El orden es el de subida. Fotos centradas en un lienzo común (máx. 1280px). Un GIF para descargar.',
@@ -634,6 +699,29 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'No se encontró nada automáticamente — usa la zona central: arrástrala o redimensiónala para cubrir lo que quieras desenfocar.',
     'image_blur_face.preview_thumbnails_hint': 'Vista previa de otro archivo:',
+    'image_motion_blur.title': 'Desenfoque gaussiano y de movimiento',
+    'image_motion_blur.description':
+      'Elige desenfoque gaussiano o de movimiento. Ajusta ángulo, distancia y número de muestras para el movimiento. Activa Desenfocar fondo para mantener el sujeto nítido y difuminar el fondo (usa la misma segmentación en el dispositivo que quitar fondo).',
+    'image_motion_blur.process': 'Aplicar desenfoque',
+    'image_motion_blur.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_motion_blur.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Varios archivos',
+    'image_motion_blur.blur_type': 'Tipo de desenfoque',
+    'image_motion_blur.gaussian': 'Desenfoque gaussiano',
+    'image_motion_blur.motion': 'Desenfoque de movimiento',
+    'image_motion_blur.angle': 'Ángulo',
+    'image_motion_blur.distance': 'Distancia',
+    'image_motion_blur.radius': 'Radio',
+    'image_motion_blur.samples': 'Muestras',
+    'image_motion_blur.blur_background': 'Desenfocar fondo',
+    'image_motion_blur.blur_background_hint':
+      'Detecta el sujeto principal y desenfoca solo el fondo. Mejor con sujetos claros; la exportación puede tardar más.',
+    'image_motion_blur.gaussian_sliders_note':
+      'Ángulo y muestras solo aplican al desenfoque de movimiento. El deslizador de radio controla la intensidad gaussiana.',
+    'image_motion_blur.preview_hint':
+      'Vista previa en vivo de la primera imagen (o la miniatura que elijas).',
+    'image_motion_blur.preview_loading': 'Actualizando vista previa…',
+    'image_motion_blur.preview_error': 'No se pudo generar la vista previa para este archivo.',
+    'image_motion_blur.preview_thumbnails_hint': 'Vista previa de otro archivo:',
     'image_remove_bg.title': 'Quitar fondo de imagen',
     'image_remove_bg.description':
       'Funciona mejor si el fondo es bastante uniforme y se ve en los bordes de la imagen. PNG transparentes; todo en tu dispositivo.',
@@ -756,9 +844,20 @@ const translations = {
     'nav.image_crop': 'Recadrage d\'images',
     'nav.image_rotate': 'Rotation d\'images',
     'nav.image_blur_face': 'Flouter les visages',
+    'nav.image_motion_blur': 'Flou de mouvement',
     'nav.image_remove_bg': 'Supprimer le fond',
     'nav.image_watermark': 'Filigrane image',
     'nav.image_ocr': 'Image vers texte',
+    'nav.image_heic_jpg': 'HEIC vers JPG',
+    'nav.login': 'Connexion',
+    'login.title': 'Connexion',
+    'login.subtitle': 'Accédez à votre compte iPDFTOOLS.',
+    'login.email': 'E-mail',
+    'login.password': 'Mot de passe',
+    'login.submit': 'Continuer',
+    'login.back_home': "Retour à l'accueil",
+    'login.demo_note':
+      'La connexion compte n’est pas encore activée. Cette page suit le thème du site.',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -793,12 +892,16 @@ const translations = {
       'Faites pivoter plusieurs photos à 90°, 180° ou 270° dans le navigateur. Fichiers séparés ou ZIP.',
     'landing.image_blur_face_desc':
       'Détecte les visages et les floute pour la confidentialité. Dans le navigateur ; images ou ZIP.',
+    'landing.image_motion_blur_desc':
+      'Flou gaussien ou directionnel : angle, distance et échantillons. Option pour flouter seulement l’arrière-plan ; tout dans le navigateur.',
     'landing.image_remove_bg_desc':
       'Effacez les fonds unis ou réguliers (studio, murs) et téléchargez des PNG transparents — tout dans le navigateur.',
     'landing.image_watermark_desc':
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     'landing.image_ocr_desc':
       'Extrayez le texte des images dans le navigateur. Choisissez la langue, puis copiez ou enregistrez.',
+    'landing.image_heic_jpg_desc':
+      'Transformez les photos HEIC/HEIF d’iPhone en JPEG standard dans le navigateur. Par lot ; fichiers séparés ou ZIP.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -932,6 +1035,12 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Déposez des images ici ou cliquez',
     'image_jpg.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_heic_to_jpg.title': 'HEIC vers JPG',
+    'image_heic_to_jpg.description':
+      'Convertissez les photos HEIC/HEIF Apple en JPEG (qualité 92) pour partager et éditer partout. Tout dans le navigateur.',
+    'image_heic_to_jpg.process': 'Convertir en JPG',
+    'image_heic_to_jpg.drop_title': 'Déposez des fichiers HEIC ici ou cliquez',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Fichiers multiples',
     'image_gif.title': 'Images vers GIF',
     'image_gif.description':
       'L\'ordre suit l\'import. Images centrées sur un canevas commun (max 1280px). Un fichier GIF.',
@@ -981,6 +1090,29 @@ const translations = {
     'image_blur_face.preview_no_faces':
       'Rien n’a été détecté automatiquement — utilisez la zone au centre : déplacez-la ou redimensionnez-la pour couvrir ce que vous voulez flouter.',
     'image_blur_face.preview_thumbnails_hint': 'Aperçu d’un autre fichier :',
+    'image_motion_blur.title': 'Flou gaussien et de mouvement',
+    'image_motion_blur.description':
+      'Choisissez un flou gaussien ou un flou de mouvement. Réglez l’angle, la distance et le nombre d’échantillons pour le mouvement. Cochez Flouter l’arrière-plan pour garder le sujet net tout en floutant le fond (même segmentation sur l’appareil que supprimer le fond).',
+    'image_motion_blur.process': 'Appliquer le flou',
+    'image_motion_blur.drop_title': 'Déposez des images ici ou cliquez',
+    'image_motion_blur.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Fichiers multiples',
+    'image_motion_blur.blur_type': 'Type de flou',
+    'image_motion_blur.gaussian': 'Flou gaussien',
+    'image_motion_blur.motion': 'Flou de mouvement',
+    'image_motion_blur.angle': 'Angle',
+    'image_motion_blur.distance': 'Distance',
+    'image_motion_blur.radius': 'Rayon',
+    'image_motion_blur.samples': 'Échantillons',
+    'image_motion_blur.blur_background': 'Flouter l’arrière-plan',
+    'image_motion_blur.blur_background_hint':
+      'Détecte le sujet principal et ne floute que l’arrière-plan. Mieux avec un sujet net ; l’export peut prendre plus de temps.',
+    'image_motion_blur.gaussian_sliders_note':
+      'L’angle et les échantillons concernent uniquement le flou de mouvement. Le curseur de rayon contrôle l’intensité du flou gaussien.',
+    'image_motion_blur.preview_hint':
+      'Aperçu en direct de la première image (ou de la miniature choisie).',
+    'image_motion_blur.preview_loading': 'Mise à jour de l’aperçu…',
+    'image_motion_blur.preview_error': 'Impossible de générer l’aperçu pour ce fichier.',
+    'image_motion_blur.preview_thumbnails_hint': 'Aperçu d’un autre fichier :',
     'image_remove_bg.title': 'Supprimer le fond d’image',
     'image_remove_bg.description':
       'Idéal si l’arrière-plan est assez uniforme et visible sur les bords. PNG transparents ; tout est traité sur votre appareil.',

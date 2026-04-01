@@ -21,6 +21,8 @@ import {
   ScanFace,
   Eraser,
   ScanText,
+  Smartphone,
+  Aperture,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,7 +63,7 @@ function toolMatchesFilter(
 
 /** One uniform treatment for all tool icons and CTAs (mint on dark teal). */
 const toolIconClass =
-  "inline-flex p-4 rounded-full mb-4 mx-auto bg-[#103c44] text-[#d6ffd2] ring-1 ring-[#d6ffd2]/20 group-hover:scale-110 transition-transform duration-300";
+  "inline-flex p-4 rounded-full mb-4 mx-auto bg-card text-primary ring-1 ring-primary/20 group-hover:scale-110 transition-transform duration-300";
 
 const FILTER_CHIPS: { id: ToolFilter; labelKey: string }[] = [
   { id: "all", labelKey: "landing.filter_all" },
@@ -189,6 +191,14 @@ const Landing = () => {
         categories: ["convert"],
       },
       {
+        icon: <Smartphone className="w-8 h-8" />,
+        title: t("nav.image_heic_jpg"),
+        description: t("landing.image_heic_jpg_desc"),
+        path: "/image-heic-to-jpg",
+        available: true,
+        categories: ["convert"],
+      },
+      {
         icon: <Film className="w-8 h-8" />,
         title: t("nav.image_gif"),
         description: t("landing.image_gif_desc"),
@@ -219,6 +229,14 @@ const Landing = () => {
       path: "/image-blur-face",
       available: true,
       categories: ["security"],
+    },
+    {
+      icon: <Aperture className="w-8 h-8" />,
+      title: t("nav.image_motion_blur"),
+      description: t("landing.image_motion_blur_desc"),
+      path: "/image-motion-blur",
+      available: true,
+      categories: ["edit"],
     },
     {
       icon: <Eraser className="w-8 h-8" />,
@@ -272,7 +290,7 @@ const Landing = () => {
           className="text-center mb-20 max-w-4xl mx-auto pt-2 sm:pt-6"
           aria-labelledby="landing-hero-heading"
         >
-          <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-[#d6ffd2] mb-6">
+          <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-6">
             {t("landing.hero_eyebrow")}
           </p>
           <h1
@@ -280,7 +298,7 @@ const Landing = () => {
             className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.12] mb-6"
           >
             <span>{t("landing.hero_headline_before")}</span>
-            <span className="text-[#d6ffd2] [text-shadow:0_0_26px_rgba(214,255,210,0.55),0_0_52px_rgba(214,255,210,0.22)]">
+            <span className="text-primary [text-shadow:0_0_26px_hsl(var(--primary)/0.55),0_0_52px_hsl(var(--primary)/0.22)]">
               {t("landing.hero_headline_highlight")}
             </span>
             <span>{t("landing.hero_headline_after")}</span>
@@ -294,14 +312,14 @@ const Landing = () => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <Button
               asChild
-              className="min-w-[200px] bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 font-semibold"
+              className="min-w-[200px] bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
             >
               <a href="#pdf-tools">{t("landing.hero_cta_primary")}</a>
             </Button>
             <Button
               asChild
               variant="outline"
-              className="min-w-[200px] border-2 border-[#d6ffd2]/35 bg-[#103c44]/50 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+              className="min-w-[200px] border-2 border-primary/35 bg-card/50 text-primary hover:bg-card hover:text-primary"
             >
               <a href="#image-tools">{t("landing.hero_cta_secondary")}</a>
             </Button>
@@ -322,8 +340,8 @@ const Landing = () => {
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
                   toolFilter === id
-                    ? "border-[#3bd62b] bg-[#3bd62b] text-[#00232d] shadow-md font-semibold"
-                    : "border-[#d6ffd2]/30 bg-[#103c44]/40 text-[#d6ffd2]/90 hover:border-[#d6ffd2]/50 hover:bg-[#103c44]/65"
+                    ? "border-success bg-success text-success-foreground shadow-md font-semibold"
+                    : "border-primary/30 bg-card/40 text-primary/90 hover:border-primary/50 hover:bg-card/65"
                 )}
               >
                 {t(labelKey)}
@@ -339,12 +357,12 @@ const Landing = () => {
         >
           <h2
             id="pdf-tools-heading"
-            className="text-2xl sm:text-3xl font-bold text-center text-[#d6ffd2] mb-10"
+            className="text-2xl sm:text-3xl font-bold text-center text-primary mb-10"
           >
             {t("nav.pdf_tools")}
           </h2>
           {pdfFiltered.length === 0 ? (
-            <p className="text-center text-[#d6ffd2]/60 text-base max-w-lg mx-auto py-6">
+            <p className="text-center text-primary/60 text-base max-w-lg mx-auto py-6">
               {t("landing.filter_empty_pdf")}
             </p>
           ) : (
@@ -352,22 +370,22 @@ const Landing = () => {
             {pdfFiltered.map((feature) => (
               <Card
                 key={feature.path}
-                className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
+                className="group hover:shadow-xl transition-all duration-300 border border-border bg-card/40 backdrop-blur-sm hover:bg-card/55"
               >
                 <CardHeader className="text-center pb-4">
                   <div className={toolIconClass}>{feature.icon}</div>
-                  <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
+                  <CardTitle className="text-2xl font-bold text-primary">
                     {feature.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-[#d6ffd2]/75 mb-6 text-lg">
+                  <p className="text-primary/75 mb-6 text-lg">
                     {feature.description}
                   </p>
                   {feature.available ? (
                     <Button
                       asChild
-                      className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 border-0 font-semibold"
                     >
                       <Link href={getLocalizedPath(feature.path)}>
                         Use Tool <ArrowRight className="ml-2 h-4 w-4" />
@@ -392,12 +410,12 @@ const Landing = () => {
         >
           <h2
             id="image-tools-heading"
-            className="text-2xl sm:text-3xl font-bold text-center text-[#d6ffd2] mb-10"
+            className="text-2xl sm:text-3xl font-bold text-center text-primary mb-10"
           >
             {t("nav.image_tools")}
           </h2>
           {imageFiltered.length === 0 ? (
-            <p className="text-center text-[#d6ffd2]/60 text-base max-w-lg mx-auto py-6">
+            <p className="text-center text-primary/60 text-base max-w-lg mx-auto py-6">
               {t("landing.filter_empty_image")}
             </p>
           ) : (
@@ -405,22 +423,22 @@ const Landing = () => {
             {imageFiltered.map((feature) => (
               <Card
                 key={feature.path}
-                className="group hover:shadow-xl transition-all duration-300 border border-border bg-[#103c44]/40 backdrop-blur-sm hover:bg-[#103c44]/55"
+                className="group hover:shadow-xl transition-all duration-300 border border-border bg-card/40 backdrop-blur-sm hover:bg-card/55"
               >
                 <CardHeader className="text-center pb-4">
                   <div className={toolIconClass}>{feature.icon}</div>
-                  <CardTitle className="text-2xl font-bold text-[#d6ffd2]">
+                  <CardTitle className="text-2xl font-bold text-primary">
                     {feature.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-[#d6ffd2]/75 mb-6 text-lg">
+                  <p className="text-primary/75 mb-6 text-lg">
                     {feature.description}
                   </p>
                   {feature.available ? (
                     <Button
                       asChild
-                      className="w-full bg-[#d6ffd2] text-[#00232d] hover:bg-[#d6ffd2]/90 border-0 font-semibold"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 border-0 font-semibold"
                     >
                       <Link href={getLocalizedPath(feature.path)}>
                         Use Tool <ArrowRight className="ml-2 h-4 w-4" />
@@ -443,7 +461,7 @@ const Landing = () => {
           aria-labelledby="why-choose-heading"
         >
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#3bd62b] mb-5 md:mb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-success mb-5 md:mb-6">
               {t("landing.why_choose_eyebrow")}
             </p>
             <h2
@@ -457,7 +475,7 @@ const Landing = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 text-left md:text-center">
               <div>
-                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                <h3 className="text-lg font-bold text-primary mb-3">
                   {t("landing.secure_title")}
                 </h3>
                 <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
@@ -465,7 +483,7 @@ const Landing = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                <h3 className="text-lg font-bold text-primary mb-3">
                   {t("landing.fast_title")}
                 </h3>
                 <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
@@ -473,7 +491,7 @@ const Landing = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#d6ffd2] mb-3">
+                <h3 className="text-lg font-bold text-primary mb-3">
                   {t("landing.easy_title")}
                 </h3>
                 <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">

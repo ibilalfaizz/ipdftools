@@ -72,6 +72,11 @@ const Header = () => {
       description: t("landing.image_blur_face_desc"),
     },
     {
+      href: "/image-motion-blur",
+      label: t("nav.image_motion_blur"),
+      description: t("landing.image_motion_blur_desc"),
+    },
+    {
       href: "/image-remove-background",
       label: t("nav.image_remove_bg"),
       description: t("landing.image_remove_bg_desc"),
@@ -86,6 +91,11 @@ const Header = () => {
       label: t("nav.image_ocr"),
       description: t("landing.image_ocr_desc"),
     },
+    {
+      href: "/image-heic-to-jpg",
+      label: t("nav.image_heic_jpg"),
+      description: t("landing.image_heic_jpg_desc"),
+    },
   ];
 
   const imageToolHrefs = [
@@ -97,9 +107,11 @@ const Header = () => {
     "/image-crop",
     "/image-rotate",
     "/image-blur-face",
+    "/image-motion-blur",
     "/image-remove-background",
     "/image-watermark",
     "/image-ocr",
+    "/image-heic-to-jpg",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
@@ -173,7 +185,7 @@ const Header = () => {
             </Link>
 
             <div className="flex md:hidden items-center gap-0.5 shrink-0">
-              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-[#d6ffd2]/25" />
+              <LanguageSelector triggerClassName="w-10 px-1 sm:w-11 shrink-0 border-primary/25" />
 
               <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
                 <SheetTrigger asChild>
@@ -181,7 +193,7 @@ const Header = () => {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    className="h-10 w-10 text-primary hover:bg-card hover:text-primary"
                     aria-label={t("tool_search.search_tools")}
                   >
                     <Search className="h-6 w-6" />
@@ -192,7 +204,7 @@ const Header = () => {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="h-10 w-10 text-[#d6ffd2] hover:bg-[#103c44] hover:text-[#d6ffd2]"
+                    className="h-10 w-10 text-primary hover:bg-card hover:text-primary"
                     aria-label={t("nav.menu")}
                   >
                     <Menu className="h-6 w-6" />
@@ -200,14 +212,14 @@ const Header = () => {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="w-full max-w-sm border-l border-[#d6ffd2]/15 bg-[#00232d] text-[#d6ffd2] overflow-y-auto gap-0 p-0 pt-12 pb-8 flex flex-col tool-side-panel"
+                  className="w-full max-w-sm border-l border-primary/15 bg-background text-foreground overflow-y-auto gap-0 p-0 pt-12 pb-8 flex flex-col tool-side-panel"
                 >
-                  <SheetHeader className="px-4 pb-2 text-left border-b border-[#d6ffd2]/15">
-                    <SheetTitle className="text-[#d6ffd2]">
+                  <SheetHeader className="px-4 pb-2 text-left border-b border-primary/15">
+                    <SheetTitle className="text-foreground">
                       {t("nav.menu")}
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="px-4 py-4 border-b border-[#d6ffd2]/15">
+                  <div className="px-4 py-4 border-b border-primary/15">
                     <ToolSearch
                       variant="header"
                       onNavigate={closeMobile}
@@ -215,7 +227,7 @@ const Header = () => {
                   </div>
                   <nav className="flex flex-col gap-6 px-4 pt-4 pb-6">
                     <section>
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-primary/70 mb-2">
                         {t("nav.pdf_tools")}
                       </h3>
                       <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
@@ -224,7 +236,7 @@ const Header = () => {
                             <Link
                               href={getLocalizedPath(tool.href)}
                               onClick={closeMobile}
-                              className="block rounded-md px-2 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2] truncate"
+                              className="block rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate"
                               title={tool.label}
                             >
                               {tool.label}
@@ -234,7 +246,7 @@ const Header = () => {
                       </ul>
                     </section>
                     <section>
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#d6ffd2]/70 mb-2">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-primary/70 mb-2">
                         {t("nav.image_tools")}
                       </h3>
                       <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
@@ -243,7 +255,7 @@ const Header = () => {
                             <Link
                               href={getLocalizedPath(tool.href)}
                               onClick={closeMobile}
-                              className="block rounded-md px-2 py-2.5 text-sm text-[#d6ffd2]/95 hover:bg-[#103c44] hover:text-[#d6ffd2] truncate"
+                              className="block rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate"
                               title={tool.label}
                             >
                               {tool.label}
