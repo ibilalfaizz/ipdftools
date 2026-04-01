@@ -318,6 +318,63 @@ export async function processJpgBatch(
   return { files: filesOut, zipSuggestedName: "converted-jpg.zip" };
 }
 
+const HEIC_MIMES = new Set([
+  "image/heic",
+  "image/heif",
+  "image/heic-sequence",
+  "image/heif-sequence",
+]);
+
+/** True for iPhone / macOS HEIC/HEIF uploads (MIME or extension). */
+export function isHeicLike(file: File): boolean {
+  const t = (file.type || "").toLowerCase().trim();
+  if (HEIC_MIMES.has(t)) return true;
+  const n = file.name.toLowerCase();
+  return n.endsWith(".heic") || n.endsWith(".heif");
+}
+
+/** Decode HEIC/HEIF to JPEG in the browser (heic2any). */
+export async function processHeicToJpgBatch(
+  files: File[]
+): Promise<ClientImageProcessResult> {
+  const { default: heic2any } = await import("heic2any");
+  const used = new Set<string>();
+  const filesOut: ClientImageResultFile[] = [];
+
+  for (const file of files) {
+    if (!isHeicLike(file)) continue;
+    try {
+      const converted = await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: JPEG_QUALITY,
+      });
+      const blobs = Array.isArray(converted) ? converted : [converted];
+      let part = 0;
+      for (const blob of blobs) {
+        if (!(blob instanceof Blob) || blob.size === 0) continue;
+        const data = await blobToBase64(blob);
+        const stem = sanitizeStem(file.name);
+        const suffix = blobs.length > 1 ? `-${part + 1}` : "";
+        const fileName = uniqueZipName(used, `${stem}${suffix}.jpg`);
+        filesOut.push({
+          name: fileName,
+          contentType: "image/jpeg",
+          data,
+        });
+        part += 1;
+      }
+    } catch {
+      /* skip file */
+    }
+  }
+
+  if (filesOut.length === 0) {
+    throw new Error("NO_VALID_IMAGES");
+  }
+  return { files: filesOut, zipSuggestedName: "heic-to-jpg.zip" };
+}
+
 /** Crop rectangle relative to each image (0–1), from the preview image’s pixel crop. */
 export type NormalizedCrop = {
   nx: number;

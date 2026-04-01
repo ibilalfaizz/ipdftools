@@ -67,6 +67,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_ocr.title": "Image to Text Online — Extract Text from Photos in Your Browser",
     "seo.image_ocr.description":
       "Pull text from images and screenshots in your browser. English, Spanish, or French; copy or download as .txt or ZIP.",
+    "seo.image_heic_to_jpg.title": "HEIC to JPG Converter Online — iPhone Photos in Your Browser",
+    "seo.image_heic_to_jpg.description":
+      "Convert .heic / .heif files to widely compatible JPEG. Batch convert in your browser; download each JPG or a ZIP — files stay on your device.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
@@ -133,6 +136,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_ocr.title": "Imagen a texto online — extrae texto en el navegador",
     "seo.image_ocr.description":
       "Extrae texto de capturas y fotos en tu navegador. Inglés, español o francés; copia o descarga .txt o ZIP.",
+    "seo.image_heic_to_jpg.title": "HEIC a JPG online — fotos de iPhone en el navegador",
+    "seo.image_heic_to_jpg.description":
+      "Convierte .heic / .heif a JPEG compatible. Por lotes en tu navegador; descarga cada JPG o un ZIP — los archivos no salen de tu dispositivo.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
@@ -199,5 +205,8 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_ocr.title": "Image vers texte en ligne — extraction dans le navigateur",
     "seo.image_ocr.description":
       "Extrayez le texte de captures et photos dans le navigateur. Anglais, espagnol ou français ; copiez ou téléchargez .txt ou ZIP.",
+    "seo.image_heic_to_jpg.title": "HEIC vers JPG en ligne — photos iPhone dans le navigateur",
+    "seo.image_heic_to_jpg.description":
+      "Convertissez les fichiers .heic / .heif en JPEG universel. Conversion par lot dans le navigateur ; téléchargez chaque JPG ou une archive ZIP — fichiers sur votre appareil.",
   },
 };

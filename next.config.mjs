@@ -64,6 +64,11 @@ const pathMapping = {
     "extraer-texto-imagen",
     "extraire-texte-image",
   ],
+  "image-heic-to-jpg": [
+    "image-heic-to-jpg",
+    "heic-a-jpg",
+    "heic-vers-jpg",
+  ],
 };
 
 /**
@@ -271,6 +276,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: "/login", destination: "/en/login", permanent: false },
       { source: "/", destination: "/en", permanent: true },
       ...imageToolSlugMigrationRedirects(),
       ...imageCropSlugMigrationRedirects(),

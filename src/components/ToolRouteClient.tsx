@@ -2,7 +2,6 @@
 
 import type { ComponentType } from "react";
 import dynamic from "next/dynamic";
-import { Loader2 } from "lucide-react";
 
 const loadFallback = () => (
   <div
@@ -10,21 +9,7 @@ const loadFallback = () => (
     aria-live="polite"
     className="min-h-screen app-bg flex flex-col items-center justify-center px-4"
   >
-    <div className="flex flex-col items-center gap-4">
-      <div className="relative">
-        <div
-          className="absolute inset-[-6px] rounded-full border border-[#d6ffd2]/15"
-          aria-hidden
-        />
-        <div className="rounded-full bg-[#103c44]/80 p-4 shadow-[0_0_32px_rgba(214,255,210,0.12)] ring-1 ring-[#d6ffd2]/25">
-          <Loader2
-            className="h-9 w-9 text-[#d6ffd2] animate-spin motion-reduce:animate-none"
-            strokeWidth={2}
-            aria-hidden
-          />
-        </div>
-      </div>
-    </div>
+    <div className="ipdf-route-loader" aria-hidden />
     <span className="sr-only">Loading</span>
   </div>
 );
@@ -109,6 +94,10 @@ const ImageOcrPage = dynamic(() => import("@/pages/ImageOcrPage"), {
   ssr: false,
   loading: loadFallback,
 });
+const ImageHeicToJpgPage = dynamic(
+  () => import("@/pages/ImageHeicToJpgPage"),
+  { ssr: false, loading: loadFallback }
+);
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -131,6 +120,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/image-watermark": ImageWatermarkPage,
   "/image-remove-background": ImageRemoveBackgroundPage,
   "/image-ocr": ImageOcrPage,
+  "/image-heic-to-jpg": ImageHeicToJpgPage,
 };
 
 export default function ToolRouteClient({

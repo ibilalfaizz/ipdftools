@@ -34,15 +34,23 @@ type TranslationPrefix =
   | "image_compress"
   | "image_webp"
   | "image_jpg"
+  | "image_heic_to_jpg"
   | "image_gif"
   | "image_rotate"
   | "image_blur_face"
   | "image_remove_bg";
 
+const DEFAULT_UPLOAD_ACCEPT =
+  "image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff";
+
 type Props = {
   /** Runs in the browser — no server upload (avoids serverless body limits). */
   processFiles: (files: File[]) => Promise<ClientImageProcessResult>;
   translationPrefix: TranslationPrefix;
+  /** `accept` on file input + dropzone hint. */
+  acceptedFormats?: string;
+  /** If set, only these files are added (e.g. HEIC-only tool). */
+  fileFilter?: (file: File) => boolean;
   children?: ReactNode;
   /** Override first download button label (e.g. GIF tool uses “Download GIF”). */
   downloadPrimaryLabelKey?: string;
@@ -64,7 +72,7 @@ type ProcessResult = { files: ResultFile[]; zipSuggestedName: string };
 type FileEntry = { id: string; file: File };
 
 const thumbBoxClass =
-  "flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#103c44]/60 ring-1 ring-[#d6ffd2]/15";
+  "flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-card/60 ring-1 ring-primary/15";
 
 function BlobImagePreview({
   src,
@@ -100,20 +108,20 @@ export function ImageSidebarFileRow({
   }, [file]);
 
   return (
-    <li className="flex items-center gap-2 rounded-md border border-[#d6ffd2]/10 bg-[#103c44]/35 p-2">
+    <li className="flex items-center gap-2 rounded-md border border-primary/10 bg-card/35 p-2">
       {previewUrl && !decodeFailed ? (
         <BlobImagePreview
           src={previewUrl}
-          className="h-11 w-11 shrink-0 rounded-md object-cover ring-1 ring-[#d6ffd2]/15"
+          className="h-11 w-11 shrink-0 rounded-md object-cover ring-1 ring-primary/15"
           onError={() => setDecodeFailed(true)}
         />
       ) : (
         <div className={thumbBoxClass} aria-hidden>
-          <ImageIcon className="h-5 w-5 text-[#d6ffd2]/45" />
+          <ImageIcon className="h-5 w-5 text-primary/45" />
         </div>
       )}
       <span
-        className="min-w-0 flex-1 truncate text-[#d6ffd2]/90"
+        className="min-w-0 flex-1 truncate text-primary/90"
         title={file.name}
       >
         {file.name}
@@ -148,6 +156,8 @@ function base64ToBlob(base64: string, contentType: string): Blob {
 export default function ImageToolsBatchForm({
   processFiles,
   translationPrefix,
+  acceptedFormats = DEFAULT_UPLOAD_ACCEPT,
+  fileFilter,
   children,
   downloadPrimaryLabelKey = "image_tools.download_images",
   renderWhenHasFiles,
@@ -186,15 +196,20 @@ export default function ImageToolsBatchForm({
     setResult(null);
   }, []);
 
-  const onDrop = useCallback((incoming: File[]) => {
-    const imgs = incoming.filter((f) => f.type.startsWith("image/"));
-    if (imgs.length === 0) return;
-    setFileEntries((prev) => [
-      ...prev,
-      ...imgs.map((file) => ({ id: crypto.randomUUID(), file })),
-    ]);
-    setResult(null);
-  }, []);
+  const onDrop = useCallback(
+    (incoming: File[]) => {
+      const imgs = fileFilter
+        ? incoming.filter(fileFilter)
+        : incoming.filter((f) => f.type.startsWith("image/"));
+      if (imgs.length === 0) return;
+      setFileEntries((prev) => [
+        ...prev,
+        ...imgs.map((file) => ({ id: crypto.randomUUID(), file })),
+      ]);
+      setResult(null);
+    },
+    [fileFilter]
+  );
 
   const onDragOver = (e: React.DragEvent) => e.preventDefault();
 
@@ -300,7 +315,7 @@ export default function ImageToolsBatchForm({
 
   const sidebarInner = (
     <div className="flex flex-col gap-5 px-6 pb-8 pt-14">
-      <div className="flex items-center justify-between gap-2 border-b border-[#d6ffd2]/15 pb-3">
+      <div className="flex items-center justify-between gap-2 border-b border-primary/15 pb-3">
         <h3 className="text-sm font-semibold tracking-tight text-foreground">
           {t("image_tools.sidebar_heading")}
         </h3>
@@ -332,7 +347,7 @@ export default function ImageToolsBatchForm({
           type="button"
           variant="outline"
           size="sm"
-          className="mt-2 w-full border-[#d6ffd2]/25"
+          className="mt-2 w-full border-primary/25"
           onClick={() => fileInputRef.current?.click()}
         >
           {t("image_tools.add_more")}
@@ -357,7 +372,7 @@ export default function ImageToolsBatchForm({
       </Button>
 
       {result && (
-        <div className="flex flex-col gap-2 pt-2 border-t border-[#d6ffd2]/15">
+        <div className="flex flex-col gap-2 pt-2 border-t border-primary/15">
           <Button
             type="button"
             size="sm"
@@ -395,11 +410,11 @@ export default function ImageToolsBatchForm({
       <div
         className={cn(
           "mx-auto w-full max-w-3xl p-2",
-          hasFiles && "border-b border-[#d6ffd2]/10 pb-4 mb-2"
+          hasFiles && "border-b border-primary/10 pb-4 mb-2"
         )}
       >
         <FileUploadZone
-          acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
+          acceptedFormats={acceptedFormats}
           title={t(`${translationPrefix}.drop_title`)}
           description={t(`${translationPrefix}.drop_desc`)}
           fileInputRef={fileInputRef}

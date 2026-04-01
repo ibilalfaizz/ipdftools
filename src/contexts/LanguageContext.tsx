@@ -59,6 +59,16 @@ const translations = {
     'nav.image_remove_bg': 'Remove background',
     'nav.image_watermark': 'Image watermark',
     'nav.image_ocr': 'Image to text',
+    'nav.image_heic_jpg': 'HEIC to JPG',
+    'nav.login': 'Log in',
+    'login.title': 'Log in',
+    'login.subtitle': 'Access your iPDFTOOLS account.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.submit': 'Continue',
+    'login.back_home': 'Back to home',
+    'login.demo_note':
+      'Account sign-in is not enabled yet. This page matches the site theme.',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -98,6 +108,8 @@ const translations = {
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
     'landing.image_ocr_desc':
       'Pull text from images in your browser. Choose a language, then copy or save as a file.',
+    'landing.image_heic_jpg_desc':
+      'Turn iPhone HEIC/HEIF photos into standard JPEG files in your browser. Batch convert; download separately or as a ZIP.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -239,6 +251,12 @@ const translations = {
     'image_jpg.process': 'Convert',
     'image_jpg.drop_title': 'Drop images here or click to browse',
     'image_jpg.drop_desc': 'Most raster formats • Multiple files',
+    'image_heic_to_jpg.title': 'HEIC to JPG',
+    'image_heic_to_jpg.description':
+      'Convert Apple HEIC/HEIF photos to JPEG (quality 92) for sharing and editing anywhere. All processing happens in your browser.',
+    'image_heic_to_jpg.process': 'Convert to JPG',
+    'image_heic_to_jpg.drop_title': 'Drop HEIC files here or click to browse',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Multiple files',
     'image_gif.title': 'Images to GIF',
     'image_gif.description':
       'Order follows upload order. Frames are centered on a shared canvas (max 1280px). One GIF download.',
@@ -413,6 +431,16 @@ const translations = {
     'nav.image_remove_bg': 'Quitar fondo',
     'nav.image_watermark': 'Marca de agua',
     'nav.image_ocr': 'Imagen a texto',
+    'nav.image_heic_jpg': 'HEIC a JPG',
+    'nav.login': 'Iniciar sesión',
+    'login.title': 'Iniciar sesión',
+    'login.subtitle': 'Accede a tu cuenta de iPDFTOOLS.',
+    'login.email': 'Correo',
+    'login.password': 'Contraseña',
+    'login.submit': 'Continuar',
+    'login.back_home': 'Volver al inicio',
+    'login.demo_note':
+      'El inicio de sesión aún no está activado. Esta página usa el tema del sitio.',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -453,6 +481,8 @@ const translations = {
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
     'landing.image_ocr_desc':
       'Extrae texto de imágenes en el navegador. Elige idioma, luego copia o guarda el archivo.',
+    'landing.image_heic_jpg_desc':
+      'Convierte fotos HEIC/HEIF del iPhone a JPEG estándar en el navegador. Por lotes; descarga sueltas o en ZIP.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -585,6 +615,12 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Suelta imágenes aquí o haz clic',
     'image_jpg.drop_desc': 'La mayoría de formatos • Varios archivos',
+    'image_heic_to_jpg.title': 'HEIC a JPG',
+    'image_heic_to_jpg.description':
+      'Convierte fotos HEIC/HEIF de Apple a JPEG (calidad 92) para compartir y editar en cualquier sitio. Todo en tu navegador.',
+    'image_heic_to_jpg.process': 'Convertir a JPG',
+    'image_heic_to_jpg.drop_title': 'Suelta archivos HEIC aquí o haz clic',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Varios archivos',
     'image_gif.title': 'Imágenes a GIF',
     'image_gif.description':
       'El orden es el de subida. Fotos centradas en un lienzo común (máx. 1280px). Un GIF para descargar.',
@@ -759,6 +795,16 @@ const translations = {
     'nav.image_remove_bg': 'Supprimer le fond',
     'nav.image_watermark': 'Filigrane image',
     'nav.image_ocr': 'Image vers texte',
+    'nav.image_heic_jpg': 'HEIC vers JPG',
+    'nav.login': 'Connexion',
+    'login.title': 'Connexion',
+    'login.subtitle': 'Accédez à votre compte iPDFTOOLS.',
+    'login.email': 'E-mail',
+    'login.password': 'Mot de passe',
+    'login.submit': 'Continuer',
+    'login.back_home': "Retour à l'accueil",
+    'login.demo_note':
+      'La connexion compte n’est pas encore activée. Cette page suit le thème du site.',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -799,6 +845,8 @@ const translations = {
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
     'landing.image_ocr_desc':
       'Extrayez le texte des images dans le navigateur. Choisissez la langue, puis copiez ou enregistrez.',
+    'landing.image_heic_jpg_desc':
+      'Transformez les photos HEIC/HEIF d’iPhone en JPEG standard dans le navigateur. Par lot ; fichiers séparés ou ZIP.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -932,6 +980,12 @@ const translations = {
     'image_jpg.process': 'Convertir',
     'image_jpg.drop_title': 'Déposez des images ici ou cliquez',
     'image_jpg.drop_desc': 'La plupart des formats • Fichiers multiples',
+    'image_heic_to_jpg.title': 'HEIC vers JPG',
+    'image_heic_to_jpg.description':
+      'Convertissez les photos HEIC/HEIF Apple en JPEG (qualité 92) pour partager et éditer partout. Tout dans le navigateur.',
+    'image_heic_to_jpg.process': 'Convertir en JPG',
+    'image_heic_to_jpg.drop_title': 'Déposez des fichiers HEIC ici ou cliquez',
+    'image_heic_to_jpg.drop_desc': '.heic / .heif • Fichiers multiples',
     'image_gif.title': 'Images vers GIF',
     'image_gif.description':
       'L\'ordre suit l\'import. Images centrées sur un canevas commun (max 1280px). Un fichier GIF.',
