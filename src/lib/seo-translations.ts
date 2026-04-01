@@ -19,6 +19,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.rotate.title": "PDF Rotator - Rotate PDF Pages Online Free",
     "seo.rotate.description":
       "Rotate PDF pages to correct orientation for free. Easy-to-use online PDF rotation tool.",
+    "seo.sign_pdf.title": "Sign PDF Online Free — Type, Style, or Image Signature in Your Browser",
+    "seo.sign_pdf.description":
+      "Add a signature, initials, or company stamp to your PDF. Choose handwriting styles, colors, or upload a scan. Last, first, or all pages — files stay on your device.",
     "seo.pdf_to_word.title": "PDF to Word Converter - Convert PDF to DOC Online",
     "seo.pdf_to_word.description":
       "Convert PDF files to editable Word documents for free. Accurate PDF to DOC/DOCX conversion tool.",
@@ -91,6 +94,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.rotate.title": "Rotar PDF - Girar Páginas PDF Online Gratis",
     "seo.rotate.description":
       "Rota páginas PDF a la orientación correcta gratis. Herramienta online fácil de usar para rotar PDFs.",
+    "seo.sign_pdf.title": "Firmar PDF online gratis — en tu navegador",
+    "seo.sign_pdf.description":
+      "Añade firma, iniciales o sello. Estilos manuscritos, colores o imagen escaneada. Última, primera o todas las páginas; archivos en tu dispositivo.",
     "seo.pdf_to_word.title": "PDF a Word - Convertir PDF a DOC Online",
     "seo.pdf_to_word.description":
       "Convierte archivos PDF a documentos Word editables gratis. Conversor preciso de PDF a DOC/DOCX.",
@@ -163,6 +169,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.rotate.title": "Rotation PDF - Faire Pivoter les Pages PDF en Ligne Gratuit",
     "seo.rotate.description":
       "Faites pivoter les pages PDF vers la bonne orientation gratuitement. Outil en ligne facile à utiliser pour faire pivoter les PDFs.",
+    "seo.sign_pdf.title": "Signer un PDF en ligne gratuitement — dans le navigateur",
+    "seo.sign_pdf.description":
+      "Ajoutez signature, initiales ou tampon. Styles manuscrits, couleurs ou image importée. Dernière, première ou toutes les pages ; fichiers sur votre appareil.",
     "seo.pdf_to_word.title": "PDF vers Word - Convertir PDF en DOC en Ligne",
     "seo.pdf_to_word.description":
       "Convertissez les fichiers PDF en documents Word éditables gratuitement. Convertisseur précis de PDF vers DOC/DOCX.",

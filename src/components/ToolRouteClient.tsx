@@ -30,6 +30,10 @@ const RotatePage = dynamic(() => import("@/pages/RotatePage"), {
   ssr: false,
   loading: loadFallback,
 });
+const SignPdfPage = dynamic(() => import("@/pages/SignPdfPage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 const PDFToWordPage = dynamic(() => import("@/pages/PDFToWordPage"), {
   ssr: false,
   loading: loadFallback,
@@ -108,6 +112,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/split-pdf": SplitPage,
   "/compress-pdf": CompressPage,
   "/rotate-pdf": RotatePage,
+  "/sign-pdf": SignPdfPage,
   "/pdf-to-word": PDFToWordPage,
   "/pdf-to-jpg": PDFToJPGPage,
   "/pdf-to-text": PDFToTextPage,

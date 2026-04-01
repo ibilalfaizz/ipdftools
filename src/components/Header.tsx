@@ -137,6 +137,11 @@ const Header = () => {
       description: "Rotate PDF pages",
     },
     {
+      href: "/sign-pdf",
+      label: t("nav.sign_pdf"),
+      description: t("landing.sign_pdf_desc"),
+    },
+    {
       href: "/pdf-to-word",
       label: t("nav.pdf_to_word"),
       description: "Convert PDF to Word documents",
