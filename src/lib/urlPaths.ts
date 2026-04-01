@@ -60,6 +60,11 @@ export const pathMapping: Record<string, string[]> = {
     "quitar-fondo-imagen",
     "supprimer-fond-image",
   ],
+  "image-ocr": [
+    "image-ocr",
+    "extraer-texto-imagen",
+    "extraire-texte-image",
+  ],
 };
 
 export const languageIndex: Record<LocaleCode, number> = { en: 0, es: 1, fr: 2 };

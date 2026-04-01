@@ -81,6 +81,11 @@ const Header = () => {
       label: t("nav.image_watermark"),
       description: t("landing.image_watermark_desc"),
     },
+    {
+      href: "/image-ocr",
+      label: t("nav.image_ocr"),
+      description: t("landing.image_ocr_desc"),
+    },
   ];
 
   const imageToolHrefs = [
@@ -94,6 +99,7 @@ const Header = () => {
     "/image-blur-face",
     "/image-remove-background",
     "/image-watermark",
+    "/image-ocr",
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 

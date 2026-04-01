@@ -59,6 +59,11 @@ const pathMapping = {
     "quitar-fondo-imagen",
     "supprimer-fond-image",
   ],
+  "image-ocr": [
+    "image-ocr",
+    "extraer-texto-imagen",
+    "extraire-texte-image",
+  ],
 };
 
 /**
@@ -206,6 +211,7 @@ function legacySeoSlugRedirects() {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: [
+    "tesseract.js",
     "@tensorflow/tfjs",
     "@tensorflow/tfjs-core",
     "@tensorflow/tfjs-backend-webgl",

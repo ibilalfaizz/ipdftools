@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -14,6 +16,7 @@ import type { FaceBlurBox } from "@/lib/face-blur-blazeface";
 
 export default function ImageBlurFacePage() {
   const { t } = useLanguage();
+  const [sidebarReserve, setSidebarReserve] = useState(false);
   const [blurPx, setBlurPx] = useState(20);
   const [boxesByFileKey, setBoxesByFileKey] = useState<
     Record<string, FaceBlurBox[]>
@@ -31,12 +34,18 @@ export default function ImageBlurFacePage() {
     <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto transition-[padding]",
+            sidebarReserve && IMAGE_TOOL_SHEET_RESERVE
+          )}
+        >
           <Card className="tool-page-card">
             <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_blur_face"
                 onFilesChange={onFilesChange}
+                onSidebarReserveChange={setSidebarReserve}
                 processFiles={(files) =>
                   processFaceBlurBatch(files, blurPx, boxesByFileKey)
                 }

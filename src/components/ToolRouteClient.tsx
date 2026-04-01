@@ -105,6 +105,10 @@ const ImageRemoveBackgroundPage = dynamic(
   () => import("@/pages/ImageRemoveBackgroundPage"),
   { ssr: false, loading: loadFallback }
 );
+const ImageOcrPage = dynamic(() => import("@/pages/ImageOcrPage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -126,6 +130,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/image-blur-face": ImageBlurFacePage,
   "/image-watermark": ImageWatermarkPage,
   "/image-remove-background": ImageRemoveBackgroundPage,
+  "/image-ocr": ImageOcrPage,
 };
 
 export default function ToolRouteClient({

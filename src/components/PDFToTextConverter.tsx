@@ -4,10 +4,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 import { extractTextFromPdf } from '@/lib/pdf-extract-text';
 
-const PDFToTextConverter = () => {
+const PDFToTextConverter = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
   const [isConverting, setIsConverting] = useState(false);
@@ -77,6 +81,7 @@ const PDFToTextConverter = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

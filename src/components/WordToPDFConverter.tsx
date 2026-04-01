@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from "./FileUploadZone";
-import PdfToolOffcanvasShell from "./PdfToolOffcanvasShell";
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 import {
   convertWordFileToPdfBlob,
   pdfDownloadNameFromWord,
@@ -15,7 +17,9 @@ import {
 
 type ConvertedItem = { url: string; downloadName: string };
 
-const WordToPDFConverter = () => {
+const WordToPDFConverter = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
@@ -134,6 +138,7 @@ const WordToPDFConverter = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

@@ -20,6 +20,7 @@ import {
   Stamp,
   ScanFace,
   Eraser,
+  ScanText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -234,6 +235,14 @@ const Landing = () => {
       path: "/image-watermark",
       available: true,
       categories: ["edit"],
+    },
+    {
+      icon: <ScanText className="w-8 h-8" />,
+      title: t("nav.image_ocr"),
+      description: t("landing.image_ocr_desc"),
+      path: "/image-ocr",
+      available: true,
+      categories: ["convert"],
     },
     ],
     [t]

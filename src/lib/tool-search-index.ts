@@ -121,4 +121,10 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     descriptionKey: "landing.image_watermark_desc",
     category: "image",
   },
+  {
+    href: "/image-ocr",
+    labelKey: "nav.image_ocr",
+    descriptionKey: "landing.image_ocr_desc",
+    category: "image",
+  },
 ];

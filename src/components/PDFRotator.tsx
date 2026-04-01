@@ -4,12 +4,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 import { useLanguage } from '../contexts/LanguageContext';
 import { rotatePDF } from '../lib/api';
 import { saveAs } from 'file-saver';
 
-const PDFRotator = () => {
+const PDFRotator = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const [files, setFiles] = useState<File[]>([]);
   const [isRotating, setIsRotating] = useState(false);
@@ -72,6 +76,7 @@ const PDFRotator = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

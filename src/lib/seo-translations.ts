@@ -64,6 +64,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_remove_background.title": "Remove Image Background Online — Transparent PNG in Your Browser",
     "seo.image_remove_background.description":
       "Remove solid or even backdrops from photos in your browser. Download transparent PNGs or a ZIP — files stay on your device.",
+    "seo.image_ocr.title": "Image to Text Online — Extract Text from Photos in Your Browser",
+    "seo.image_ocr.description":
+      "Pull text from images and screenshots in your browser. English, Spanish, or French; copy or download as .txt or ZIP.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
@@ -127,6 +130,9 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_remove_background.title": "Quitar fondo de imagen online — PNG transparente",
     "seo.image_remove_background.description":
       "Quita fondos lisos o uniformes en el navegador. PNG transparentes o ZIP; los archivos no salen de tu dispositivo.",
+    "seo.image_ocr.title": "Imagen a texto online — extrae texto en el navegador",
+    "seo.image_ocr.description":
+      "Extrae texto de capturas y fotos en tu navegador. Inglés, español o francés; copia o descarga .txt o ZIP.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
@@ -190,5 +196,8 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.image_remove_background.title": "Supprimer le fond d’une image en ligne — PNG transparent",
     "seo.image_remove_background.description":
       "Retirez les fonds unis ou réguliers dans le navigateur. PNG transparents ou ZIP ; vos fichiers restent sur votre appareil.",
+    "seo.image_ocr.title": "Image vers texte en ligne — extraction dans le navigateur",
+    "seo.image_ocr.description":
+      "Extrayez le texte de captures et photos dans le navigateur. Anglais, espagnol ou français ; copiez ou téléchargez .txt ou ZIP.",
   },
 };

@@ -10,7 +10,9 @@ import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
 import { useLanguage } from '@/contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 
 interface SplitOption {
   type: 'individual' | 'range';
@@ -22,7 +24,9 @@ interface SplitResult {
   filenames: string[];
 }
 
-const PDFSplitter = () => {
+const PDFSplitter = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -217,6 +221,7 @@ const PDFSplitter = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

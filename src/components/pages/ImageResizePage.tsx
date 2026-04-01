@@ -9,17 +9,25 @@ import Footer from "../Footer";
 import ImageToolsBatchForm from "../ImageToolsBatchForm";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { processResizeBatch } from "@/lib/client-image-jobs";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 export default function ImageResizePage() {
   const { t } = useLanguage();
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
+  const [sidebarReserve, setSidebarReserve] = useState(false);
 
   return (
     <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto transition-[padding]",
+            sidebarReserve && IMAGE_TOOL_SHEET_RESERVE
+          )}
+        >
           <Card className="tool-page-card">
             <CardContent className="p-0">
               <ImageToolsBatchForm
@@ -27,6 +35,7 @@ export default function ImageResizePage() {
                 processFiles={(files) =>
                   processResizeBatch(files, width, height)
                 }
+                onSidebarReserveChange={setSidebarReserve}
               >
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
