@@ -78,7 +78,7 @@ function BlobImagePreview({
   return <img src={src} alt="" className={className} onError={onError} />;
 }
 
-function ImageSidebarFileRow({
+export function ImageSidebarFileRow({
   file,
   onRemove,
 }: {

@@ -58,6 +58,7 @@ const translations = {
     'nav.image_blur_face': 'Blur faces',
     'nav.image_remove_bg': 'Remove background',
     'nav.image_watermark': 'Image watermark',
+    'nav.image_ocr': 'Image to text',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -95,6 +96,8 @@ const translations = {
       'Erase solid or even backgrounds (for example studio white or walls) and download transparent PNGs — all in your browser.',
     'landing.image_watermark_desc':
       'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
+    'landing.image_ocr_desc':
+      'Pull text from images in your browser. Choose a language, then copy or save as a file.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -334,6 +337,34 @@ const translations = {
       'Could not read that image file. Try PNG or JPEG, or another browser.',
     'image_watermark.drop_title': 'Drop an image here or click to browse',
     'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • One image',
+    'image_ocr.title': 'Image to text',
+    'image_ocr.description':
+      'Turn text in pictures into editable copy you can paste or save. Everything runs in your browser.',
+    'image_ocr.drop_title': 'Drop images here or click to browse',
+    'image_ocr.drop_desc': 'PNG, JPEG, WebP, GIF • Multiple files',
+    'image_ocr.language_label': 'Text language in image',
+    'image_ocr.lang_auto': 'Auto (Slower)',
+    'image_ocr.lang_eng': 'English',
+    'image_ocr.lang_spa': 'Spanish (Español)',
+    'image_ocr.lang_fra': 'French (Français)',
+    'image_ocr.combobox_placeholder': 'Choose a language…',
+    'image_ocr.combobox_search': 'Search languages…',
+    'image_ocr.combobox_empty': 'No language matches.',
+    'image_ocr.select_language_first':
+      'Select a language before extracting text.',
+    'image_ocr.extracting_wait': 'Starting…',
+    'image_ocr.process': 'Extract text',
+    'image_ocr.processing': 'Reading text…',
+    'image_ocr.progress_label': 'Working…',
+    'image_ocr.result_heading': 'Extracted text',
+    'image_ocr.placeholder':
+      'Add images, then tap Extract text. Results show here — copy or download as one .txt or a ZIP of files.',
+    'image_ocr.empty_result': '(No text detected.)',
+    'image_ocr.copy_all': 'Copy all text',
+    'image_ocr.download_txt': 'Download one .txt file',
+    'image_ocr.download_zip': 'Download .txt files as ZIP',
+    'image_ocr.success': 'Text extracted',
+    'image_ocr.copied': 'Copied to clipboard',
     'image_tools.result_ready': 'Ready — download as images or ZIP.',
     'image_tools.download_images': 'Download images',
     'image_tools.download_gif': 'Download GIF',
@@ -381,6 +412,7 @@ const translations = {
     'nav.image_blur_face': 'Desenfocar caras',
     'nav.image_remove_bg': 'Quitar fondo',
     'nav.image_watermark': 'Marca de agua',
+    'nav.image_ocr': 'Imagen a texto',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -419,6 +451,8 @@ const translations = {
       'Elimina fondos lisos o uniformes (estudio, paredes) y descarga PNG transparentes — todo en tu navegador.',
     'landing.image_watermark_desc':
       'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
+    'landing.image_ocr_desc':
+      'Extrae texto de imágenes en el navegador. Elige idioma, luego copia o guarda el archivo.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -649,6 +683,34 @@ const translations = {
       'No se pudo leer esa imagen. Prueba PNG o JPEG u otro navegador.',
     'image_watermark.drop_title': 'Suelta una imagen aquí o haz clic',
     'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Una imagen',
+    'image_ocr.title': 'Imagen a texto',
+    'image_ocr.description':
+      'Convierte el texto de tus imágenes en texto que puedes copiar o guardar. Todo ocurre en tu navegador.',
+    'image_ocr.drop_title': 'Suelta imágenes aquí o haz clic',
+    'image_ocr.drop_desc': 'PNG, JPEG, WebP, GIF • Varios archivos',
+    'image_ocr.language_label': 'Idioma del texto en la imagen',
+    'image_ocr.lang_auto': 'Auto (más lento)',
+    'image_ocr.lang_eng': 'Inglés (English)',
+    'image_ocr.lang_spa': 'Español',
+    'image_ocr.lang_fra': 'Francés (Français)',
+    'image_ocr.combobox_placeholder': 'Elige un idioma…',
+    'image_ocr.combobox_search': 'Buscar idiomas…',
+    'image_ocr.combobox_empty': 'Ningún idioma coincide.',
+    'image_ocr.select_language_first':
+      'Selecciona un idioma antes de extraer el texto.',
+    'image_ocr.extracting_wait': 'Iniciando…',
+    'image_ocr.process': 'Extraer texto',
+    'image_ocr.processing': 'Leyendo texto…',
+    'image_ocr.progress_label': 'Procesando…',
+    'image_ocr.result_heading': 'Texto extraído',
+    'image_ocr.placeholder':
+      'Añade imágenes y pulsa Extraer texto. El resultado aparece aquí — copia o descarga un .txt o ZIP.',
+    'image_ocr.empty_result': '(No se detectó texto.)',
+    'image_ocr.copy_all': 'Copiar todo el texto',
+    'image_ocr.download_txt': 'Descargar un .txt',
+    'image_ocr.download_zip': 'Descargar .txt en ZIP',
+    'image_ocr.success': 'Texto extraído',
+    'image_ocr.copied': 'Copiado al portapapeles',
     'image_tools.result_ready': 'Listo — descarga como imágenes o ZIP.',
     'image_tools.download_images': 'Descargar imágenes',
     'image_tools.download_gif': 'Descargar GIF',
@@ -696,6 +758,7 @@ const translations = {
     'nav.image_blur_face': 'Flouter les visages',
     'nav.image_remove_bg': 'Supprimer le fond',
     'nav.image_watermark': 'Filigrane image',
+    'nav.image_ocr': 'Image vers texte',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -734,6 +797,8 @@ const translations = {
       'Effacez les fonds unis ou réguliers (studio, murs) et téléchargez des PNG transparents — tout dans le navigateur.',
     'landing.image_watermark_desc':
       'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
+    'landing.image_ocr_desc':
+      'Extrayez le texte des images dans le navigateur. Choisissez la langue, puis copiez ou enregistrez.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -965,6 +1030,34 @@ const translations = {
       'Impossible de lire cette image. Essayez PNG ou JPEG, ou un autre navigateur.',
     'image_watermark.drop_title': 'Déposez une image ici ou cliquez',
     'image_watermark.drop_desc': 'PNG, JPEG, WebP, GIF, TIFF • Une image',
+    'image_ocr.title': 'Image vers texte',
+    'image_ocr.description':
+      'Transformez le texte visible sur vos images en texte à copier ou enregistrer. Tout se passe dans le navigateur.',
+    'image_ocr.drop_title': 'Déposez des images ici ou cliquez',
+    'image_ocr.drop_desc': 'PNG, JPEG, WebP, GIF • Plusieurs fichiers',
+    'image_ocr.language_label': 'Langue du texte sur l’image',
+    'image_ocr.lang_auto': 'Auto (plus lent)',
+    'image_ocr.lang_eng': 'Anglais (English)',
+    'image_ocr.lang_spa': 'Espagnol (Español)',
+    'image_ocr.lang_fra': 'Français',
+    'image_ocr.combobox_placeholder': 'Choisir une langue…',
+    'image_ocr.combobox_search': 'Rechercher une langue…',
+    'image_ocr.combobox_empty': 'Aucune langue ne correspond.',
+    'image_ocr.select_language_first':
+      'Choisissez une langue avant d’extraire le texte.',
+    'image_ocr.extracting_wait': 'Démarrage…',
+    'image_ocr.process': 'Extraire le texte',
+    'image_ocr.processing': 'Lecture du texte…',
+    'image_ocr.progress_label': 'Traitement…',
+    'image_ocr.result_heading': 'Texte extrait',
+    'image_ocr.placeholder':
+      'Ajoutez des images, puis lancez Extraire le texte. Le résultat apparaît ici — copiez ou téléchargez un .txt ou un ZIP.',
+    'image_ocr.empty_result': '(Aucun texte détecté.)',
+    'image_ocr.copy_all': 'Copier tout le texte',
+    'image_ocr.download_txt': 'Télécharger un fichier .txt',
+    'image_ocr.download_zip': 'Télécharger les .txt en ZIP',
+    'image_ocr.success': 'Texte extrait',
+    'image_ocr.copied': 'Copié dans le presse-papiers',
     'image_tools.result_ready': 'Prêt — téléchargez en images ou en ZIP.',
     'image_tools.download_images': 'Télécharger les images',
     'image_tools.download_gif': 'Télécharger le GIF',
