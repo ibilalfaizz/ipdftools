@@ -355,32 +355,24 @@ export default function ImageCropPage() {
                   </p>
                 </div>
 
-                <div
-                  className={cn(
-                    "mx-auto w-full max-w-3xl p-2",
-                    hasFiles && "border-b border-[#d6ffd2]/10 pb-4 mb-2"
-                  )}
-                >
-                  <FileUploadZone
-                    acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
-                    title={t("image_crop.drop_title")}
-                    description={t("image_crop.drop_desc")}
-                    fileInputRef={fileInputRef}
-                    onDrop={onDrop}
-                    onDragOver={onDragOver}
-                    onFileSelect={onFileSelect}
-                    multiple={false}
-                    className={cn(
-                      "flex flex-col justify-center",
-                      hasFiles
-                        ? "min-h-[min(200px,28vh)] py-6"
-                        : "min-h-[min(420px,52vh)] py-12"
-                    )}
-                  />
-                </div>
+                {!hasFiles ? (
+                  <div className="mx-auto w-full max-w-3xl p-2">
+                    <FileUploadZone
+                      acceptedFormats="image/png,image/jpeg,image/webp,image/gif,image/tiff,.png,.jpg,.jpeg,.webp,.gif,.tif,.tiff"
+                      title={t("image_crop.drop_title")}
+                      description={t("image_crop.drop_desc")}
+                      fileInputRef={fileInputRef}
+                      onDrop={onDrop}
+                      onDragOver={onDragOver}
+                      onFileSelect={onFileSelect}
+                      multiple={false}
+                      className="flex min-h-[min(420px,52vh)] flex-col justify-center py-12"
+                    />
+                  </div>
+                ) : null}
 
                 {hasFiles && previewUrl ? (
-                  <div className="px-4 pb-6 flex justify-center min-w-0">
+                  <div className="flex min-w-0 justify-center px-4 pb-6 pt-2">
                     <ImageCropCanvas
                       key={previewUrl}
                       imageUrl={previewUrl}
