@@ -3,11 +3,12 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
-import { Loader2 } from "lucide-react";
+import { ImageIcon, Loader2, X } from "lucide-react";
 import JSZip from "jszip";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/components/ui/use-toast";
@@ -59,6 +60,80 @@ type ResultFile = { name: string; contentType: string; data: string };
 
 type ProcessResult = { files: ResultFile[]; zipSuggestedName: string };
 
+type FileEntry = { id: string; file: File };
+
+const thumbBoxClass =
+  "flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#103c44]/60 ring-1 ring-[#d6ffd2]/15";
+
+function BlobImagePreview({
+  src,
+  className,
+  onError,
+}: {
+  src: string;
+  className?: string;
+  onError?: () => void;
+}) {
+  // eslint-disable-next-line @next/next/no-img-element -- object URL from File
+  return <img src={src} alt="" className={className} onError={onError} />;
+}
+
+function ImageSidebarFileRow({
+  file,
+  onRemove,
+}: {
+  file: File;
+  onRemove: () => void;
+}) {
+  const { t } = useLanguage();
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [decodeFailed, setDecodeFailed] = useState(false);
+
+  useEffect(() => {
+    setDecodeFailed(false);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [file]);
+
+  return (
+    <li className="flex items-center gap-2 rounded-md border border-[#d6ffd2]/10 bg-[#103c44]/35 p-2">
+      {previewUrl && !decodeFailed ? (
+        <BlobImagePreview
+          src={previewUrl}
+          className="h-11 w-11 shrink-0 rounded-md object-cover ring-1 ring-[#d6ffd2]/15"
+          onError={() => setDecodeFailed(true)}
+        />
+      ) : (
+        <div className={thumbBoxClass} aria-hidden>
+          <ImageIcon className="h-5 w-5 text-[#d6ffd2]/45" />
+        </div>
+      )}
+      <span
+        className="min-w-0 flex-1 truncate text-[#d6ffd2]/90"
+        title={file.name}
+      >
+        {file.name}
+      </span>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 shrink-0 text-muted-foreground hover:bg-destructive/15 hover:text-destructive"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        aria-label={`${t("common.remove")}: ${file.name}`}
+      >
+        <X className="h-4 w-4" aria-hidden />
+      </Button>
+    </li>
+  );
+}
+
 function base64ToBlob(base64: string, contentType: string): Blob {
   const binary = atob(base64);
   const len = binary.length;
@@ -80,23 +155,36 @@ export default function ImageToolsBatchForm({
   const { t } = useLanguage();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<File[]>([]);
+  const [fileEntries, setFileEntries] = useState<FileEntry[]>([]);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ProcessResult | null>(null);
+
+  const files = useMemo(
+    () => fileEntries.map((e) => e.file),
+    [fileEntries]
+  );
 
   useEffect(() => {
     onFilesChange?.(files);
   }, [files, onFilesChange]);
 
   const clearFiles = useCallback(() => {
-    setFiles([]);
+    setFileEntries([]);
+    setResult(null);
+  }, []);
+
+  const removeFileEntry = useCallback((id: string) => {
+    setFileEntries((prev) => prev.filter((e) => e.id !== id));
     setResult(null);
   }, []);
 
   const onDrop = useCallback((incoming: File[]) => {
     const imgs = incoming.filter((f) => f.type.startsWith("image/"));
     if (imgs.length === 0) return;
-    setFiles((prev) => [...prev, ...imgs]);
+    setFileEntries((prev) => [
+      ...prev,
+      ...imgs.map((file) => ({ id: crypto.randomUUID(), file })),
+    ]);
     setResult(null);
   }, []);
 
@@ -224,15 +312,13 @@ export default function ImageToolsBatchForm({
         <p className="text-xs font-medium text-muted-foreground mb-2">
           {t("image_tools.files_added")}: {files.length}
         </p>
-        <ul className="text-sm text-muted-foreground max-h-40 overflow-y-auto space-y-1.5 tool-list-box p-3">
-          {files.map((f) => (
-            <li
-              key={`${f.name}-${f.size}-${f.lastModified}`}
-              className="truncate"
-              title={f.name}
-            >
-              {f.name}
-            </li>
+        <ul className="max-h-52 space-y-2 overflow-y-auto text-sm tool-list-box p-2">
+          {fileEntries.map((entry) => (
+            <ImageSidebarFileRow
+              key={entry.id}
+              file={entry.file}
+              onRemove={() => removeFileEntry(entry.id)}
+            />
           ))}
         </ul>
         <Button
