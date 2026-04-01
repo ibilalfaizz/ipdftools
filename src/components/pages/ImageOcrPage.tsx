@@ -381,15 +381,15 @@ export default function ImageOcrPage() {
     <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto transition-[padding]",
+            hasFiles && IMAGE_TOOL_SHEET_RESERVE
+          )}
+        >
           <Card className="tool-page-card">
             <CardContent className="p-0">
-              <div
-                className={cn(
-                  "w-full min-w-0 relative transition-[padding]",
-                  hasFiles && IMAGE_TOOL_SHEET_RESERVE
-                )}
-              >
+              <div className="w-full min-w-0 relative">
                 <div className="px-4 sm:px-6 pt-6 pb-2 md:px-8">
                   <h2 className="text-2xl font-bold text-foreground">
                     {t("image_ocr.title")}

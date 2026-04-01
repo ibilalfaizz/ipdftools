@@ -13,6 +13,8 @@ import {
   processRotateBatch,
   type ImageRotateDegrees,
 } from "@/lib/client-image-jobs";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 function normalizeRotation90(n: number): ImageRotateDegrees {
   const x = ((Math.round(n) % 360) + 360) % 360;
@@ -23,6 +25,7 @@ function normalizeRotation90(n: number): ImageRotateDegrees {
 export default function ImageRotatePage() {
   const { t } = useLanguage();
   const [rotationDeg, setRotationDeg] = useState(0);
+  const [sidebarReserve, setSidebarReserve] = useState(false);
 
   const handleFilesChange = useCallback((files: File[]) => {
     if (files.length === 0) setRotationDeg(0);
@@ -42,12 +45,18 @@ export default function ImageRotatePage() {
     <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto transition-[padding]",
+            sidebarReserve && IMAGE_TOOL_SHEET_RESERVE
+          )}
+        >
           <Card className="tool-page-card">
             <CardContent className="p-0">
               <ImageToolsBatchForm
                 translationPrefix="image_rotate"
                 onFilesChange={handleFilesChange}
+                onSidebarReserveChange={setSidebarReserve}
                 processFiles={(files) =>
                   processRotateBatch(files, effective)
                 }

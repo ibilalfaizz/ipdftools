@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,10 +9,12 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
-import { cn } from "@/lib/utils";
+/** Optional prop for tool pages to reserve column width when the file sidebar is open. */
+export type PdfToolSidebarReserveProps = {
+  onSidebarReserveChange?: (active: boolean) => void;
+};
 
-type Props = {
+type Props = PdfToolSidebarReserveProps & {
   hasFiles: boolean;
   onClear: () => void;
   /** Title / description (and icon) — shifts with main content when the sheet is open. */
@@ -30,16 +32,17 @@ export default function PdfToolOffcanvasShell({
   intro,
   children,
   sidebar,
+  onSidebarReserveChange,
 }: Props) {
   const { t } = useLanguage();
 
+  useEffect(() => {
+    onSidebarReserveChange?.(hasFiles);
+    return () => onSidebarReserveChange?.(false);
+  }, [hasFiles, onSidebarReserveChange]);
+
   return (
-    <div
-      className={cn(
-        "w-full min-w-0 max-w-4xl mx-auto p-6 transition-[padding]",
-        hasFiles && IMAGE_TOOL_SHEET_RESERVE
-      )}
-    >
+    <div className="w-full min-w-0 max-w-4xl mx-auto p-6">
       {intro}
       <div className="mx-auto w-full max-w-3xl p-2">{children}</div>
       <Sheet

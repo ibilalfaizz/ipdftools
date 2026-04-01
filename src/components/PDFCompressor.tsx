@@ -8,9 +8,13 @@ import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
 import { useLanguage } from '@/contexts/LanguageContext';
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 
-const PDFCompressor = () => {
+const PDFCompressor = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -123,6 +127,7 @@ const PDFCompressor = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 import { getPdfJs } from '@/lib/pdfjs-client';
 
 interface ConvertedFile {
@@ -53,7 +55,9 @@ function canvasToJpegBlob(
   });
 }
 
-const PDFToJPGConverter = () => {
+const PDFToJPGConverter = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
@@ -213,6 +217,7 @@ const PDFToJPGConverter = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

@@ -5,9 +5,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from "@/components/ui/use-toast";
 import FileUploadZone from './FileUploadZone';
-import PdfToolOffcanvasShell from './PdfToolOffcanvasShell';
+import PdfToolOffcanvasShell, {
+  type PdfToolSidebarReserveProps,
+} from "./PdfToolOffcanvasShell";
 
-const JPGToPDFConverter = () => {
+const JPGToPDFConverter = ({
+  onSidebarReserveChange,
+}: PdfToolSidebarReserveProps = {}) => {
   const [files, setFiles] = useState<File[]>([]);
   const [conversionLoading, setConversionLoading] = useState(false);
   const [convertedPdf, setConvertedPdf] = useState<any>(null);
@@ -162,6 +166,7 @@ const JPGToPDFConverter = () => {
 
   return (
     <PdfToolOffcanvasShell
+      onSidebarReserveChange={onSidebarReserveChange}
       intro={
         <div className="text-center mb-8">
           <div className="inline-flex p-4 tool-icon-bubble rounded-full mb-4">

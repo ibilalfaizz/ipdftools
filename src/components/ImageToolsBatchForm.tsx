@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/sheet";
 import FileUploadZone from "./FileUploadZone";
 import type { ClientImageProcessResult } from "@/lib/client-image-jobs";
-import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
 import { cn } from "@/lib/utils";
 
 /** Passed to `renderWhenHasFiles` so previews can reflect processing state. */
@@ -54,6 +53,8 @@ type Props = {
   ) => ReactNode;
   /** Called whenever the file list changes (e.g. clear all → reset rotation in parent). */
   onFilesChange?: (files: File[]) => void;
+  /** When the right file sidebar is open — parent can reserve horizontal space for the whole card. */
+  onSidebarReserveChange?: (active: boolean) => void;
 };
 
 type ResultFile = { name: string; contentType: string; data: string };
@@ -151,6 +152,7 @@ export default function ImageToolsBatchForm({
   downloadPrimaryLabelKey = "image_tools.download_images",
   renderWhenHasFiles,
   onFilesChange,
+  onSidebarReserveChange,
 }: Props) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -167,6 +169,12 @@ export default function ImageToolsBatchForm({
   useEffect(() => {
     onFilesChange?.(files);
   }, [files, onFilesChange]);
+
+  const hasFiles = fileEntries.length > 0;
+  useEffect(() => {
+    onSidebarReserveChange?.(hasFiles);
+    return () => onSidebarReserveChange?.(false);
+  }, [hasFiles, onSidebarReserveChange]);
 
   const clearFiles = useCallback(() => {
     setFileEntries([]);
@@ -288,7 +296,6 @@ export default function ImageToolsBatchForm({
     }
   };
 
-  const hasFiles = files.length > 0;
   const sheetOpen = hasFiles;
 
   const sidebarInner = (
@@ -375,12 +382,7 @@ export default function ImageToolsBatchForm({
   );
 
   return (
-    <div
-      className={cn(
-        "w-full min-w-0 relative transition-[padding]",
-        hasFiles && IMAGE_TOOL_SHEET_RESERVE
-      )}
-    >
+    <div className="w-full min-w-0 relative">
       <div className="px-4 sm:px-6 pt-6 pb-2 md:px-8">
         <h2 className="text-2xl font-bold text-foreground">
           {t(`${translationPrefix}.title`)}

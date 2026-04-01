@@ -10,17 +10,25 @@ import Footer from "../Footer";
 import ImageToolsBatchForm from "../ImageToolsBatchForm";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { processGifBatch } from "@/lib/client-image-gif";
+import { IMAGE_TOOL_SHEET_RESERVE } from "@/lib/image-tool-sheet-layout";
+import { cn } from "@/lib/utils";
 
 export default function ImageGifPage() {
   const { t } = useLanguage();
   const [secondsPerImage, setSecondsPerImage] = useState(1);
   const [loop, setLoop] = useState(true);
+  const [sidebarReserve, setSidebarReserve] = useState(false);
 
   return (
     <div className="min-h-screen app-bg">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto transition-[padding]",
+            sidebarReserve && IMAGE_TOOL_SHEET_RESERVE
+          )}
+        >
           <Card className="tool-page-card">
             <CardContent className="p-0">
               <ImageToolsBatchForm
@@ -29,6 +37,7 @@ export default function ImageGifPage() {
                 processFiles={(files) =>
                   processGifBatch(files, { secondsPerImage, loop })
                 }
+                onSidebarReserveChange={setSidebarReserve}
               >
                 <div className="space-y-4">
                   <div className="space-y-2">
