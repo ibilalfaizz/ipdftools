@@ -4,245 +4,280 @@ import type { LocaleCode } from "@/lib/urlPaths";
 export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
   en: {
     "seo.site_name": "iPDFTOOLS",
-    "seo.default.title": "iPDFTOOLS - Free Online PDF Tools",
+    "seo.default.title":
+      "iPDFTOOLS — Bulk PDF & Image Tools | Batch 100s of Files in Your Browser",
     "seo.default.description":
-      "Free online PDF tools to merge, split, compress, convert and rotate PDF files. Fast, secure, and easy to use.",
-    "seo.merge.title": "PDF Merger - Combine PDF Files Online Free",
+      "Free bulk PDF and image tools: merge, split, compress, and batch-convert dozens or hundreds of files in your browser—bulk resize, WebP/JPG, HEIC, OCR, crop, watermark, and more. Private; no uploads to our servers.",
+    "seo.merge.title": "Bulk PDF Merger — Combine Many PDFs into One Online Free",
     "seo.merge.description":
-      "Merge multiple PDF files into one document for free. Fast, secure, and easy PDF merger tool that works in your browser.",
-    "seo.split.title": "PDF Splitter - Split PDF Files Online Free",
+      "Merge multiple PDFs into one document—queue dozens of files, reorder pages, and export in your browser. Fast bulk PDF merger; files stay on your device.",
+    "seo.split.title": "PDF Splitter — Split Large PDFs & Extract Pages Online Free",
     "seo.split.description":
-      "Split PDF files into separate pages or documents for free. Extract specific pages from PDF files with our online PDF splitter.",
-    "seo.compress.title": "PDF Compressor - Reduce PDF File Size Online",
+      "Split PDFs by pages or ranges—break huge PDFs into smaller files. Extract what you need in your browser; private and free.",
+    "seo.compress.title": "Bulk PDF Compressor — Shrink Many PDFs Online Free",
     "seo.compress.description":
-      "Compress PDF files to reduce file size while maintaining quality. Free online PDF compression tool.",
-    "seo.rotate.title": "PDF Rotator - Rotate PDF Pages Online Free",
+      "Compress PDFs to cut file size while keeping quality—batch many documents in your browser before email or storage.",
+    "seo.rotate.title": "Rotate PDF Pages Online — Batch Fix Orientation Free",
     "seo.rotate.description":
-      "Rotate PDF pages to correct orientation for free. Easy-to-use online PDF rotation tool.",
-    "seo.sign_pdf.title": "Sign PDF Online Free — Type, Style, or Image Signature in Your Browser",
+      "Rotate PDF pages 90°, 180°, or 270°—process many files in one go in your browser. Quick, free, and private.",
+    "seo.sign_pdf.title":
+      "Sign PDF Online Free — Type, Draw, or Image Signature in Your Browser",
     "seo.sign_pdf.description":
-      "Add a signature, initials, or company stamp to your PDF. Choose handwriting styles, colors, or upload a scan. Last, first, or all pages — files stay on your device.",
-    "seo.pdf_to_word.title": "PDF to Word Converter - Convert PDF to DOC Online",
+      "Add signatures, initials, or stamps to PDFs. Handwriting styles, colors, or upload a scan. Last, first, or all pages—files stay on your device.",
+    "seo.pdf_to_word.title": "Bulk PDF to Word — Convert Many PDFs to DOCX Online",
     "seo.pdf_to_word.description":
-      "Convert PDF files to editable Word documents for free. Accurate PDF to DOC/DOCX conversion tool.",
-    "seo.pdf_to_jpg.title": "PDF to JPG Converter - Convert PDF to Images Online",
+      "Convert PDFs to editable Word documents—run batch PDF-to-DOCX in your browser. Accurate conversion without server uploads.",
+    "seo.pdf_to_jpg.title": "PDF to JPG — Bulk Export Pages as Images Online",
     "seo.pdf_to_jpg.description":
-      "Convert PDF pages to high-quality JPG images for free. Fast and reliable PDF to image converter.",
-    "seo.pdf_to_text.title": "PDF to Text Converter - Extract Text from PDF Online",
+      "Export PDF pages as high-quality JPEGs—batch many pages or whole folders of PDFs in your browser. Fast PDF-to-image conversion.",
+    "seo.pdf_to_text.title": "PDF to Text — Extract Text from Many PDFs Online",
     "seo.pdf_to_text.description":
-      "Extract text content from PDF files for free. Convert PDF documents to plain text format.",
-    "seo.word_to_pdf.title": "Word to PDF Converter - Convert DOC to PDF Online",
+      "Pull text from PDFs for copying or search—batch-friendly extraction in your browser. Free and private.",
+    "seo.word_to_pdf.title": "Bulk Word to PDF — Convert Many DOCX Files Online",
     "seo.word_to_pdf.description":
-      "Convert Word documents to PDF format for free. Reliable DOC/DOCX to PDF conversion tool.",
-    "seo.jpg_to_pdf.title": "JPG to PDF Converter - Convert Images to PDF Online",
+      "Convert Word to PDF in bulk—batch DOC/DOCX to PDF in your browser with layout-friendly output.",
+    "seo.jpg_to_pdf.title": "Bulk JPG to PDF — Combine 100s of Images into PDFs Online",
     "seo.jpg_to_pdf.description":
-      "Convert JPG and PNG images to PDF documents for free. Create PDF files from your images.",
-    "seo.pdf_workflow.title": "PDF Workflow — Chain Merge, Compress, Rotate & Split in Your Browser",
+      "Turn JPG, PNG, and more into PDFs—queue many images at once, set page size, and download from your browser.",
+    "seo.pdf_workflow.title":
+      "PDF Workflow — Bulk Chain Merge, Compress, Split & Rotate in Browser",
     "seo.pdf_workflow.description":
-      "Simplify tasks by connecting PDF tools into one automated workflow. Set up each step, fine-tune settings, and save your automations—no account needed.",
-    "seo.image_workflow.title": "Image Workflow — Chain Resize, Compress, Rotate & Convert in Your Browser",
+      "Automate PDF work: chain merge, split, compress, and rotate in one workflow. Save presets—ideal when you process dozens or hundreds of files.",
+    "seo.image_workflow.title":
+      "Image Workflow — Bulk Resize, Compress & Convert in One Pipeline",
     "seo.image_workflow.description":
-      "Simplify tasks by connecting image tools into one automated workflow. Set up each step, fine-tune settings, and save your automations—no account needed.",
-    "seo.image_resize.title": "Bulk Image Resizer Online — Width & Height",
+      "Chain image steps into one flow: batch resize, compress, rotate, and convert formats. Save workflows; process many files locally.",
+    "seo.image_resize.title":
+      "Bulk Image Resizer — Resize 100s of Photos to the Same Size Online",
     "seo.image_resize.description":
-      "Resize many images to the same pixel size. Download as one ZIP or as separate files.",
-    "seo.image_compress.title": "Bulk Lossless Image Compressor Online",
+      "Resize many images at once—same width, height, and center crop for hundreds of files. ZIP or individual downloads; runs in your browser.",
+    "seo.image_compress.title":
+      "Bulk Image Compressor — Shrink 100s of PNG, WebP & JPEGs Losslessly",
     "seo.image_compress.description":
-      "Shrink PNG, WebP, and JPEG without quality loss. ZIP or individual downloads.",
-    "seo.image_webp.title": "Bulk WebP Converter Online",
+      "Batch lossless compression for smaller PNG, WebP, and JPEG files—queue dozens or hundreds of images and download a ZIP or separate files.",
+    "seo.image_webp.title": "Bulk WebP Converter — Turn 100s of Images to WebP Online",
     "seo.image_webp.description":
-      "Convert many images to WebP. Download a ZIP or each file on its own.",
-    "seo.image_jpg.title": "Bulk JPG Converter Online — PNG, WebP & More to JPEG",
+      "Convert many images to WebP in one batch—smaller files, high quality. ZIP or per-file download; all in your browser.",
+    "seo.image_jpg.title":
+      "Bulk JPG Converter — PNG, WebP & More to JPEG (100s of Files)",
     "seo.image_jpg.description":
-      "Convert many images to JPG in your browser. ZIP or individual downloads.",
-    "seo.image_gif.title": "Images to GIF Maker Online — Animated GIF from Photos",
+      "Batch-convert many images to widely compatible JPG—drop whole folders, get a ZIP or individual JPEGs. Free in-browser conversion.",
+    "seo.image_gif.title": "Bulk Images to GIF — Build Animated GIFs from 100s of Frames",
     "seo.image_gif.description":
-      "Combine images into one animated GIF. Set timing and loop in your browser.",
-    "seo.image_crop.title": "Crop Images Online — Visual Selector & Pixel Controls",
+      "Combine many photos into animated GIFs—set timing and loop. Great for slideshows and social; processing stays on your device.",
+    "seo.image_crop.title": "Bulk Image Crop — Same Crop Across 100s of Photos Online",
     "seo.image_crop.description":
-      "Crop photos in your browser. Drag the frame or set width, height, and position. ZIP or single downloads.",
-    "seo.image_rotate.title": "Rotate Images Online — 90°, 180°, 270° in Your Browser",
+      "Crop many images with one frame or exact pixels—apply the same region to dozens or hundreds of files. ZIP or single downloads.",
+    "seo.image_rotate.title":
+      "Bulk Image Rotator — Turn 100s of Photos 90°/180°/270° Online",
     "seo.image_rotate.description":
-      "Rotate many photos at once. Choose clockwise angle, then download each file or a ZIP — all on your device.",
-    "seo.image_blur_face.title": "Blur Faces in Photos Online — Privacy in Your Browser",
+      "Rotate many images in one batch—pick clockwise angle, then download each file or one ZIP. All processing in your browser.",
+    "seo.image_blur_face.title":
+      "Bulk Blur Faces in Photos — Privacy for 100s of Images Online",
     "seo.image_blur_face.description":
-      "Auto-detect regions and blur them for privacy in your browser. Adjust regions before export; download PNG/WebP/JPEG or a ZIP.",
-    "seo.image_watermark.title": "Add Image or Text Watermark Online — Free in Your Browser",
+      "Auto-detect and blur faces across many photos—batch privacy for large sets. Adjust regions, then export PNG/WebP/JPEG or a ZIP.",
+    "seo.image_watermark.title":
+      "Bulk Watermark Images — Text or Logo on 100s of Files Online",
     "seo.image_watermark.description":
-      "Overlay text or a logo on your photo. Adjust size, opacity, and position, then download PNG or ZIP.",
-    "seo.image_remove_background.title": "Remove Image Background Online — Transparent PNG in Your Browser",
+      "Add watermarks to many images at once—position, opacity, and size controls. Download PNGs or a ZIP; runs locally.",
+    "seo.image_remove_background.title":
+      "Bulk Remove Background — Transparent PNGs for 100s of Images Online",
     "seo.image_remove_background.description":
-      "Remove solid or even backdrops from photos in your browser. Download transparent PNGs or a ZIP — files stay on your device.",
-    "seo.image_ocr.title": "Image to Text Online — Extract Text from Photos in Your Browser",
+      "Erase backgrounds from many photos in batch—studio or solid backdrops to transparent PNGs. Private browser processing.",
+    "seo.image_ocr.title": "Bulk Image to Text (OCR) — Extract Text from 100s of Images",
     "seo.image_ocr.description":
-      "Pull text from images and screenshots in your browser. English, Spanish, or French; copy or download as .txt or ZIP.",
-    "seo.image_heic_to_jpg.title": "HEIC to JPG Converter Online — iPhone Photos in Your Browser",
+      "OCR many images at once—English, Spanish, or French. Copy text or export .txt or ZIP; no file upload to our servers.",
+    "seo.image_heic_to_jpg.title":
+      "Bulk HEIC to JPG — Convert 100s of iPhone Photos Online Free",
     "seo.image_heic_to_jpg.description":
-      "Convert .heic / .heif files to widely compatible JPEG. Batch convert in your browser; download each JPG or a ZIP — files stay on your device.",
-    "seo.image_motion_blur.title": "Motion & Gaussian Blur for Photos — Online in Your Browser",
+      "Batch-convert HEIC/HEIF to JPEG—queue hundreds of iPhone photos and download JPGs or a ZIP in your browser.",
+    "seo.image_motion_blur.title":
+      "Bulk Motion & Gaussian Blur — Process 100s of Photos in Browser",
     "seo.image_motion_blur.description":
-      "Apply directional motion blur or soft Gaussian blur to images. Optional background-only blur using on-device segmentation. Batch process; download PNG, WebP, or JPEG or a ZIP.",
+      "Apply motion or Gaussian blur to many images—optional background-only blur. Batch export PNG, WebP, or JPEG or a ZIP.",
   },
   es: {
     "seo.site_name": "iPDFTOOLS",
-    "seo.default.title": "iPDFTOOLS - Herramientas PDF Gratuitas Online",
+    "seo.default.title":
+      "iPDFTOOLS — Herramientas PDF e imagen masivas | Cientos de archivos en el navegador",
     "seo.default.description":
-      "Herramientas PDF gratuitas para combinar, dividir, comprimir, convertir y rotar archivos PDF. Rápido, seguro y fácil de usar.",
-    "seo.merge.title": "Combinar PDF - Unir Archivos PDF Online Gratis",
+      "Herramientas PDF e imagen gratuitas y masivas: fusiona, divide, comprime y convierte por lotes decenas o cientos de archivos en tu navegador—redimensionado, WebP/JPG, HEIC, OCR, recorte y más. Privado; sin subidas a nuestros servidores.",
+    "seo.merge.title": "Combinar PDF en masa — Unir muchos archivos PDF en uno gratis",
     "seo.merge.description":
-      "Combina múltiples archivos PDF en un documento gratis. Herramienta rápida y segura para fusionar PDFs en tu navegador.",
-    "seo.split.title": "Dividir PDF - Separar Páginas PDF Online Gratis",
+      "Fusiona varios PDF en un solo documento—añade decenas de archivos, reordena páginas y exporta en el navegador. Tus archivos no salen del dispositivo.",
+    "seo.split.title": "Dividir PDF — Separar PDF grandes y extraer páginas gratis",
     "seo.split.description":
-      "Divide archivos PDF en páginas o documentos separados gratis. Extrae páginas específicas de PDFs con nuestra herramienta online.",
-    "seo.compress.title": "Comprimir PDF - Reducir Tamaño de PDF Online",
+      "Divide PDF por páginas o rangos—parte documentos muy grandes en archivos más pequeños en tu navegador; rápido y privado.",
+    "seo.compress.title": "Comprimir PDF en masa — Reducir muchos PDF online gratis",
     "seo.compress.description":
-      "Comprime archivos PDF para reducir su tamaño manteniendo la calidad. Herramienta gratuita de compresión PDF.",
-    "seo.rotate.title": "Rotar PDF - Girar Páginas PDF Online Gratis",
+      "Comprime PDF para reducir tamaño manteniendo calidad—procesa muchos documentos por lotes en el navegador antes de enviar o guardar.",
+    "seo.rotate.title": "Rotar PDF online — Corregir orientación de muchos archivos",
     "seo.rotate.description":
-      "Rota páginas PDF a la orientación correcta gratis. Herramienta online fácil de usar para rotar PDFs.",
+      "Rota páginas a 90°, 180° o 270°—procesa muchos PDF seguidos en el navegador. Gratis y privado.",
     "seo.sign_pdf.title": "Firmar PDF online gratis — en tu navegador",
     "seo.sign_pdf.description":
       "Añade firma, iniciales o sello. Estilos manuscritos, colores o imagen escaneada. Última, primera o todas las páginas; archivos en tu dispositivo.",
-    "seo.pdf_to_word.title": "PDF a Word - Convertir PDF a DOC Online",
+    "seo.pdf_to_word.title": "PDF a Word en masa — Convertir muchos PDF a DOCX online",
     "seo.pdf_to_word.description":
-      "Convierte archivos PDF a documentos Word editables gratis. Conversor preciso de PDF a DOC/DOCX.",
-    "seo.pdf_to_jpg.title": "PDF a JPG - Convertir PDF a Imágenes Online",
+      "Convierte PDF a Word editables—conversiones por lotes en el navegador. PDF a DOC/DOCX preciso sin subir a servidor.",
+    "seo.pdf_to_jpg.title": "PDF a JPG en masa — Exportar muchas páginas como imágenes",
     "seo.pdf_to_jpg.description":
-      "Convierte páginas PDF a imágenes JPG de alta calidad gratis. Conversor rápido y confiable de PDF a imagen.",
-    "seo.pdf_to_text.title": "PDF a Texto - Extraer Texto de PDF Online",
+      "Exporta páginas PDF a JPEG de alta calidad—procesa muchas páginas o carpetas de PDF en el navegador.",
+    "seo.pdf_to_text.title": "PDF a texto — Extraer texto de muchos PDF online",
     "seo.pdf_to_text.description":
-      "Extrae contenido de texto de archivos PDF gratis. Convierte documentos PDF a formato de texto plano.",
-    "seo.word_to_pdf.title": "Word a PDF - Convertir DOC a PDF Online",
+      "Extrae texto de PDF para copiar o buscar—ideal para lotes de documentos en el navegador. Rápido y privado.",
+    "seo.word_to_pdf.title": "Word a PDF en masa — Convertir muchos DOCX a PDF online",
     "seo.word_to_pdf.description":
-      "Convierte documentos Word a formato PDF gratis. Herramienta confiable de conversión DOC/DOCX a PDF.",
-    "seo.jpg_to_pdf.title": "JPG a PDF - Convertir Imágenes a PDF Online",
+      "Convierte Word a PDF por lotes—DOC/DOCX a PDF en el navegador con buen resultado de maquetación.",
+    "seo.jpg_to_pdf.title": "JPG a PDF en masa — Cientos de imágenes a PDF online",
     "seo.jpg_to_pdf.description":
-      "Convierte imágenes JPG y PNG a documentos PDF gratis. Crea archivos PDF desde tus imágenes.",
-    "seo.pdf_workflow.title": "Flujo PDF — combinar, comprimir, rotar y dividir en el navegador",
+      "Convierte JPG, PNG y más a PDF—añade muchas imágenes a la vez, ajusta tamaño de página y descarga en el navegador.",
+    "seo.pdf_workflow.title":
+      "Flujo PDF — Encadenar fusión, compresión, división y rotación en masa",
     "seo.pdf_workflow.description":
-      "Simplifica tareas conectando herramientas PDF en un flujo automatizado. Configura cada paso, ajusta opciones y guarda automatizaciones—sin cuenta.",
-    "seo.image_workflow.title": "Flujo de imágenes — redimensionar, comprimir, rotar y convertir",
+      "Automatiza tareas PDF: encadena herramientas en un flujo. Guarda configuraciones—ideal si procesas decenas o cientos de archivos.",
+    "seo.image_workflow.title":
+      "Flujo de imágenes — Redimensionar, comprimir y convertir por lotes",
     "seo.image_workflow.description":
-      "Simplifica tareas conectando herramientas de imagen en un flujo automatizado. Configura cada paso, ajusta opciones y guarda automatizaciones—sin cuenta.",
-    "seo.image_resize.title": "Redimensionador masivo de imágenes online",
+      "Encadena pasos en un solo flujo: redimensionado, compresión, rotación y conversión masiva. Guarda flujos; todo en local.",
+    "seo.image_resize.title":
+      "Redimensionador masivo — Mismo tamaño para cientos de fotos online",
     "seo.image_resize.description":
-      "Mismo tamaño en píxeles para muchas imágenes. ZIP o archivos sueltos.",
-    "seo.image_compress.title": "Compresor masivo sin pérdida online",
+      "Redimensiona muchas imágenes a la vez—mismo ancho, alto y recorte centrado. Descarga ZIP o archivos sueltos en el navegador.",
+    "seo.image_compress.title":
+      "Compresión masiva sin pérdida — Cientos de PNG, WebP y JPEG más ligeros",
     "seo.image_compress.description":
-      "Reduce PNG, WebP y JPEG sin perder calidad. ZIP o descargas individuales.",
-    "seo.image_webp.title": "Conversor masivo a WebP online",
+      "Comprime por lotes sin pérdida de calidad—cola de decenas o cientos de imágenes; ZIP o descargas individuales.",
+    "seo.image_webp.title": "Conversor masivo a WebP — Cientos de imágenes online",
     "seo.image_webp.description":
-      "Muchas imágenes a WebP. Un ZIP o un archivo por imagen.",
-    "seo.image_jpg.title": "Conversor masivo a JPG online",
+      "Convierte muchas imágenes a WebP en un solo lote—archivos más pequeños y buena calidad. ZIP o archivo por imagen.",
+    "seo.image_jpg.title": "Conversor masivo a JPG — Cientos de archivos a JPEG",
     "seo.image_jpg.description":
-      "Muchas imágenes a JPEG en el navegador. ZIP o archivos sueltos.",
-    "seo.image_gif.title": "Imágenes a GIF animado online",
+      "Convierte por lotes PNG, WebP, GIF y más a JPG compatible—carpetas enteras, ZIP o JPEG sueltos en el navegador.",
+    "seo.image_gif.title": "Imágenes a GIF en masa — Animar muchas fotos online",
     "seo.image_gif.description":
-      "Combina fotos en un GIF. Ajusta segundos por imagen y bucle en el navegador.",
-    "seo.image_crop.title": "Recorte de imágenes online",
+      "Combina muchas fotos en GIF animados—ajusta tiempo y bucle. Ideal para presentaciones; todo en tu dispositivo.",
+    "seo.image_crop.title": "Recorte masivo — Misma zona en cientos de fotos online",
     "seo.image_crop.description":
-      "Recorta en el navegador: arrastra el marco o usa píxeles. ZIP o archivos sueltos.",
-    "seo.image_rotate.title": "Rotar imágenes online — 90°, 180°, 270°",
+      "Recorta muchas imágenes con un marco o píxeles exactos—misma zona en decenas o cientos de archivos. ZIP o sueltos.",
+    "seo.image_rotate.title":
+      "Rotación masiva — Gira cientos de fotos 90°/180°/270° online",
     "seo.image_rotate.description":
-      "Gira muchas fotos a la vez. Elige el ángulo y descarga cada archivo o un ZIP, todo en tu dispositivo.",
-    "seo.image_blur_face.title": "Desenfocar caras en fotos online — privacidad",
+      "Rota muchas imágenes en un solo lote—elige ángulo y descarga cada archivo o un ZIP. Procesamiento en el navegador.",
+    "seo.image_blur_face.title":
+      "Desenfocar caras en masa — Privacidad para cientos de fotos",
     "seo.image_blur_face.description":
-      "Detecta zonas y desenfócalas en tu navegador. Ajusta las regiones antes de exportar; descarga imágenes o ZIP.",
-    "seo.image_watermark.title": "Marca de agua en imágenes online",
+      "Detecta y desenfoca caras en muchas fotos—lotes grandes para privacidad. Ajusta zonas; PNG/WebP/JPEG o ZIP.",
+    "seo.image_watermark.title":
+      "Marca de agua masiva — Texto o logo en cientos de imágenes",
     "seo.image_watermark.description":
-      "Añade texto o un logo. Ajusta tamaño, opacidad y posición. Descarga PNG o ZIP.",
-    "seo.image_remove_background.title": "Quitar fondo de imagen online — PNG transparente",
+      "Marca muchas imágenes a la vez—posición, opacidad y tamaño. Descarga PNG o ZIP en local.",
+    "seo.image_remove_background.title":
+      "Quitar fondo en masa — PNG transparentes para cientos de imágenes",
     "seo.image_remove_background.description":
-      "Quita fondos lisos o uniformes en el navegador. PNG transparentes o ZIP; los archivos no salen de tu dispositivo.",
-    "seo.image_ocr.title": "Imagen a texto online — extrae texto en el navegador",
+      "Elimina fondos de muchas fotos por lotes—estudio o fondos lisos a PNG transparentes. Privado en el navegador.",
+    "seo.image_ocr.title": "OCR masivo — Texto de cientos de imágenes online",
     "seo.image_ocr.description":
-      "Extrae texto de capturas y fotos en tu navegador. Inglés, español o francés; copia o descarga .txt o ZIP.",
-    "seo.image_heic_to_jpg.title": "HEIC a JPG online — fotos de iPhone en el navegador",
+      "OCR por lotes en inglés, español o francés—copia texto o exporta .txt o ZIP sin subir archivos a nuestros servidores.",
+    "seo.image_heic_to_jpg.title":
+      "HEIC a JPG en masa — Cientos de fotos de iPhone a JPEG",
     "seo.image_heic_to_jpg.description":
-      "Convierte .heic / .heif a JPEG compatible. Por lotes en tu navegador; descarga cada JPG o un ZIP — los archivos no salen de tu dispositivo.",
-    "seo.image_motion_blur.title": "Desenfoque de movimiento y gaussiano online",
+      "Convierte HEIC/HEIF a JPEG por lotes—cola de cientos de fotos y descarga JPG o ZIP en el navegador.",
+    "seo.image_motion_blur.title":
+      "Desenfoque masivo — Movimiento y gaussiano para muchas fotos",
     "seo.image_motion_blur.description":
-      "Aplica desenfoque direccional o gaussiano. Opción de desenfocar solo el fondo con segmentación en el dispositivo. Por lotes; descarga imágenes o ZIP.",
+      "Aplica desenfoque a muchas imágenes—opción solo fondo. Exporta por lotes PNG, WebP, JPEG o ZIP.",
   },
   fr: {
     "seo.site_name": "iPDFTOOLS",
-    "seo.default.title": "iPDFTOOLS - Outils PDF Gratuits en Ligne",
+    "seo.default.title":
+      "iPDFTOOLS — Outils PDF et image en masse | Des centaines de fichiers dans le navigateur",
     "seo.default.description":
-      "Outils PDF gratuits pour fusionner, diviser, compresser, convertir et faire pivoter les fichiers PDF. Rapide, sécurisé et facile à utiliser.",
-    "seo.merge.title": "Fusionner PDF - Combiner des Fichiers PDF en Ligne Gratuit",
+      "Outils PDF et image gratuits en masse : fusionnez, divisez, compressez et convertissez par lots des dizaines ou des centaines de fichiers dans votre navigateur — redimensionnement, WebP/JPG, HEIC, OCR, recadrage et plus. Privé ; pas d’envoi vers nos serveurs.",
+    "seo.merge.title": "Fusion PDF en masse — Combiner de nombreux PDF en un seul gratuitement",
     "seo.merge.description":
-      "Fusionnez plusieurs fichiers PDF en un seul document gratuitement. Outil rapide et sécurisé pour combiner des PDFs dans votre navigateur.",
-    "seo.split.title": "Diviser PDF - Séparer les Pages PDF en Ligne Gratuit",
+      "Fusionnez plusieurs PDF en un document — ajoutez des dizaines de fichiers, réordonnez les pages et exportez dans le navigateur. Vos fichiers restent sur l’appareil.",
+    "seo.split.title": "Diviser PDF — Découper de gros PDF et extraire des pages gratuitement",
     "seo.split.description":
-      "Divisez les fichiers PDF en pages ou documents séparés gratuitement. Extrayez des pages spécifiques des PDFs avec notre outil en ligne.",
-    "seo.compress.title": "Compresser PDF - Réduire la Taille de PDF en Ligne",
+      "Divisez des PDF par pages ou plages — découpez de très gros fichiers en plusieurs parties dans le navigateur ; rapide et privé.",
+    "seo.compress.title": "Compression PDF en masse — Réduire de nombreux PDF en ligne",
     "seo.compress.description":
-      "Compressez les fichiers PDF pour réduire leur taille tout en maintenant la qualité. Outil gratuit de compression PDF.",
-    "seo.rotate.title": "Rotation PDF - Faire Pivoter les Pages PDF en Ligne Gratuit",
+      "Compressez des PDF pour réduire la taille tout en gardant la qualité — traitez beaucoup de documents par lots avant envoi ou stockage.",
+    "seo.rotate.title": "Rotation PDF en ligne — Corriger l’orientation de nombreux fichiers",
     "seo.rotate.description":
-      "Faites pivoter les pages PDF vers la bonne orientation gratuitement. Outil en ligne facile à utiliser pour faire pivoter les PDFs.",
+      "Faites pivoter les pages à 90°, 180° ou 270° — enchaînez plusieurs PDF dans le navigateur. Gratuit et privé.",
     "seo.sign_pdf.title": "Signer un PDF en ligne gratuitement — dans le navigateur",
     "seo.sign_pdf.description":
       "Ajoutez signature, initiales ou tampon. Styles manuscrits, couleurs ou image importée. Dernière, première ou toutes les pages ; fichiers sur votre appareil.",
-    "seo.pdf_to_word.title": "PDF vers Word - Convertir PDF en DOC en Ligne",
+    "seo.pdf_to_word.title": "PDF vers Word en masse — Convertir de nombreux PDF en DOCX",
     "seo.pdf_to_word.description":
-      "Convertissez les fichiers PDF en documents Word éditables gratuitement. Convertisseur précis de PDF vers DOC/DOCX.",
-    "seo.pdf_to_jpg.title": "PDF vers JPG - Convertir PDF en Images en Ligne",
+      "Convertissez des PDF en Word modifiables — conversions par lots dans le navigateur. PDF vers DOC/DOCX précis sans envoi serveur.",
+    "seo.pdf_to_jpg.title": "PDF vers JPG en masse — Exporter de nombreuses pages en images",
     "seo.pdf_to_jpg.description":
-      "Convertissez les pages PDF en images JPG de haute qualité gratuitement. Convertisseur rapide et fiable de PDF vers image.",
-    "seo.pdf_to_text.title": "PDF vers Texte - Extraire le Texte de PDF en Ligne",
+      "Exportez des pages PDF en JPEG haute qualité — traitez de nombreuses pages ou dossiers de PDF dans le navigateur.",
+    "seo.pdf_to_text.title": "PDF vers texte — Extraire le texte de nombreux PDF en ligne",
     "seo.pdf_to_text.description":
-      "Extrayez le contenu texte des fichiers PDF gratuitement. Convertissez les documents PDF au format texte brut.",
-    "seo.word_to_pdf.title": "Word vers PDF - Convertir DOC en PDF en Ligne",
+      "Extrayez le texte des PDF pour copier ou rechercher — adapté aux lots de documents dans le navigateur. Rapide et privé.",
+    "seo.word_to_pdf.title": "Word vers PDF en masse — Convertir de nombreux DOCX en PDF",
     "seo.word_to_pdf.description":
-      "Convertissez les documents Word au format PDF gratuitement. Outil fiable de conversion DOC/DOCX vers PDF.",
-    "seo.jpg_to_pdf.title": "JPG vers PDF - Convertir Images en PDF en Ligne",
+      "Convertissez Word en PDF par lots — DOC/DOCX vers PDF dans le navigateur avec une mise en page fidèle.",
+    "seo.jpg_to_pdf.title": "JPG vers PDF en masse — Des centaines d’images en PDF en ligne",
     "seo.jpg_to_pdf.description":
-      "Convertissez les images JPG et PNG en documents PDF gratuitement. Créez des fichiers PDF à partir de vos images.",
-    "seo.pdf_workflow.title": "Workflow PDF — fusion, compression, rotation et division dans le navigateur",
+      "Transformez JPG, PNG et plus en PDF — ajoutez de nombreuses images à la fois, réglez le format de page et téléchargez dans le navigateur.",
+    "seo.pdf_workflow.title":
+      "Workflow PDF — Enchaîner fusion, compression, division et rotation en masse",
     "seo.pdf_workflow.description":
-      "Simplifiez vos tâches en connectant des outils PDF dans un workflow automatisé. Configurez chaque étape, peaufinez les réglages et enregistrez—sans compte.",
-    "seo.image_workflow.title": "Workflow image — redimensionnement, compression, rotation et conversion",
+      "Automatisez le travail PDF : enchaînez les outils dans un flux. Enregistrez des préréglages — idéal pour des dizaines ou des centaines de fichiers.",
+    "seo.image_workflow.title":
+      "Workflow image — Redimensionnement, compression et conversion par lots",
     "seo.image_workflow.description":
-      "Simplifiez vos tâches en connectant des outils image dans un workflow automatisé. Configurez chaque étape, peaufinez les réglages et enregistrez—sans compte.",
-    "seo.image_resize.title": "Redimensionnement d'images en masse en ligne",
+      "Enchaînez les étapes : redimensionnement, compression, rotation et conversion de formats. Enregistrez des flux ; traitement local.",
+    "seo.image_resize.title":
+      "Redimensionnement massif — Même taille pour des centaines de photos en ligne",
     "seo.image_resize.description":
-      "Même taille en pixels pour beaucoup d'images. ZIP ou fichiers séparés.",
-    "seo.image_compress.title": "Compression sans perte en masse en ligne",
+      "Redimensionnez de nombreuses images à la fois — même largeur, hauteur et recadrage centré. ZIP ou fichiers séparés dans le navigateur.",
+    "seo.image_compress.title":
+      "Compression sans perte en masse — Des centaines de PNG, WebP et JPEG allégés",
     "seo.image_compress.description":
-      "Allégez PNG, WebP et JPEG sans perte. ZIP ou téléchargements séparés.",
-    "seo.image_webp.title": "Conversion WebP en masse en ligne",
+      "Compression par lots sans perte — file d’attente de dizaines ou de centaines d’images ; ZIP ou téléchargements séparés.",
+    "seo.image_webp.title": "Conversion WebP en masse — Des centaines d’images en ligne",
     "seo.image_webp.description":
-      "Passez de nombreuses images en WebP. Archive ZIP ou un fichier par image.",
-    "seo.image_jpg.title": "Conversion JPG en masse en ligne",
+      "Convertissez de nombreuses images en WebP en un seul lot — fichiers plus légers, bonne qualité. ZIP ou fichier par image.",
+    "seo.image_jpg.title": "Conversion JPG en masse — Des centaines de fichiers en JPEG",
     "seo.image_jpg.description":
-      "Passez de nombreuses images en JPEG dans le navigateur. ZIP ou fichiers séparés.",
-    "seo.image_gif.title": "Images vers GIF animé en ligne",
+      "Conversion par lots PNG, WebP, GIF et plus vers JPEG — dossiers entiers, ZIP ou fichiers séparés dans le navigateur.",
+    "seo.image_gif.title": "Images vers GIF en masse — Animer de nombreuses photos en ligne",
     "seo.image_gif.description":
-      "Assemblez des photos en un GIF. Réglage du délai et de la boucle dans le navigateur.",
-    "seo.image_crop.title": "Recadrage d'images en ligne",
+      "Assemblez de nombreuses photos en GIF animés — réglage du délai et de la boucle. Idéal pour diaporamas ; tout sur l’appareil.",
+    "seo.image_crop.title": "Recadrage massif — Même zone sur des centaines de photos",
     "seo.image_crop.description":
-      "Recadrez dans le navigateur : glissez le cadre ou saisissez les pixels. ZIP ou fichiers séparés.",
-    "seo.image_rotate.title": "Rotation d'images en ligne — 90°, 180°, 270°",
+      "Recadrez de nombreuses images avec un cadre ou des pixels — même zone sur des dizaines ou des centaines de fichiers. ZIP ou séparés.",
+    "seo.image_rotate.title":
+      "Rotation massive — Pivoter des centaines de photos 90°/180°/270° en ligne",
     "seo.image_rotate.description":
-      "Faites pivoter plusieurs photos à la fois. Choisissez l'angle, puis téléchargez chaque fichier ou une archive ZIP.",
-    "seo.image_blur_face.title": "Flouter les visages en ligne — confidentialité",
+      "Faites pivoter de nombreuses images en un lot — choisissez l’angle, puis téléchargez chaque fichier ou une archive ZIP. Dans le navigateur.",
+    "seo.image_blur_face.title":
+      "Floutage des visages en masse — Confidentialité pour des centaines d’images",
     "seo.image_blur_face.description":
-      "Détection de zones et floutage dans le navigateur. Ajustez les régions avant export ; images ou ZIP.",
-    "seo.image_watermark.title": "Filigrane sur image en ligne",
+      "Détection et floutage sur de nombreuses photos — lots importants pour la confidentialité. Ajustez les zones ; images ou ZIP.",
+    "seo.image_watermark.title":
+      "Filigrane en masse — Texte ou logo sur des centaines d’images",
     "seo.image_watermark.description":
-      "Superposez du texte ou un logo. Réglez taille, opacité et position. Téléchargez PNG ou ZIP.",
-    "seo.image_remove_background.title": "Supprimer le fond d’une image en ligne — PNG transparent",
+      "Appliquez un filigrane à de nombreuses images — position, opacité et taille. Téléchargez des PNG ou une archive ZIP en local.",
+    "seo.image_remove_background.title":
+      "Suppression de fond en masse — PNG transparents pour des centaines d’images",
     "seo.image_remove_background.description":
-      "Retirez les fonds unis ou réguliers dans le navigateur. PNG transparents ou ZIP ; vos fichiers restent sur votre appareil.",
-    "seo.image_ocr.title": "Image vers texte en ligne — extraction dans le navigateur",
+      "Supprimez les arrière-plans de nombreuses photos par lots — studio ou fonds unis vers PNG transparents. Privé dans le navigateur.",
+    "seo.image_ocr.title": "OCR en masse — Texte extrait de centaines d’images en ligne",
     "seo.image_ocr.description":
-      "Extrayez le texte de captures et photos dans le navigateur. Anglais, espagnol ou français ; copiez ou téléchargez .txt ou ZIP.",
-    "seo.image_heic_to_jpg.title": "HEIC vers JPG en ligne — photos iPhone dans le navigateur",
+      "OCR par lots en anglais, espagnol ou français — copiez le texte ou exportez .txt ou ZIP sans envoyer vos fichiers sur nos serveurs.",
+    "seo.image_heic_to_jpg.title":
+      "HEIC vers JPG en masse — Des centaines de photos iPhone en JPEG",
     "seo.image_heic_to_jpg.description":
-      "Convertissez les fichiers .heic / .heif en JPEG universel. Conversion par lot dans le navigateur ; téléchargez chaque JPG ou une archive ZIP — fichiers sur votre appareil.",
-    "seo.image_motion_blur.title": "Flou de mouvement et gaussien pour photos en ligne",
+      "Convertissez HEIC/HEIF en JPEG par lots — file de centaines de photos et téléchargement JPG ou ZIP dans le navigateur.",
+    "seo.image_motion_blur.title":
+      "Flou en masse — Mouvement et gaussien pour de nombreuses photos",
     "seo.image_motion_blur.description":
-      "Appliquez un flou directionnel ou un flou gaussien. Option pour flouter uniquement l’arrière-plan via segmentation sur l’appareil. Traitement par lot ; images ou ZIP.",
+      "Appliquez un flou à de nombreuses images — option arrière-plan seul. Export par lots PNG, WebP, JPEG ou ZIP.",
   },
 };
