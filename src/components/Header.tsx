@@ -37,6 +37,11 @@ const Header = () => {
       description: t("landing.image_resize_desc"),
     },
     {
+      href: "/image-workflow",
+      label: t("nav.image_workflow"),
+      description: t("landing.image_workflow_desc"),
+    },
+    {
       href: "/bulk-image-compress",
       label: t("nav.image_compress"),
       description: t("landing.image_compress_desc"),
@@ -100,6 +105,7 @@ const Header = () => {
 
   const imageToolHrefs = [
     "/bulk-image-resize",
+    "/image-workflow",
     "/bulk-image-compress",
     "/bulk-image-webp",
     "/bulk-image-jpg",
@@ -165,6 +171,16 @@ const Header = () => {
       href: "/jpg-to-pdf",
       label: t("nav.jpg_to_pdf"),
       description: "Convert images to PDF",
+    },
+    {
+      href: "/pdf-workflow",
+      label: t("nav.pdf_workflow"),
+      description: t("landing.pdf_workflow_desc"),
+    },
+    {
+      href: "/image-workflow",
+      label: t("nav.image_workflow"),
+      description: t("landing.image_workflow_desc"),
     },
   ];
 

@@ -37,6 +37,12 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.jpg_to_pdf.title": "JPG to PDF Converter - Convert Images to PDF Online",
     "seo.jpg_to_pdf.description":
       "Convert JPG and PNG images to PDF documents for free. Create PDF files from your images.",
+    "seo.pdf_workflow.title": "PDF Workflow — Chain Merge, Compress, Rotate & Split in Your Browser",
+    "seo.pdf_workflow.description":
+      "Simplify tasks by connecting PDF tools into one automated workflow. Set up each step, fine-tune settings, and save your automations—no account needed.",
+    "seo.image_workflow.title": "Image Workflow — Chain Resize, Compress, Rotate & Convert in Your Browser",
+    "seo.image_workflow.description":
+      "Simplify tasks by connecting image tools into one automated workflow. Set up each step, fine-tune settings, and save your automations—no account needed.",
     "seo.image_resize.title": "Bulk Image Resizer Online — Width & Height",
     "seo.image_resize.description":
       "Resize many images to the same pixel size. Download as one ZIP or as separate files.",
@@ -112,6 +118,12 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.jpg_to_pdf.title": "JPG a PDF - Convertir Imágenes a PDF Online",
     "seo.jpg_to_pdf.description":
       "Convierte imágenes JPG y PNG a documentos PDF gratis. Crea archivos PDF desde tus imágenes.",
+    "seo.pdf_workflow.title": "Flujo PDF — combinar, comprimir, rotar y dividir en el navegador",
+    "seo.pdf_workflow.description":
+      "Simplifica tareas conectando herramientas PDF en un flujo automatizado. Configura cada paso, ajusta opciones y guarda automatizaciones—sin cuenta.",
+    "seo.image_workflow.title": "Flujo de imágenes — redimensionar, comprimir, rotar y convertir",
+    "seo.image_workflow.description":
+      "Simplifica tareas conectando herramientas de imagen en un flujo automatizado. Configura cada paso, ajusta opciones y guarda automatizaciones—sin cuenta.",
     "seo.image_resize.title": "Redimensionador masivo de imágenes online",
     "seo.image_resize.description":
       "Mismo tamaño en píxeles para muchas imágenes. ZIP o archivos sueltos.",
@@ -187,6 +199,12 @@ export const seoTranslations: Record<LocaleCode, Record<string, string>> = {
     "seo.jpg_to_pdf.title": "JPG vers PDF - Convertir Images en PDF en Ligne",
     "seo.jpg_to_pdf.description":
       "Convertissez les images JPG et PNG en documents PDF gratuitement. Créez des fichiers PDF à partir de vos images.",
+    "seo.pdf_workflow.title": "Workflow PDF — fusion, compression, rotation et division dans le navigateur",
+    "seo.pdf_workflow.description":
+      "Simplifiez vos tâches en connectant des outils PDF dans un workflow automatisé. Configurez chaque étape, peaufinez les réglages et enregistrez—sans compte.",
+    "seo.image_workflow.title": "Workflow image — redimensionnement, compression, rotation et conversion",
+    "seo.image_workflow.description":
+      "Simplifiez vos tâches en connectant des outils image dans un workflow automatisé. Configurez chaque étape, peaufinez les réglages et enregistrez—sans compte.",
     "seo.image_resize.title": "Redimensionnement d'images en masse en ligne",
     "seo.image_resize.description":
       "Même taille en pixels pour beaucoup d'images. ZIP ou fichiers séparés.",
