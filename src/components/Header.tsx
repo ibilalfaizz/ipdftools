@@ -1,13 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Aperture,
+  Crop,
+  Download,
+  Eraser,
+  FileImage,
+  FileText,
+  Film,
+  GitBranch,
+  Image,
+  LogIn,
+  LogOut,
+  Maximize2,
+  Menu,
+  Merge,
+  Minimize,
+  Minimize2,
+  PenLine,
+  RotateCw,
+  ScanFace,
+  ScanText,
+  Search,
+  Smartphone,
+  Sparkles,
+  Split,
+  Stamp,
+  Upload,
+  UserRound,
+} from "lucide-react";
 import LanguageSelector from "./LanguageSelector";
 import ToolSearch from "./ToolSearch";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   Sheet,
   SheetContent,
@@ -23,89 +54,119 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
+type NavToolItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  featured?: boolean;
+};
+
 const Header = () => {
   const pathname = usePathname();
   const { t, getLocalizedPath, getOriginalPath } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   const currentOriginalPath = getOriginalPath(pathname);
 
-  const imageTools = [
-    {
-      href: "/bulk-image-resize",
-      label: t("nav.image_resize"),
-      description: t("landing.image_resize_desc"),
-    },
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    let mounted = true;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!mounted) return;
+      setUserEmail(data.user?.email ?? null);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  const onSignOut = async () => {
+    const supabase = getSupabaseBrowserClient();
+    await supabase.auth.signOut();
+  };
+
+  const imageTools: NavToolItem[] = [
     {
       href: "/image-workflow",
       label: t("nav.image_workflow"),
-      description: t("landing.image_workflow_desc"),
+      icon: GitBranch,
+      featured: true,
+    },
+    {
+      href: "/bulk-image-resize",
+      label: t("nav.image_resize"),
+      icon: Maximize2,
     },
     {
       href: "/bulk-image-compress",
       label: t("nav.image_compress"),
-      description: t("landing.image_compress_desc"),
+      icon: Minimize2,
     },
     {
       href: "/bulk-image-webp",
       label: t("nav.image_webp"),
-      description: t("landing.image_webp_desc"),
+      icon: Sparkles,
     },
     {
       href: "/bulk-image-jpg",
       label: t("nav.image_jpg"),
-      description: t("landing.image_jpg_desc"),
+      icon: FileImage,
     },
     {
       href: "/bulk-image-gif",
       label: t("nav.image_gif"),
-      description: t("landing.image_gif_desc"),
+      icon: Film,
     },
     {
       href: "/image-crop",
       label: t("nav.image_crop"),
-      description: t("landing.image_crop_desc"),
+      icon: Crop,
     },
     {
       href: "/image-rotate",
       label: t("nav.image_rotate"),
-      description: t("landing.image_rotate_desc"),
+      icon: RotateCw,
     },
     {
       href: "/image-blur-face",
       label: t("nav.image_blur_face"),
-      description: t("landing.image_blur_face_desc"),
+      icon: ScanFace,
     },
     {
       href: "/image-motion-blur",
       label: t("nav.image_motion_blur"),
-      description: t("landing.image_motion_blur_desc"),
+      icon: Aperture,
     },
     {
       href: "/image-remove-background",
       label: t("nav.image_remove_bg"),
-      description: t("landing.image_remove_bg_desc"),
+      icon: Eraser,
     },
     {
       href: "/image-watermark",
       label: t("nav.image_watermark"),
-      description: t("landing.image_watermark_desc"),
+      icon: Stamp,
     },
     {
       href: "/image-ocr",
       label: t("nav.image_ocr"),
-      description: t("landing.image_ocr_desc"),
+      icon: ScanText,
     },
     {
       href: "/image-heic-to-jpg",
       label: t("nav.image_heic_jpg"),
-      description: t("landing.image_heic_jpg_desc"),
+      icon: Smartphone,
     },
   ];
 
   const imageToolHrefs = [
-    "/bulk-image-resize",
     "/image-workflow",
+    "/bulk-image-resize",
     "/bulk-image-compress",
     "/bulk-image-webp",
     "/bulk-image-jpg",
@@ -121,66 +182,62 @@ const Header = () => {
   ];
   const onImageToolRoute = imageToolHrefs.includes(currentOriginalPath);
 
-  const allTools = [
+  const allTools: NavToolItem[] = [
+    {
+      href: "/pdf-workflow",
+      label: t("nav.pdf_workflow"),
+      icon: GitBranch,
+      featured: true,
+    },
     {
       href: "/merge-pdf",
       label: t("nav.merge"),
-      description: "Combine multiple PDF files into one",
+      icon: Merge,
     },
     {
       href: "/split-pdf",
       label: t("nav.split"),
-      description: "Split PDF into multiple documents",
+      icon: Split,
     },
     {
       href: "/compress-pdf",
       label: t("nav.compress"),
-      description: "Reduce PDF file size",
+      icon: Minimize,
     },
     {
       href: "/rotate-pdf",
       label: t("nav.rotate"),
-      description: "Rotate PDF pages",
+      icon: RotateCw,
     },
     {
       href: "/sign-pdf",
       label: t("nav.sign_pdf"),
-      description: t("landing.sign_pdf_desc"),
+      icon: PenLine,
     },
     {
       href: "/pdf-to-word",
       label: t("nav.pdf_to_word"),
-      description: "Convert PDF to Word documents",
+      icon: FileText,
     },
     {
       href: "/pdf-to-jpg",
       label: t("nav.pdf_to_jpg"),
-      description: "Convert PDF to JPG images",
+      icon: Image,
     },
     {
       href: "/pdf-to-text",
       label: t("nav.pdf_to_text"),
-      description: "Extract text from PDF",
+      icon: FileText,
     },
     {
       href: "/word-to-pdf",
       label: t("nav.word_to_pdf"),
-      description: "Convert Word to PDF",
+      icon: Upload,
     },
     {
       href: "/jpg-to-pdf",
       label: t("nav.jpg_to_pdf"),
-      description: "Convert images to PDF",
-    },
-    {
-      href: "/pdf-workflow",
-      label: t("nav.pdf_workflow"),
-      description: t("landing.pdf_workflow_desc"),
-    },
-    {
-      href: "/image-workflow",
-      label: t("nav.image_workflow"),
-      description: t("landing.image_workflow_desc"),
+      icon: Download,
     },
   ];
 
@@ -252,18 +309,34 @@ const Header = () => {
                         {t("nav.pdf_tools")}
                       </h3>
                       <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                        {allTools.map((tool) => (
-                          <li key={tool.href} className="min-w-0">
-                            <Link
-                              href={getLocalizedPath(tool.href)}
-                              onClick={closeMobile}
-                              className="block rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate"
-                              title={tool.label}
-                            >
-                              {tool.label}
-                            </Link>
-                          </li>
-                        ))}
+                        {allTools.map((tool) => {
+                          const Icon = tool.icon;
+                          return (
+                            <li key={tool.href} className="min-w-0">
+                              <Link
+                                href={getLocalizedPath(tool.href)}
+                                onClick={closeMobile}
+                                className={cn(
+                                  "group flex items-center gap-1.5 rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate",
+                                  tool.featured &&
+                                    "border border-primary/45 bg-primary/12 font-semibold text-primary shadow-sm ring-1 ring-primary/20"
+                                )}
+                                title={tool.label}
+                              >
+                                <Icon
+                                  className={cn(
+                                    "h-3.5 w-3.5 shrink-0",
+                                    tool.featured
+                                      ? "text-primary"
+                                      : "text-muted-foreground group-hover:text-primary"
+                                  )}
+                                  aria-hidden
+                                />
+                                <span className="truncate">{tool.label}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </section>
                     <section>
@@ -271,19 +344,65 @@ const Header = () => {
                         {t("nav.image_tools")}
                       </h3>
                       <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                        {imageTools.map((tool) => (
-                          <li key={tool.href} className="min-w-0">
-                            <Link
-                              href={getLocalizedPath(tool.href)}
-                              onClick={closeMobile}
-                              className="block rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate"
-                              title={tool.label}
-                            >
-                              {tool.label}
-                            </Link>
-                          </li>
-                        ))}
+                        {imageTools.map((tool) => {
+                          const Icon = tool.icon;
+                          return (
+                            <li key={tool.href} className="min-w-0">
+                              <Link
+                                href={getLocalizedPath(tool.href)}
+                                onClick={closeMobile}
+                                className={cn(
+                                  "group flex items-center gap-1.5 rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary truncate",
+                                  tool.featured &&
+                                    "border border-primary/45 bg-primary/12 font-semibold text-primary shadow-sm ring-1 ring-primary/20"
+                                )}
+                                title={tool.label}
+                              >
+                                <Icon
+                                  className={cn(
+                                    "h-3.5 w-3.5 shrink-0",
+                                    tool.featured
+                                      ? "text-primary"
+                                      : "text-muted-foreground group-hover:text-primary"
+                                  )}
+                                  aria-hidden
+                                />
+                                <span className="truncate">{tool.label}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
                       </ul>
+                    </section>
+                    <section className="pt-2 border-t border-primary/15">
+                      {userEmail ? (
+                        <div className="space-y-2">
+                          <Link
+                            href={getLocalizedPath("/account")}
+                            onClick={closeMobile}
+                            className="flex items-center gap-2 rounded-md px-2 py-2.5 text-sm text-primary/95 hover:bg-card hover:text-primary"
+                          >
+                            <UserRound className="h-4 w-4" aria-hidden />
+                            {t("nav.account")}
+                          </Link>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full border-primary/30 bg-card/40 text-primary hover:bg-card"
+                            onClick={() => void onSignOut()}
+                          >
+                            <LogOut className="h-4 w-4 mr-2" aria-hidden />
+                            {t("auth.sign_out")}
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                          <Link href={getLocalizedPath("/login")} onClick={closeMobile}>
+                            <LogIn className="h-4 w-4 mr-2" aria-hidden />
+                            {t("nav.login")}
+                          </Link>
+                        </Button>
+                      )}
                     </section>
                   </nav>
                 </SheetContent>
@@ -299,6 +418,36 @@ const Header = () => {
             <div className="flex items-center space-x-4 shrink-0">
               <LanguageSelector />
 
+              {userEmail ? (
+                <div className="flex items-center gap-2">
+                  <Button asChild variant="outline" className="border-primary/25">
+                    <Link href={getLocalizedPath("/account")}>
+                      <UserRound className="h-4 w-4 mr-2" aria-hidden />
+                      {t("nav.account")}
+                    </Link>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-primary/25"
+                    onClick={() => void onSignOut()}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" aria-hidden />
+                    {t("auth.sign_out")}
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  asChild
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Link href={getLocalizedPath("/login")}>
+                    <LogIn className="h-4 w-4 mr-2" aria-hidden />
+                    {t("nav.login")}
+                  </Link>
+                </Button>
+              )}
+
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -312,21 +461,46 @@ const Header = () => {
                       {t("nav.pdf_tools")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[min(520px,90vw)] grid-cols-2 max-h-[70vh] overflow-y-auto">
-                        {allTools.map((tool) => (
-                          <Link
-                            key={tool.href}
-                            href={getLocalizedPath(tool.href)}
-                            className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none group-hover:text-primary">
-                              {tool.label}
-                            </div>
-                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-                              {tool.description}
-                            </p>
-                          </Link>
-                        ))}
+                      <div
+                        className={cn(
+                          "grid w-[min(28rem,calc(100vw-2rem))] max-w-full min-w-0 grid-cols-2 gap-2 p-3 sm:gap-3 sm:p-4",
+                          "max-h-[min(70vh,32rem)] overflow-y-auto overflow-x-hidden",
+                          "[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)]"
+                        )}
+                      >
+                        {allTools.map((tool) => {
+                          const Icon = tool.icon;
+                          return (
+                            <Link
+                              key={tool.href}
+                              href={getLocalizedPath(tool.href)}
+                              className={cn(
+                                "group flex min-w-0 max-w-full items-center gap-2 sm:gap-2.5 select-none rounded-md p-2.5 leading-none no-underline outline-none transition-colors sm:p-3",
+                                "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                tool.featured &&
+                                  "border border-primary/40 bg-primary/[0.08] shadow-sm ring-1 ring-primary/25"
+                              )}
+                            >
+                              <Icon
+                                className={cn(
+                                  "h-4 w-4 shrink-0",
+                                  tool.featured
+                                    ? "text-primary"
+                                    : "text-muted-foreground group-hover:text-primary"
+                                )}
+                                aria-hidden
+                              />
+                              <span
+                                className={cn(
+                                  "min-w-0 text-sm font-medium leading-snug group-hover:text-primary",
+                                  tool.featured && "text-primary"
+                                )}
+                              >
+                                {tool.label}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
@@ -341,21 +515,46 @@ const Header = () => {
                       {t("nav.image_tools")}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[min(480px,90vw)] grid-cols-2">
-                        {imageTools.map((tool) => (
-                          <Link
-                            key={tool.href}
-                            href={getLocalizedPath(tool.href)}
-                            className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none group-hover:text-primary">
-                              {tool.label}
-                            </div>
-                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
-                              {tool.description}
-                            </p>
-                          </Link>
-                        ))}
+                      <div
+                        className={cn(
+                          "grid w-[min(28rem,calc(100vw-2rem))] max-w-full min-w-0 grid-cols-2 gap-2 p-3 sm:gap-3 sm:p-4",
+                          "max-h-[min(70vh,32rem)] overflow-y-auto overflow-x-hidden",
+                          "[grid-template-columns:minmax(0,1fr)_minmax(0,1fr)]"
+                        )}
+                      >
+                        {imageTools.map((tool) => {
+                          const Icon = tool.icon;
+                          return (
+                            <Link
+                              key={tool.href}
+                              href={getLocalizedPath(tool.href)}
+                              className={cn(
+                                "group flex min-w-0 max-w-full items-center gap-2 sm:gap-2.5 select-none rounded-md p-2.5 leading-none no-underline outline-none transition-colors sm:p-3",
+                                "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                tool.featured &&
+                                  "border border-primary/40 bg-primary/[0.08] shadow-sm ring-1 ring-primary/25"
+                              )}
+                            >
+                              <Icon
+                                className={cn(
+                                  "h-4 w-4 shrink-0",
+                                  tool.featured
+                                    ? "text-primary"
+                                    : "text-muted-foreground group-hover:text-primary"
+                                )}
+                                aria-hidden
+                              />
+                              <span
+                                className={cn(
+                                  "min-w-0 text-sm font-medium leading-snug group-hover:text-primary",
+                                  tool.featured && "text-primary"
+                                )}
+                              >
+                                {tool.label}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </NavigationMenuContent>
                   </NavigationMenuItem>

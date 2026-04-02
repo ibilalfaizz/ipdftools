@@ -65,14 +65,43 @@ const translations = {
     'nav.image_ocr': 'Image to text',
     'nav.image_heic_jpg': 'HEIC to JPG',
     'nav.login': 'Log in',
-    'login.title': 'Log in',
-    'login.subtitle': 'Access your iPDFTOOLS account.',
+    'nav.account': 'Account',
+    'auth.sign_in_google': 'Sign in with Google',
+    'auth.sign_out': 'Sign out',
+    'login.title': 'Log in or sign up',
+    'login.subtitle': 'Use your email or Google to access your account.',
+    'login.tab_sign_in': 'Log in',
+    'login.tab_sign_up': 'Sign up',
     'login.email': 'Email',
     'login.password': 'Password',
-    'login.submit': 'Continue',
+    'login.password_hint': 'At least 6 characters.',
+    'login.submit_sign_in': 'Log in',
+    'login.submit_sign_up': 'Create account',
+    'login.or': 'or',
+    'login.continue_google': 'Continue with Google',
+    'login.check_email': 'Check your inbox to confirm your email, then sign in.',
     'login.back_home': 'Back to home',
-    'login.demo_note':
-      'Account sign-in is not enabled yet. This page matches the site theme.',
+
+    'account.title': 'Account',
+    'account.subtitle': 'Profile and saved workflows.',
+    'account.tab_profile': 'Profile',
+    'account.tab_workflows': 'Workflows',
+    'account.profile_title': 'Your profile',
+    'account.profile_desc': 'Email and session.',
+    'account.pdf_workflows': 'PDF workflows',
+    'account.image_workflows': 'Image workflows',
+    'account.no_workflows_pdf':
+      'Create a new workflow — you don’t have any PDF workflows saved yet.',
+    'account.no_workflows_image':
+      'Create a new workflow — you don’t have any image workflows saved yet.',
+    'account.create_new_workflow': 'Create new workflow',
+    'account.open_workflow': 'Open',
+    'account.steps': 'Steps',
+    'account.updated': 'Updated',
+    'account.delete_workflow': 'Delete workflow',
+    'account.delete_failed': 'Could not delete the workflow. Try again.',
+    'account.menu_title': 'Dashboard',
+    'account.nav_aria': 'Account sections',
     
     // URL paths
     'url.merge': 'merge-pdf',
@@ -88,43 +117,57 @@ const translations = {
     'url.pdf_workflow': 'pdf-workflow',
     'url.image_workflow': 'image-workflow',
     
-    // Landing page descriptions
-    'landing.merge_desc': 'Combine multiple PDF files into a single document with ease.',
-    'landing.split_desc': 'Extract pages from your PDF or split into multiple documents.',
-    'landing.compress_desc': 'Reduce PDF file size while maintaining quality.',
-    'landing.rotate_desc': 'Rotate PDF pages to the correct orientation.',
+    // Landing page descriptions (SEO: primary intent keywords + “online / browser / free” where natural)
+    'landing.merge_desc':
+      'Merge PDF files online for free—combine multiple PDFs into one document in your browser. Private and fast.',
+    'landing.split_desc':
+      'Split PDF online: extract pages or divide one PDF into multiple files. Runs locally in your browser—no uploads to our servers.',
+    'landing.compress_desc':
+      'Compress PDF online to shrink file size while keeping quality. Reduce PDFs in your browser before sharing or storing.',
+    'landing.rotate_desc':
+      'Rotate PDF pages online—90°, 180°, or 270°. Free PDF rotator in your browser; fix orientation instantly.',
     'landing.sign_pdf_desc':
-      'Add a typed, styled, or image signature, initials, or company stamp. Configure in the sidebar; processing stays in your browser.',
-    'landing.pdf_to_word_desc': 'Convert PDF files to editable Word documents.',
-    'landing.pdf_to_jpg_desc': 'Convert PDF pages to high-quality JPG images.',
-    'landing.pdf_to_text_desc': 'Extract text content from PDF documents.',
-    'landing.word_to_pdf_desc': 'Convert Word documents to PDF format.',
-    'landing.jpg_to_pdf_desc': 'Convert JPG and PNG images to PDF documents.',
+      'Sign PDF online: add typed, drawn, or image signatures, initials, and stamps. E-sign PDFs in your browser; files stay on your device.',
+    'landing.pdf_to_word_desc':
+      'PDF to Word converter online: turn PDFs into editable DOCX files in your browser. Free PDF to Word—no software install.',
+    'landing.pdf_to_jpg_desc':
+      'PDF to JPG online: export PDF pages as high-quality JPEG images. Free PDF to image converter in your browser.',
+    'landing.pdf_to_text_desc':
+      'PDF to text online: extract and copy text from PDFs for free in your browser. Fast PDF text extractor.',
+    'landing.word_to_pdf_desc':
+      'Word to PDF online: convert DOCX to PDF in your browser. Secure, free Word to PDF converter with layout preserved.',
+    'landing.jpg_to_pdf_desc':
+      'JPG to PDF online: combine images into one PDF or set page size. Free image-to-PDF converter in your browser.',
     'landing.pdf_workflow_desc':
-      'Simplify tasks by connecting tools into one automated workflow. Set up each step, fine-tune settings, and save for easy access—no account.',
+      'PDF workflow builder: chain merge, split, compress, and rotate in one flow. Save setups when signed in; all processing runs in your browser.',
     'landing.image_workflow_desc':
-      'Connect image tools into one workflow. Set up steps like resize, compress, rotate, and convert—saved in your browser for quick reuse.',
-    'landing.image_resize_desc': 'Bulk-resize photos to the same width and height (center crop).',
-    'landing.image_compress_desc': 'Bulk lossless re-compression for smaller PNG, WebP, and JPEG files.',
-    'landing.image_webp_desc': 'Bulk-convert images to modern WebP at high quality.',
-    'landing.image_jpg_desc': 'Bulk-convert PNG, WebP, GIF, and more to widely compatible JPEG files.',
+      'Image workflow: connect resize, compress, rotate, and format conversion in one pipeline. Save locally or to your account; runs in your browser.',
+    'landing.image_resize_desc':
+      'Bulk image resizer online: set width and height with center crop for many photos at once. Free in your browser.',
+    'landing.image_compress_desc':
+      'Compress images online in bulk: lossless re-compression for smaller PNG, WebP, and JPEG files. Private and fast.',
+    'landing.image_webp_desc':
+      'Convert images to WebP online in bulk—modern format, high quality, smaller files. Free WebP converter in your browser.',
+    'landing.image_jpg_desc':
+      'Bulk JPG converter online: turn PNG, WebP, GIF, and more into widely compatible JPEG files in your browser.',
     'landing.image_gif_desc':
-      'Build an animated GIF from multiple photos. Set seconds per frame and loop in the sidebar.',
-    'landing.image_crop_desc': 'Crop images with a draggable frame or exact pixel values. Same relative area for multiple files.',
+      'GIF maker online: build animated GIFs from multiple photos. Set frame timing and loop in the sidebar—runs in your browser.',
+    'landing.image_crop_desc':
+      'Crop images online: draggable frame or exact pixels, same relative area across multiple files. Free batch crop in your browser.',
     'landing.image_rotate_desc':
-      'Rotate many photos 90°, 180°, or 270° clockwise in your browser. Download separately or as a ZIP.',
+      'Rotate images online in bulk—90°, 180°, or 270° clockwise. Download separately or as a ZIP; all in your browser.',
     'landing.image_blur_face_desc':
-      'Auto-detect faces and blur them for privacy. Runs in your browser; download images or a ZIP.',
+      'Blur faces in photos online: auto-detect faces for privacy. Process in your browser; download images or a ZIP.',
     'landing.image_motion_blur_desc':
-      'Gaussian or directional motion blur, angle, distance, and quality samples. Optionally blur only the background; all in your browser.',
+      'Motion blur and Gaussian blur online: angle, distance, and quality. Optionally blur only the background; runs in your browser.',
     'landing.image_remove_bg_desc':
-      'Erase solid or even backgrounds (for example studio white or walls) and download transparent PNGs — all in your browser.',
+      'Remove background from images online: erase solid or even studio backgrounds, download transparent PNGs in your browser.',
     'landing.image_watermark_desc':
-      'Add text or a logo watermark. Drag to position, resize, set opacity — download PNG in your browser.',
+      'Watermark images online: add text or logo, drag to position, set opacity—download PNG in your browser.',
     'landing.image_ocr_desc':
-      'Pull text from images in your browser. Choose a language, then copy or save as a file.',
+      'Image to text (OCR) online: extract text from pictures in your browser. Choose language; copy or save results.',
     'landing.image_heic_jpg_desc':
-      'Turn iPhone HEIC/HEIF photos into standard JPEG files in your browser. Batch convert; download separately or as a ZIP.',
+      'HEIC to JPG converter online: turn iPhone HEIC/HEIF photos into standard JPEG files. Batch convert in your browser.',
     
     // Landing page content (hero: eyebrow + headline split for highlighted word)
     'landing.hero_eyebrow': 'PDF & IMAGE TOOLS',
@@ -287,6 +330,15 @@ const translations = {
     'workflow.error_ranges_required': 'Enter page ranges (e.g. 1-3, 5).',
     'workflow.error_invalid_ranges': 'Could not parse ranges. Check page numbers.',
     'workflow.error_run': 'Workflow failed. Try another PDF or fewer steps.',
+    'workflow.load_remote_failed':
+      'Could not load this workflow. Sign in or check the link.',
+    'workflow.save': 'Save',
+    'workflow.saving': 'Saving…',
+    'workflow.saved_toast': 'Saved.',
+    'workflow.save_error': 'Could not save workflow.',
+    'workflow.saved_after_signin': 'Your workflow was saved to your account.',
+    'workflow.save_failed_after_signin':
+      'Could not save your workflow after sign-in. Try Save again.',
 
     'image_workflow.title': 'Image workflow',
     'image_workflow.description':
@@ -628,14 +680,43 @@ const translations = {
     'nav.image_ocr': 'Imagen a texto',
     'nav.image_heic_jpg': 'HEIC a JPG',
     'nav.login': 'Iniciar sesión',
-    'login.title': 'Iniciar sesión',
-    'login.subtitle': 'Accede a tu cuenta de iPDFTOOLS.',
+    'nav.account': 'Cuenta',
+    'auth.sign_in_google': 'Iniciar con Google',
+    'auth.sign_out': 'Cerrar sesión',
+    'login.title': 'Iniciar sesión o registrarse',
+    'login.subtitle': 'Usa tu correo o Google para acceder a tu cuenta.',
+    'login.tab_sign_in': 'Iniciar sesión',
+    'login.tab_sign_up': 'Registrarse',
     'login.email': 'Correo',
     'login.password': 'Contraseña',
-    'login.submit': 'Continuar',
+    'login.password_hint': 'Al menos 6 caracteres.',
+    'login.submit_sign_in': 'Iniciar sesión',
+    'login.submit_sign_up': 'Crear cuenta',
+    'login.or': 'o',
+    'login.continue_google': 'Continuar con Google',
+    'login.check_email': 'Revisa tu correo para confirmar la cuenta y luego inicia sesión.',
     'login.back_home': 'Volver al inicio',
-    'login.demo_note':
-      'El inicio de sesión aún no está activado. Esta página usa el tema del sitio.',
+
+    'account.title': 'Cuenta',
+    'account.subtitle': 'Perfil y flujos guardados.',
+    'account.tab_profile': 'Perfil',
+    'account.tab_workflows': 'Flujos',
+    'account.profile_title': 'Tu perfil',
+    'account.profile_desc': 'Correo y sesión.',
+    'account.pdf_workflows': 'Flujos PDF',
+    'account.image_workflows': 'Flujos de imagen',
+    'account.no_workflows_pdf':
+      'Crea un flujo nuevo — aún no tienes flujos PDF guardados.',
+    'account.no_workflows_image':
+      'Crea un flujo nuevo — aún no tienes flujos de imagen guardados.',
+    'account.create_new_workflow': 'Crear flujo nuevo',
+    'account.open_workflow': 'Abrir',
+    'account.steps': 'Pasos',
+    'account.updated': 'Actualizado',
+    'account.delete_workflow': 'Eliminar flujo',
+    'account.delete_failed': 'No se pudo eliminar el flujo. Inténtalo de nuevo.',
+    'account.menu_title': 'Panel',
+    'account.nav_aria': 'Secciones de la cuenta',
     
     // URL paths
     'url.merge': 'combinar-pdf',
@@ -651,44 +732,57 @@ const translations = {
     'url.pdf_workflow': 'flujo-pdf',
     'url.image_workflow': 'flujo-imagenes',
     
-    // Landing page descriptions
-    'landing.merge_desc': 'Combina múltiples archivos PDF en un solo documento con facilidad.',
-    'landing.split_desc': 'Extrae páginas de tu PDF o divide en múltiples documentos.',
-    'landing.compress_desc': 'Reduce el tamaño del archivo PDF manteniendo la calidad.',
-    'landing.rotate_desc': 'Rota las páginas PDF a la orientación correcta.',
+    // Landing page descriptions (SEO: intención + “online / navegador / gratis”)
+    'landing.merge_desc':
+      'Fusionar PDF online gratis: combina varios PDF en un solo documento en el navegador. Rápido y privado.',
+    'landing.split_desc':
+      'Dividir PDF online: extrae páginas o separa un PDF en varios archivos. Se procesa en tu navegador; sin subir a nuestros servidores.',
+    'landing.compress_desc':
+      'Comprimir PDF online para reducir el tamaño manteniendo calidad. Reduce PDFs en el navegador antes de compartir.',
+    'landing.rotate_desc':
+      'Rotar PDF online: páginas a 90°, 180° o 270°. Corrige la orientación en el navegador; herramienta gratuita.',
     'landing.sign_pdf_desc':
-      'Firma con texto, estilo manuscrito o imagen; iniciales o sello. Configura en el panel; todo en tu navegador.',
-    'landing.pdf_to_word_desc': 'Convierte archivos PDF a documentos Word editables.',
-    'landing.pdf_to_jpg_desc': 'Convierte páginas PDF a imágenes JPG de alta calidad.',
-    'landing.pdf_to_text_desc': 'Extrae contenido de texto de documentos PDF.',
-    'landing.word_to_pdf_desc': 'Convierte documentos Word a formato PDF.',
-    'landing.jpg_to_pdf_desc': 'Convierte imágenes JPG y PNG a documentos PDF.',
+      'Firmar PDF online: firma escrita, dibujada o imagen, iniciales y sellos. Firma electrónica en el navegador; los archivos no salen de tu dispositivo.',
+    'landing.pdf_to_word_desc':
+      'PDF a Word online: convierte PDF a DOCX editable en el navegador. Convertidor PDF a Word gratis sin instalar programas.',
+    'landing.pdf_to_jpg_desc':
+      'PDF a JPG online: exporta páginas como imágenes JPEG de alta calidad. Convertidor PDF a imagen gratis en el navegador.',
+    'landing.pdf_to_text_desc':
+      'PDF a texto online: extrae y copia texto de PDF gratis en el navegador. Extractor de texto de PDF rápido.',
+    'landing.word_to_pdf_desc':
+      'Word a PDF online: convierte DOCX a PDF en el navegador. Convertidor Word a PDF seguro y gratuito con buen maquetado.',
+    'landing.jpg_to_pdf_desc':
+      'JPG a PDF online: une imágenes en un PDF o ajusta el tamaño de página. Convertidor de imagen a PDF gratis en el navegador.',
     'landing.pdf_workflow_desc':
-      'Simplifica tareas conectando herramientas en un flujo automatizado. Configura cada paso, ajusta opciones y guárdalo para usarlo cuando quieras, sin cuenta.',
+      'Flujo PDF: encadena fusionar, dividir, comprimir y rotar en un solo flujo. Guarda configuraciones con cuenta; todo en tu navegador.',
     'landing.image_workflow_desc':
-      'Conecta herramientas de imagen en un flujo. Configura pasos como redimensionar, comprimir, rotar y convertir; se guarda en tu navegador para reutilizarlo.',
-    'landing.image_resize_desc': 'Redimensiona muchas fotos al mismo ancho y alto (recorte centrado).',
-    'landing.image_compress_desc': 'Recompresión sin pérdida en lote para PNG, WebP y JPEG más ligeros.',
-    'landing.image_webp_desc': 'Convierte muchas imágenes a WebP con alta calidad.',
+      'Flujo de imagen: conecta redimensionar, comprimir, rotar y convertir en una tubería. Guarda local o en tu cuenta; en el navegador.',
+    'landing.image_resize_desc':
+      'Redimensionar imágenes en lote online: mismo ancho y alto con recorte centrado. Gratis en tu navegador.',
+    'landing.image_compress_desc':
+      'Comprimir imágenes online en lote: recompresión sin pérdida para PNG, WebP y JPEG más ligeros. Privado y rápido.',
+    'landing.image_webp_desc':
+      'Convertir a WebP online en lote: formato moderno, alta calidad, archivos más pequeños. Gratis en el navegador.',
     'landing.image_jpg_desc':
-      'Convierte PNG, WebP, GIF y más a JPEG compatible con todo.',
+      'Convertidor JPG en lote online: de PNG, WebP, GIF y más a JPEG compatible en el navegador.',
     'landing.image_gif_desc':
-      'Crea un GIF animado desde varias fotos. Segundos por imagen y bucle en el panel.',
-    'landing.image_crop_desc': 'Recorta con el marco o valores en píxeles. Misma zona relativa en cada archivo.',
+      'Crear GIF online: anima varias fotos, tiempo por fotograma y bucle en el panel. Todo en tu navegador.',
+    'landing.image_crop_desc':
+      'Recortar imágenes online: marco arrastrable o píxeles exactos, misma zona en varios archivos. Recorte por lotes gratis.',
     'landing.image_rotate_desc':
-      'Gira muchas fotos 90°, 180° o 270° en el navegador. Descarga sueltas o en ZIP.',
+      'Rotar imágenes online en lote: 90°, 180° o 270°. Descarga sueltas o en ZIP; en el navegador.',
     'landing.image_blur_face_desc':
-      'Detecta caras y las desenfoca para privacidad. En tu navegador; imágenes o ZIP.',
+      'Desenfocar caras online: detección automática para privacidad. Procesa en el navegador; imágenes o ZIP.',
     'landing.image_motion_blur_desc':
-      'Desenfoque gaussiano o de movimiento: ángulo, distancia y muestras. Opción de desenfocar solo el fondo; todo en tu navegador.',
+      'Desenfoque de movimiento y gaussiano online: ángulo, distancia y calidad. Opción solo fondo; en el navegador.',
     'landing.image_remove_bg_desc':
-      'Elimina fondos lisos o uniformes (estudio, paredes) y descarga PNG transparentes — todo en tu navegador.',
+      'Quitar fondo de imagen online: fondos lisos o de estudio, descarga PNG transparentes en el navegador.',
     'landing.image_watermark_desc':
-      'Texto o logo como marca de agua. Arrastra, cambia tamaño y opacidad — descarga PNG en el navegador.',
+      'Marca de agua online: texto o logo, posición y opacidad; descarga PNG en el navegador.',
     'landing.image_ocr_desc':
-      'Extrae texto de imágenes en el navegador. Elige idioma, luego copia o guarda el archivo.',
+      'OCR online: extrae texto de imágenes en el navegador. Elige idioma; copia o guarda el resultado.',
     'landing.image_heic_jpg_desc':
-      'Convierte fotos HEIC/HEIF del iPhone a JPEG estándar en el navegador. Por lotes; descarga sueltas o en ZIP.',
+      'HEIC a JPG online: convierte fotos HEIC/HEIF del iPhone a JPEG estándar. Por lotes en el navegador.',
     
     // Landing page content
     'landing.hero_eyebrow': 'HERRAMIENTAS PDF E IMAGEN',
@@ -842,6 +936,15 @@ const translations = {
     'workflow.error_ranges_required': 'Introduce rangos (p.ej. 1-3, 5).',
     'workflow.error_invalid_ranges': 'No se pudieron interpretar los rangos. Revisa los números.',
     'workflow.error_run': 'El flujo falló. Prueba otro PDF o menos pasos.',
+    'workflow.load_remote_failed':
+      'No se pudo cargar este flujo. Inicia sesión o revisa el enlace.',
+    'workflow.save': 'Guardar',
+    'workflow.saving': 'Guardando…',
+    'workflow.saved_toast': 'Guardado.',
+    'workflow.save_error': 'No se pudo guardar el flujo.',
+    'workflow.saved_after_signin': 'Tu flujo se guardó en tu cuenta.',
+    'workflow.save_failed_after_signin':
+      'No se pudo guardar el flujo tras iniciar sesión. Pulsa Guardar otra vez.',
 
     'image_workflow.title': 'Flujo de imágenes',
     'image_workflow.description':
@@ -1183,14 +1286,43 @@ const translations = {
     'nav.image_ocr': 'Image vers texte',
     'nav.image_heic_jpg': 'HEIC vers JPG',
     'nav.login': 'Connexion',
-    'login.title': 'Connexion',
-    'login.subtitle': 'Accédez à votre compte iPDFTOOLS.',
+    'nav.account': 'Compte',
+    'auth.sign_in_google': 'Connexion avec Google',
+    'auth.sign_out': 'Déconnexion',
+    'login.title': 'Connexion ou inscription',
+    'login.subtitle': 'Utilisez votre e-mail ou Google pour accéder à votre compte.',
+    'login.tab_sign_in': 'Connexion',
+    'login.tab_sign_up': 'Inscription',
     'login.email': 'E-mail',
     'login.password': 'Mot de passe',
-    'login.submit': 'Continuer',
+    'login.password_hint': 'Au moins 6 caractères.',
+    'login.submit_sign_in': 'Se connecter',
+    'login.submit_sign_up': 'Créer un compte',
+    'login.or': 'ou',
+    'login.continue_google': 'Continuer avec Google',
+    'login.check_email': 'Vérifiez votre boîte mail pour confirmer, puis connectez-vous.',
     'login.back_home': "Retour à l'accueil",
-    'login.demo_note':
-      'La connexion compte n’est pas encore activée. Cette page suit le thème du site.',
+
+    'account.title': 'Compte',
+    'account.subtitle': 'Profil et flux enregistrés.',
+    'account.tab_profile': 'Profil',
+    'account.tab_workflows': 'Flux',
+    'account.profile_title': 'Votre profil',
+    'account.profile_desc': 'E-mail et session.',
+    'account.pdf_workflows': 'Flux PDF',
+    'account.image_workflows': 'Flux image',
+    'account.no_workflows_pdf':
+      'Créez un nouveau flux — vous n’avez encore aucun flux PDF enregistré.',
+    'account.no_workflows_image':
+      'Créez un nouveau flux — vous n’avez encore aucun flux image enregistré.',
+    'account.create_new_workflow': 'Créer un flux',
+    'account.open_workflow': 'Ouvrir',
+    'account.steps': 'Étapes',
+    'account.updated': 'Mis à jour',
+    'account.delete_workflow': 'Supprimer le flux',
+    'account.delete_failed': 'Impossible de supprimer le flux. Réessayez.',
+    'account.menu_title': 'Tableau de bord',
+    'account.nav_aria': 'Sections du compte',
     
     // URL paths
     'url.merge': 'fusionner-pdf',
@@ -1206,44 +1338,57 @@ const translations = {
     'url.pdf_workflow': 'flux-pdf',
     'url.image_workflow': 'flux-images',
     
-    // Landing page descriptions
-    'landing.merge_desc': 'Combinez plusieurs fichiers PDF en un seul document avec facilité.',
-    'landing.split_desc': 'Extrayez des pages de votre PDF ou divisez en plusieurs documents.',
-    'landing.compress_desc': 'Réduisez la taille du fichier PDF tout en maintenant la qualité.',
-    'landing.rotate_desc': 'Faites pivoter les pages PDF vers la bonne orientation.',
+    // Landing page descriptions (SEO : intention + « en ligne / navigateur / gratuit »)
+    'landing.merge_desc':
+      'Fusionner PDF en ligne gratuitement : combinez plusieurs PDF en un seul document dans le navigateur. Rapide et privé.',
+    'landing.split_desc':
+      'Diviser un PDF en ligne : extrayez des pages ou séparez un PDF en plusieurs fichiers. Traitement local dans le navigateur.',
+    'landing.compress_desc':
+      'Compresser un PDF en ligne pour réduire la taille tout en gardant la qualité. Réduisez vos PDF dans le navigateur avant partage.',
+    'landing.rotate_desc':
+      'Faire pivoter un PDF en ligne : pages à 90°, 180° ou 270°. Corrigez l’orientation dans le navigateur ; outil gratuit.',
     'landing.sign_pdf_desc':
-      'Ajoutez une signature texte, manuscrite ou image, des initiales ou un tampon. Réglages dans le panneau ; tout dans le navigateur.',
-    'landing.pdf_to_word_desc': 'Convertissez les fichiers PDF en documents Word éditables.',
-    'landing.pdf_to_jpg_desc': 'Convertissez les pages PDF en images JPG de haute qualité.',
-    'landing.pdf_to_text_desc': 'Extrayez le contenu textuel des documents PDF.',
-    'landing.word_to_pdf_desc': 'Convertissez les documents Word au format PDF.',
-    'landing.jpg_to_pdf_desc': 'Convertissez les images JPG et PNG en documents PDF.',
+      'Signer un PDF en ligne : signature saisie, dessinée ou image, initiales et tampons. Signature électronique dans le navigateur ; fichiers sur votre appareil.',
+    'landing.pdf_to_word_desc':
+      'PDF vers Word en ligne : convertissez des PDF en DOCX modifiable dans le navigateur. Convertisseur PDF vers Word gratuit, sans installation.',
+    'landing.pdf_to_jpg_desc':
+      'PDF vers JPG en ligne : exportez les pages en images JPEG haute qualité. Convertisseur PDF vers image gratuit dans le navigateur.',
+    'landing.pdf_to_text_desc':
+      'PDF vers texte en ligne : extrayez et copiez le texte des PDF gratuitement dans le navigateur. Extracteur de texte PDF rapide.',
+    'landing.word_to_pdf_desc':
+      'Word vers PDF en ligne : convertissez DOCX en PDF dans le navigateur. Convertisseur Word vers PDF sécurisé et gratuit.',
+    'landing.jpg_to_pdf_desc':
+      'JPG vers PDF en ligne : regroupez des images en un PDF ou définissez le format de page. Convertisseur image vers PDF gratuit.',
     'landing.pdf_workflow_desc':
-      'Simplifiez vos tâches en connectant des outils dans un workflow automatisé. Configurez chaque étape, peaufinez les réglages et enregistrez pour y accéder facilement, sans compte.',
+      'Workflow PDF : enchaînez fusion, division, compression et rotation dans un flux. Enregistrez vos réglages avec un compte ; tout dans le navigateur.',
     'landing.image_workflow_desc':
-      'Connectez des outils image dans un workflow. Configurez des étapes comme redimensionner, compresser, faire pivoter et convertir ; enregistré dans le navigateur pour réutiliser rapidement.',
-    'landing.image_resize_desc': 'Redimensionnez en masse au même format (recadrage centré).',
-    'landing.image_compress_desc': 'Recompression sans perte par lot pour des PNG, WebP et JPEG plus légers.',
-    'landing.image_webp_desc': 'Conversion en masse vers WebP haute qualité.',
+      'Workflow image : reliez redimensionnement, compression, rotation et conversion en un pipeline. Sauvegarde locale ou compte ; dans le navigateur.',
+    'landing.image_resize_desc':
+      'Redimensionner des images en lot en ligne : même largeur et hauteur (recadrage centré). Gratuit dans le navigateur.',
+    'landing.image_compress_desc':
+      'Compresser des images en ligne par lot : recompression sans perte pour des PNG, WebP et JPEG plus légers. Privé et rapide.',
+    'landing.image_webp_desc':
+      'Convertir en WebP en ligne par lot : format moderne, haute qualité, fichiers plus petits. Gratuit dans le navigateur.',
     'landing.image_jpg_desc':
-      'PNG, WebP, GIF et plus en JPEG universellement compatible.',
+      'Convertisseur JPG en lot en ligne : PNG, WebP, GIF et plus vers JPEG compatible, dans le navigateur.',
     'landing.image_gif_desc':
-      'Créez un GIF animé à partir de photos. Délai par image et boucle dans le panneau.',
-    'landing.image_crop_desc': 'Recadrez avec le cadre ou la saisie en pixels. Même zone relative pour chaque fichier.',
+      'Créer un GIF en ligne : animez plusieurs photos, délai par image et boucle dans le panneau. Dans le navigateur.',
+    'landing.image_crop_desc':
+      'Recadrer des images en ligne : cadre déplaçable ou pixels exacts, même zone sur plusieurs fichiers. Recadrage par lot gratuit.',
     'landing.image_rotate_desc':
-      'Faites pivoter plusieurs photos à 90°, 180° ou 270° dans le navigateur. Fichiers séparés ou ZIP.',
+      'Faire pivoter des images en lot en ligne : 90°, 180° ou 270°. Téléchargement séparé ou ZIP ; dans le navigateur.',
     'landing.image_blur_face_desc':
-      'Détecte les visages et les floute pour la confidentialité. Dans le navigateur ; images ou ZIP.',
+      'Flouter les visages en ligne : détection automatique pour la confidentialité. Traitement dans le navigateur ; images ou ZIP.',
     'landing.image_motion_blur_desc':
-      'Flou gaussien ou directionnel : angle, distance et échantillons. Option pour flouter seulement l’arrière-plan ; tout dans le navigateur.',
+      'Flou de mouvement et gaussien en ligne : angle, distance et qualité. Option arrière-plan seul ; dans le navigateur.',
     'landing.image_remove_bg_desc':
-      'Effacez les fonds unis ou réguliers (studio, murs) et téléchargez des PNG transparents — tout dans le navigateur.',
+      'Supprimer le fond d’une image en ligne : fonds unis ou studio, téléchargez des PNG transparents dans le navigateur.',
     'landing.image_watermark_desc':
-      'Texte ou logo en filigrane. Déplacez, redimensionnez, réglage de l\'opacité — téléchargement PNG dans le navigateur.',
+      'Filigrane en ligne : texte ou logo, position et opacité ; téléchargement PNG dans le navigateur.',
     'landing.image_ocr_desc':
-      'Extrayez le texte des images dans le navigateur. Choisissez la langue, puis copiez ou enregistrez.',
+      'OCR en ligne : extrayez le texte des images dans le navigateur. Choisissez la langue ; copiez ou enregistrez.',
     'landing.image_heic_jpg_desc':
-      'Transformez les photos HEIC/HEIF d’iPhone en JPEG standard dans le navigateur. Par lot ; fichiers séparés ou ZIP.',
+      'HEIC vers JPG en ligne : convertissez les photos HEIC/HEIF iPhone en JPEG standard. Par lot dans le navigateur.',
     
     // Landing page content
     'landing.hero_eyebrow': 'OUTILS PDF ET IMAGE',
@@ -1398,6 +1543,15 @@ const translations = {
     'workflow.error_ranges_required': 'Saisissez des plages (ex. 1-3, 5).',
     'workflow.error_invalid_ranges': 'Plages invalides. Vérifiez les numéros de page.',
     'workflow.error_run': 'Échec du workflow. Essayez un autre PDF ou moins d’étapes.',
+    'workflow.load_remote_failed':
+      'Impossible de charger ce flux. Connectez-vous ou vérifiez le lien.',
+    'workflow.save': 'Enregistrer',
+    'workflow.saving': 'Enregistrement…',
+    'workflow.saved_toast': 'Enregistré.',
+    'workflow.save_error': 'Impossible d’enregistrer le flux.',
+    'workflow.saved_after_signin': 'Votre flux a été enregistré sur votre compte.',
+    'workflow.save_failed_after_signin':
+      'Impossible d’enregistrer le flux après connexion. Réessayez avec Enregistrer.',
 
     'image_workflow.title': 'Workflow image',
     'image_workflow.description':

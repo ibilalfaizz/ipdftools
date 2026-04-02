@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import FileUploadZone from "@/components/FileUploadZone";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import { runPdfWorkflow } from "@/lib/pdf-workflow-run";
@@ -41,6 +42,21 @@ import {
   workflowHasTerminalSplit,
 } from "@/lib/pdf-workflow-types";
 import { cn } from "@/lib/utils";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import {
+  deleteWorkflow,
+  getWorkflowById,
+  listWorkflows,
+  upsertWorkflow,
+  type WorkflowRow,
+} from "@/lib/workflows/supabase-workflow-store";
+import {
+  PENDING_PDF_WORKFLOW_KEY,
+  RETURN_PATH,
+  clearPendingPdfWorkflow,
+  readPendingPdfWorkflow,
+  writePendingPdfWorkflow,
+} from "@/lib/workflows/pending-workflow-storage";
 
 type PendingTool =
   | "merge"
@@ -82,19 +98,31 @@ function stepIcon(step: PdfWorkflowStep) {
 }
 
 export default function PDFWorkflow() {
-  const { t } = useLanguage();
+  const { t, getLocalizedPath } = useLanguage();
+  const router = useRouter();
   const [workflowName, setWorkflowName] = useState("");
   const [steps, setSteps] = useState<PdfWorkflowStep[]>([]);
+  const [saved, setSaved] = useState<WorkflowRow[]>([]);
+  const [selectedSavedId, setSelectedSavedId] = useState<string>("");
+  const [signedIn, setSignedIn] = useState(false);
   const [pendingTool, setPendingTool] = useState<PendingTool>("compress");
   const [pendingAngle, setPendingAngle] = useState<WorkflowRotateAngle>(90);
   const [pendingRanges, setPendingRanges] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [running, setRunning] = useState(false);
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hydratedRef = useRef(false);
   const prevMergeFirstRef = useRef(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const wf = new URLSearchParams(window.location.search).get("wf");
+    if (wf) {
+      clearPendingPdfWorkflow();
+      hydratedRef.current = true;
+      return;
+    }
     const stored = loadWorkflowFromStorage();
     if (stored) {
       setWorkflowName(stored.name);
@@ -107,6 +135,89 @@ export default function PDFWorkflow() {
     if (!hydratedRef.current) return;
     saveWorkflowToStorage({ name: workflowName, steps });
   }, [workflowName, steps]);
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    let mounted = true;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!mounted) return;
+      setSignedIn(!!data.user);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(!!session?.user);
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  const refreshSaved = useCallback(async () => {
+    if (!signedIn) {
+      setSaved([]);
+      setSelectedSavedId("");
+      return;
+    }
+    try {
+      const rows = await listWorkflows("pdf_workflows");
+      setSaved(rows);
+    } catch {
+      // ignore until tables exist
+    }
+  }, [signedIn]);
+
+  useEffect(() => {
+    void refreshSaved();
+  }, [refreshSaved]);
+
+  useEffect(() => {
+    if (!signedIn || typeof window === "undefined") return;
+    const wf = new URLSearchParams(window.location.search).get("wf");
+    if (!wf) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const row = await getWorkflowById("pdf_workflows", wf);
+        if (cancelled || !row) return;
+        setWorkflowName(row.name);
+        setSteps((row.steps as PdfWorkflowStep[]) || []);
+        setSelectedSavedId(row.id);
+        const url = new URL(window.location.href);
+        url.searchParams.delete("wf");
+        window.history.replaceState({}, "", url.pathname + url.search);
+      } catch {
+        toast.error(t("workflow.load_remote_failed"));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [signedIn, t]);
+
+  useEffect(() => {
+    if (!signedIn || typeof window === "undefined") return;
+    if (new URLSearchParams(window.location.search).get("wf")) return;
+    const raw = sessionStorage.getItem(PENDING_PDF_WORKFLOW_KEY);
+    if (!raw) return;
+    sessionStorage.removeItem(PENDING_PDF_WORKFLOW_KEY);
+    void (async () => {
+      try {
+        const data = JSON.parse(raw) as { name: string; steps: PdfWorkflowStep[] };
+        setWorkflowName(data.name);
+        setSteps(data.steps);
+        const row = await upsertWorkflow("pdf_workflows", {
+          name: data.name.trim(),
+          steps: data.steps,
+        });
+        setSelectedSavedId(row.id);
+        await refreshSaved();
+        toast.success(t("workflow.saved_after_signin"));
+      } catch {
+        sessionStorage.setItem(PENDING_PDF_WORKFLOW_KEY, raw);
+        toast.error(t("workflow.save_failed_after_signin"));
+      }
+    })();
+  }, [signedIn, refreshSaved, t]);
 
   const mergeFirst = steps[0]?.kind === "merge";
   const terminalSplit = workflowHasTerminalSplit(steps);
@@ -281,6 +392,59 @@ export default function PDFWorkflow() {
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 items-start">
         <Card className="border-[#d6ffd2]/20 bg-card/40">
           <CardContent className="p-4 sm:p-6 space-y-5">
+            {signedIn && (
+              <div className="space-y-2">
+                <Label className="text-foreground">My saved workflows</Label>
+                <div className="flex gap-2">
+                  <Select
+                    value={selectedSavedId}
+                    onValueChange={(v) => setSelectedSavedId(v)}
+                  >
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Select…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {saved.map((w) => (
+                        <SelectItem key={w.id} value={w.id}>
+                          {w.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!selectedSavedId}
+                    onClick={() => {
+                      const row = saved.find((s) => s.id === selectedSavedId);
+                      if (!row) return;
+                      setWorkflowName(row.name);
+                      setSteps((row.steps as PdfWorkflowStep[]) || []);
+                    }}
+                  >
+                    Load
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!selectedSavedId}
+                    onClick={() =>
+                      void (async () => {
+                        try {
+                          await deleteWorkflow("pdf_workflows", selectedSavedId);
+                          await refreshSaved();
+                          setSelectedSavedId("");
+                        } catch {
+                          toast.error("Could not delete workflow.");
+                        }
+                      })()
+                    }
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            )}
             <div>
               <Label htmlFor="wf-name" className="text-foreground">
                 {t("workflow.name_label")}
@@ -368,9 +532,59 @@ export default function PDFWorkflow() {
 
         <Card className="border-[#d6ffd2]/20 bg-card/40">
           <CardContent className="p-4 sm:p-6">
-            <h2 className="text-sm font-semibold text-foreground mb-4">
-              {t("workflow.preview_heading")}
-            </h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
+              <h2 className="text-sm font-semibold text-foreground">
+                {t("workflow.preview_heading")}
+              </h2>
+              <div className="flex flex-wrap gap-2 shrink-0">
+                {signedIn ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    disabled={saving || !workflowName.trim() || steps.length === 0}
+                    onClick={() =>
+                      void (async () => {
+                        setSaving(true);
+                        try {
+                          const row = await upsertWorkflow("pdf_workflows", {
+                            name: workflowName.trim(),
+                            steps,
+                          });
+                          await refreshSaved();
+                          setSelectedSavedId(row.id);
+                          toast.success(t("workflow.saved_toast"));
+                        } catch {
+                          toast.error(t("workflow.save_error"));
+                        } finally {
+                          setSaving(false);
+                        }
+                      })()
+                    }
+                  >
+                    {saving ? t("workflow.saving") : t("workflow.save")}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    disabled={!workflowName.trim() || steps.length === 0}
+                    onClick={() => {
+                      writePendingPdfWorkflow({
+                        name: workflowName.trim(),
+                        steps,
+                      });
+                      router.push(
+                        `${getLocalizedPath("/login")}?next=${encodeURIComponent(RETURN_PATH.pdfWorkflow)}`
+                      );
+                    }}
+                  >
+                    {t("workflow.save")}
+                  </Button>
+                )}
+              </div>
+            </div>
 
             {steps.length === 0 ? (
               <p className="text-sm text-muted-foreground">
