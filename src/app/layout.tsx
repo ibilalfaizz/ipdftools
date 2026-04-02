@@ -15,9 +15,10 @@ const poppins = Poppins({
 const GA_MEASUREMENT_ID = "G-5ME1F1TQP9";
 
 export const metadata: Metadata = {
-  title: "iPDFTOOLS - Free Online PDF & Image Tools",
+  title:
+    "iPDFTOOLS — Bulk PDF & Image Tools | Batch Process 100s of Files in Your Browser",
   description:
-    "Free PDF and image tools online: merge, split, compress, and rotate PDFs; convert with Word, JPG, and text; bulk image resize, compress, WebP/JPG/GIF, crop, watermark, background removal, and face blur. Fast and private in your browser.",
+    "Free bulk PDF and image tools: merge, split, compress, and batch-convert dozens or hundreds of files in your browser—bulk resize, WebP/JPG, HEIC, OCR, crop, watermark, background removal, and more. Private; files stay on your device.",
   metadataBase: new URL("https://www.ipdftools.com/"),
 };
 
