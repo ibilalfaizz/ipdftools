@@ -106,6 +106,14 @@ const ImageMotionBlurPage = dynamic(
   () => import("@/pages/ImageMotionBlurPage"),
   { ssr: false, loading: loadFallback }
 );
+const PdfWorkflowPage = dynamic(() => import("@/pages/PdfWorkflowPage"), {
+  ssr: false,
+  loading: loadFallback,
+});
+const ImageWorkflowPage = dynamic(() => import("@/pages/ImageWorkflowPage"), {
+  ssr: false,
+  loading: loadFallback,
+});
 
 const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/merge-pdf": MergePage,
@@ -118,6 +126,8 @@ const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "/pdf-to-text": PDFToTextPage,
   "/word-to-pdf": WordToPDFPage,
   "/jpg-to-pdf": JPGToPDFPage,
+  "/pdf-workflow": PdfWorkflowPage,
+  "/image-workflow": ImageWorkflowPage,
   "/bulk-image-resize": ImageResizePage,
   "/bulk-image-compress": ImageCompressPage,
   "/bulk-image-webp": ImageWebpPage,

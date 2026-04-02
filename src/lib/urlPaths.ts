@@ -11,6 +11,8 @@ export const pathMapping: Record<string, string[]> = {
   "pdf-to-text": ["pdf-to-text", "pdf-a-texto", "pdf-vers-texte"],
   "word-to-pdf": ["word-to-pdf", "word-a-pdf", "word-vers-pdf"],
   "jpg-to-pdf": ["jpg-to-pdf", "jpg-a-pdf", "jpg-vers-pdf"],
+  "pdf-workflow": ["pdf-workflow", "flujo-pdf", "flux-pdf"],
+  "image-workflow": ["image-workflow", "flujo-imagenes", "flux-images"],
   "bulk-image-resize": [
     "bulk-image-resize",
     "redimensionar-imagen-masivo",

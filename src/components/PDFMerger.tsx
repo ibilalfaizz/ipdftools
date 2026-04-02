@@ -8,7 +8,7 @@ import FileUploadZone from './FileUploadZone';
 import PdfToolOffcanvasShell, {
   type PdfToolSidebarReserveProps,
 } from "./PdfToolOffcanvasShell";
-import { mergePDFs } from '../utils/pdfMergeAPI';
+import { mergePdfFiles } from "@/lib/pdf-merge-client";
 
 interface FileWithId {
   id: string;
@@ -22,7 +22,15 @@ const PDFMerger = ({
   const [files, setFiles] = useState<FileWithId[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [mergedPdfUrl, setMergedPdfUrl] = useState<string | null>(null);
+  const mergedUrlRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const revokeMerged = useCallback(() => {
+    if (mergedUrlRef.current) {
+      URL.revokeObjectURL(mergedUrlRef.current);
+      mergedUrlRef.current = null;
+    }
+  }, []);
 
   const handleDrop = useCallback((acceptedFiles: File[]) => {
     const pdfs = acceptedFiles.filter((f) => f.type === 'application/pdf');
@@ -32,8 +40,9 @@ const PDFMerger = ({
       file,
     }));
     setFiles((prev) => [...prev, ...newFiles]);
+    revokeMerged();
     setMergedPdfUrl(null);
-  }, []);
+  }, [revokeMerged]);
 
   const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -43,24 +52,35 @@ const PDFMerger = ({
     if (fileInputRef.current) fileInputRef.current.value = '';
   }, []);
 
-  const handleRemoveFile = useCallback((id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
-  }, []);
+  const handleRemoveFile = useCallback(
+    (id: string) => {
+      revokeMerged();
+      setMergedPdfUrl(null);
+      setFiles((prev) => prev.filter((f) => f.id !== id));
+    },
+    [revokeMerged]
+  );
 
-  const moveFile = useCallback((dragIndex: number, hoverIndex: number) => {
-    setFiles((prev) => {
-      const newFiles = [...prev];
-      const draggedFile = newFiles[dragIndex];
-      newFiles.splice(dragIndex, 1);
-      newFiles.splice(hoverIndex, 0, draggedFile);
-      return newFiles;
-    });
-  }, []);
+  const moveFile = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      revokeMerged();
+      setMergedPdfUrl(null);
+      setFiles((prev) => {
+        const newFiles = [...prev];
+        const draggedFile = newFiles[dragIndex];
+        newFiles.splice(dragIndex, 1);
+        newFiles.splice(hoverIndex, 0, draggedFile);
+        return newFiles;
+      });
+    },
+    [revokeMerged]
+  );
 
   const clearAll = useCallback(() => {
+    revokeMerged();
     setFiles([]);
     setMergedPdfUrl(null);
-  }, []);
+  }, [revokeMerged]);
 
   const handleMerge = async () => {
     if (files.length < 2) return;
@@ -68,15 +88,16 @@ const PDFMerger = ({
     setIsProcessing(true);
     try {
       const fileArray = files.map((f) => f.file);
-      const response = await mergePDFs(fileArray);
-
-      if (response.success && response.downloadUrl) {
-        setMergedPdfUrl(response.downloadUrl);
-      } else {
-        console.error('Failed to merge PDFs:', response.error);
-      }
+      revokeMerged();
+      const bytes = await mergePdfFiles(fileArray);
+      const blob = new Blob([new Uint8Array(bytes)], {
+        type: "application/pdf",
+      });
+      const url = URL.createObjectURL(blob);
+      mergedUrlRef.current = url;
+      setMergedPdfUrl(url);
     } catch (error) {
-      console.error('Error merging PDFs:', error);
+      console.error("Error merging PDFs:", error);
     } finally {
       setIsProcessing(false);
     }

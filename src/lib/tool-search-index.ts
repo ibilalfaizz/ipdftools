@@ -68,6 +68,18 @@ export const TOOL_SEARCH_INDEX: ToolSearchItem[] = [
     category: "pdf",
   },
   {
+    href: "/pdf-workflow",
+    labelKey: "nav.pdf_workflow",
+    descriptionKey: "landing.pdf_workflow_desc",
+    category: "pdf",
+  },
+  {
+    href: "/image-workflow",
+    labelKey: "nav.image_workflow",
+    descriptionKey: "landing.image_workflow_desc",
+    category: "image",
+  },
+  {
     href: "/bulk-image-resize",
     labelKey: "nav.image_resize",
     descriptionKey: "landing.image_resize_desc",

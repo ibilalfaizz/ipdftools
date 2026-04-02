@@ -24,6 +24,7 @@ import {
   Smartphone,
   Aperture,
   PenLine,
+  GitBranch,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -161,12 +162,28 @@ const Landing = () => {
         available: true,
         categories: ["convert"],
       },
+      {
+        icon: <GitBranch className="w-8 h-8" />,
+        title: t("nav.pdf_workflow"),
+        description: t("landing.pdf_workflow_desc"),
+        path: "/pdf-workflow",
+        available: true,
+        categories: ["create", "optimize", "edit"],
+      },
     ],
     [t]
   );
 
   const imageToolFeatures: LandingTool[] = useMemo(
     () => [
+      {
+        icon: <GitBranch className="w-8 h-8" />,
+        title: t("nav.image_workflow"),
+        description: t("landing.image_workflow_desc"),
+        path: "/image-workflow",
+        available: true,
+        categories: ["create", "optimize", "edit"],
+      },
       {
         icon: <Maximize2 className="w-8 h-8" />,
         title: t("nav.image_resize"),
@@ -332,6 +349,86 @@ const Landing = () => {
             >
               <a href="#image-tools">{t("landing.hero_cta_secondary")}</a>
             </Button>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-5xl mx-auto">
+            <Card className="border border-primary/25 bg-card/35 hover:bg-card/55 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-md bg-primary/15 text-primary flex items-center justify-center ring-1 ring-primary/20 shrink-0">
+                    <GitBranch className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <p className="font-semibold text-foreground truncate">
+                      {t("nav.pdf_workflow")}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {t("landing.pdf_workflow_desc")}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Link href={getLocalizedPath("/pdf-workflow")}>
+                    {t("workflow.run")}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-primary/25 bg-card/35 hover:bg-card/55 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-md bg-primary/15 text-primary flex items-center justify-center ring-1 ring-primary/20 shrink-0">
+                    <Image className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <p className="font-semibold text-foreground truncate">
+                      {t("nav.image_workflow")}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {t("landing.image_workflow_desc")}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Link href={getLocalizedPath("/image-workflow")}>
+                    {t("image_workflow.run")}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-primary/25 bg-card/35 hover:bg-card/55 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-md bg-primary/15 text-primary flex items-center justify-center ring-1 ring-primary/20 shrink-0">
+                    <PenLine className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <p className="font-semibold text-foreground truncate">
+                      {t("nav.sign_pdf")}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {t("landing.sign_pdf_desc")}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Link href={getLocalizedPath("/sign-pdf")}>
+                    {t("sign_pdf.title")}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
